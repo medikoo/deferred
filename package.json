@@ -1,8 +1,8 @@
 {
 	"name": "deferred",
-	"version": "0.1.0",
-	"description": "Deferred/Promise concept in JavaScript",
-	"keywords": ["deferred", "promise", "promises", "async", "asynchronous", "future", "futures", "continuations"],
+	"version": "0.1.1",
+	"description": "Asynchronous control-flow with deferred and promises",
+	"keywords": ["deferred", "promise", "promises", "async", "asynchronous", "future", "futures", "continuations", "flow"],
 	"author": "Mariusz Nowak <medikoo+deferred@medikoo.com> (http://www.medikoo.com/)",
 	"main": "lib/index",
 	"repository": {
@@ -14,6 +14,6 @@
 		"web": "https://github.com/medikoo/deferred/issues"
 	},
 	"dependencies": {
-		"es5-ext": "0.4.x"
+		"es5-ext": "0.5.x"
 	}
 }
