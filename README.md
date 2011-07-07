@@ -1,11 +1,11 @@
 # Asynchronous JavaScript with deferred and promises
 
-This work is highly inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal). It introduces promises simple, plain and powerful way. It was build with  _less is more_ manthra in mind, API consist of just 7 functions which should give all you need to build complicated asynchronous control flow, whatever way.
+This work is highly inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal). It introduces promises simple, plain and powerful way. It was build with  _less is more_ mantra in mind, API consist of just 7 functions which should give all you need to build complicated asynchronous control flow, whatever way.
 
 * [Installation](#installation)
 * [Deferred/Promise](#deferred-promise)
 	* [Basics](#deferred-promise-basics)
-	* [Error handling](#deferred-promise-error-handling)]
+	* [Error handling](#deferred-promise-error-handling)
 * [Asynchronous functions as promises](#asynchronous-functions-as-promises)
 * [Control-flow, sophisticated chaining](#control-flow)
 	* [`join`](#control-flow-join)
@@ -32,7 +32,7 @@ It's plain EcmaScript, but out of the box currently works only with node & npm (
 
 	$ npm install deferred
 
-For browser or other environments it needs to be bundled with few dependencies from [es5-ext](https://github.com/medikoo/es5-ext) project (code states specifically which dependiences). Browser ready files will surely be provided in future.
+For browser or other environments it needs to be bundled with few dependencies from [es5-ext](https://github.com/medikoo/es5-ext) project (code states specifically which). Browser ready files will be provided in future.
 
 <a name="deferred-promise" />
 ## Deferred/Promise concept
@@ -40,7 +40,7 @@ For browser or other environments it needs to be bundled with few dependencies f
 <a name="deferred-promise-basics" />
 ### Basics
 
-Straight to the point - when there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally you got the value, deferred is resolved `deferred.resolve(value)` at that point all promise observers are notified with value of fulfilled promise.
+Straight to the point: when there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally you got the value, deferred is resolved `deferred.resolve(value)` at that point all promise observers are notified with value of fulfilled promise.
 
 Example:
 
@@ -103,7 +103,7 @@ Promise can be resolved only once, and callbacks passed to `then` are also calle
 <a name="deferred-promise-error-handling" />
 ### Error handling
 
-Promise is rejected when it's resolved with an error. Other important note - if callback passed to `then` throws exception it becomes resolution of promise returned by `then`. To handle error pass second callback argument to `then`:
+Promise is rejected when it's resolved with an error, same way if callback passed to `then` throws exception it becomes resolution of promise returned by `then`. To handle error, pass second callback argument to `then`:
 
 	later()
 		.then(function (n) {
@@ -115,7 +115,7 @@ Promise is rejected when it's resolved with an error. Other important note - if 
 			// handle error;
 		});
 
-When there is no error callback passed, error is silent. To expose error end chain with `.end()`, then error that broke the chain will be thrown:
+When there is no error callback passed, error is silent. To expose error, end chain with `.end()`, then error that broke the chain will be thrown:
 
 	later()
 		.then(function (n) {
@@ -152,7 +152,7 @@ This approach is widely used within node.js:
 		}, 1000);
 	};
 
-Asynchronous function receives callback argument. Callback handles both error and success. There's easy way to turn those methods into promises and take advantage of promise design. There's `deferred.asyncToPromise` for that, let's use shorter name:
+Asynchronous function receives callback argument. Callback handles both error and success. There's easy way to turn such functions into promises and take advantage of promise design. There's `deferred.asyncToPromise` for that, let's use shorter name:
 
 	var a2p = deferred.asyncToPromise;
 
@@ -210,9 +210,9 @@ Reading file, changing it's content  and writing under different name:
 There are three dedicated methods for constructing flow chain.
 They're avaiable on `deferred`:
 
-	deferred.join(p1, p2, p3, ...).then(...);
-	deferred.all(p1, p2, p3, ...).then(...);
-	deferred.first(p1, p2, p3, ...).then(...);
+	deferred.join(...);
+	deferred.all(...);
+	deferred.first(...);
 
 	// let's access them directly:
 	var join = deferred.join;
@@ -237,14 +237,14 @@ Chain methods take arguments of any type and internally distinguish between prom
 <a name="control-flow-join" />
 ### join(...)
 
-`join` returns promise which resolves with array of resolved values of all arguments.
+`join` returns promise which resolves with an array of resolved values of all arguments.
 Values may be anything, also errors (rejected promises, functions that thrown errors, errors itself). Returned promise always fulfills, never rejects.
 
 <a name="control-flow-all" />
 ### all(...)
 
 Same as `join`, with that difference that all arguments need to be succesful.
-If there's any error, chain execution is stopped (following functions are not invoked), and promise is rejected with error that broke the chain. In succesful case promise value is  same as with `join` we get array of results.
+If there's any error, chain execution is stopped (following functions are not invoked), and promise is rejected with error that broke the chain. In succesful case promise value is  same as with `join`, we get array of results.
 
 <a name="control-flow-first" />
 ### first(...)
@@ -255,7 +255,7 @@ with error that occurred last.
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above chain methods take any arguments, not only promises. Function arguments are invoked with previous argument value, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within result array. Any other values (neither promises or functions) are treated as if it were values of resolved promises.
+As mentioned above chain methods take any arguments, not only promises. Function arguments are invoked with previous argument value, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
@@ -332,7 +332,7 @@ We can shorten it a bit with introduction of functional sugar, it's out of scope
 <a name="control-flow-examples-asynchronous-loop" />
 #### Asynchronous loop
 
-Let's say we're after content that is paginated over many pages on some website (like search results). We don't know on how many pages it spans. We can only know by reading page _n_ whether page _n + 1_ exists.
+Let's say we're after content that is paginated over many pages on some website (like search results). We don't know on how many pages it spans. We only know by reading page _n_ whether page _n + 1_ exists.
 
 First things first. Simple download function, it downloads page at given path from predefinied domain and returns promise:
 
@@ -496,7 +496,7 @@ It's a question of combining `all` chains. First example from docs:
 <a name="comparision-to-async-loop" />
 ##### async.whilst, async.until
 
-See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example to see how to do such loops with promises
+See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example, to see how to do such loops with promises
 
 <a name="comparision-to-async-array-iterators" />
 ##### async.forEach, async.map, async.filter ..etc.
@@ -514,4 +514,4 @@ Asynchronous handlers for array iterators, forEach and map:
 	.end();
 
 I decided not to implement array iterator functions in this library, for two reasons.
-First is as you see above - it's very easy and straightforward to setup most them with provided chain methods, second it's unlikely you'll need most of them.
+First is as you see above - it's very easy and straightforward to setup them with provided chain methods, second it's unlikely we'll need most of them.
