@@ -1,6 +1,6 @@
 # Asynchronous JavaScript with deferred and promises
 
- Promises simple, straightforward and powerful way. It was build with  _less is more_ mantra in mind, API consist of just 7 functions which should give all you need to build complicated asynchronous control flow, whichever way.
+ Promises simple, straightforward and powerful way. It was build with  _less is more_ mantra in mind, API consist of just 7 functions which should give all you need to configure complicated asynchronous control flow.
 
 This work is highly inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
 
@@ -17,7 +17,7 @@ This work is highly inspired by other deferred/promise implementations, in parti
 	* [Examples](#control-flow-examples)
 		* [Regular control-flow](#control-flow-examples)
 		* [Asynchronous loop](#control-flow-examples-asynchronous-loop)
-* [Comparision with other solutions that take non promise approach](#comparision)
+* [Comparision to other solutions that take non promise approach](#comparision)
 	* [Step](#comparision-to-step)
 	* [Async](#comparision-to-async)
 		* [async.series](#comparision-to-async-series)
@@ -42,7 +42,7 @@ For browser or other environments it needs to be bundled with few dependencies f
 <a name="deferred-promise-basics" />
 ### Basics
 
-Straight to the point: when there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved `deferred.resolve(value)` at that point all promise observers (added with `deferred.promise.then`) are notified with value of fulfilled promise.
+Straight to the point: when there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added via `deferred.promise.then`) are notified with value of fulfilled promise.
 
 Example:
 
@@ -105,7 +105,7 @@ Promise can be resolved only once, and callbacks passed to `then` are also calle
 <a name="deferred-promise-error-handling" />
 ### Error handling
 
-Promise is rejected when it's resolved with an error, same way if callback passed to `then` throws exception it becomes resolution of promise returned by `then`. To handle error, pass second callback argument to `then`:
+Promise is rejected when it's resolved with an error, same way if callback passed to `then` throws exception it becomes resolution of promise returned by `then`. To handle error, pass second callback to `then`:
 
 	later()
 		.then(function (n) {
@@ -256,7 +256,7 @@ with error that occurred last.
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above chain methods take any arguments, not only promises. Function arguments are called with previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
+As mentioned above, chain methods take any arguments, not only promises. Function arguments are called with previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
@@ -396,9 +396,9 @@ We can also make it with `all`:
 	).end();
 
 <a name="comparision" />
-### Comparision with other solutions that take non promise approach
+### Comparision to other solutions that take non promise approach
 
-Following are examples from documentation of other solutions rewriten deferred/promise way. You'll be the judge, which solution you find more powerful and friendly.
+Following are examples from documentation of other solutions rewritten deferred/promise way. You'll be the judge, which solution you find more powerful and friendly.
 
 <a name="comparision-to-step" />
 #### Step -> https://github.com/creationix/step
