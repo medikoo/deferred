@@ -1,10 +1,9 @@
 'use strict';
 
-var path      = require('path')
-  , merge     = require('es5-ext/lib/Object/plain/merge').call
-  , indexTest = require('tad/lib/utils/index-test')
-
-  , deferred  = require('../lib/deferred')
+var path       = require('path')
+  , isFunction = require('es5-ext/lib/Function/is-function')
+  , merge      = require('es5-ext/lib/Object/plain/merge').call
+  , indexTest  = require('tad/lib/utils/index-test')
 
   , dir = path.dirname(__dirname) + '/lib';
 
@@ -13,6 +12,9 @@ module.exports = {
 		.then(function (o) {
 			delete o.deferred;
 			delete o.chain;
+			delete o.isPromise;
+			delete o.promise;
+
 			return indexTest.readDir(dir + '/chain')
 				.then(function (o2) {
 					delete o2.base;
@@ -20,6 +22,8 @@ module.exports = {
 				});
 		}), "index"),
 	"Deferred function is main object": function (t, a) {
-		a.equal(t, deferred);
+		var d = t();
+		d.resolve({});
+		a.ok(isFunction(d.resolve) && isFunction(d.promise.then));
 	}
 };

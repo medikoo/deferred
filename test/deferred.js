@@ -62,6 +62,15 @@ module.exports = {
 			a.equal(e, x); d();
 		}).end();
 	},
+	"Error handler in end": function (t, a, d) {
+		var defer = t(), x = new Error('Test error');
+		defer.resolve(1);
+		defer.promise.then(function () {
+			throw x;
+		}).end(function (e) {
+			a.equal(e, x); d();
+		});
+	},
 	"Prevent double then callbacks with alien promise": function (t, a, d) {
 		var defer = t(), count = 0;
 		defer.promise.then(function () {
