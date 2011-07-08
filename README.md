@@ -42,7 +42,7 @@ For browser or other environments it needs to be bundled with few dependencies f
 <a name="deferred-promise-basics" />
 ### Basics
 
-Straight to the point: when there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added via `deferred.promise.then`) are notified with value of fulfilled promise.
+When there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added via `deferred.promise.then`) are notified with value of fulfilled promise.
 
 Example:
 
@@ -153,7 +153,7 @@ There is a known convention in JavaScript for working with asynchronous calls. F
 		}, 1000);
 	};
 
-Asynchronous function receives callback argument. Callback handles both error and success. There's easy way to turn such functions into promises and take advantage of promise design. There's `deferred.asyncToPromise` for that, let's use shorter name:
+Asynchronous function receives callback argument, callback handles both error and success. There's easy way to turn such functions into promises and take advantage of promise design. There's `deferred.asyncToPromise` for that, let's use shorter name:
 
 	var a2p = deferred.asyncToPromise;
 
@@ -188,12 +188,11 @@ Third way is to bind method for later execution. We'll use `ba2p` name for that:
 		console.log(n); // 7
 	});
 
-Note that this way of using it is not perfectly safe. We need to be sure that `abinded` will be called without any not expected arguments, if it's the case, then it won't execute as expected, see:
+Note that this way of using it is not perfectly safe. We need to be sure that `abinded` will be called without any not expected arguments, if it's the case, then it won't execute as expected:
 
 	abinded(7, 4); // TypeError: number is not a function.
 
-Node.js example.  
-Reading file, changing it's content  and writing under different name:
+Node.js example, reading file, changing it's content  and writing under different name:
 
 	var fs   = require('fs');
 
@@ -208,21 +207,12 @@ Reading file, changing it's content  and writing under different name:
 <a name="control-flow" />
 ## Control-flow, sophisticated chaining
 
-There are three dedicated methods for constructing flow chain.
-They're avaiable on `deferred`:
-
-	deferred.join(...);
-	deferred.all(...);
-	deferred.first(...);
+There are three dedicated methods for constructing flow chain. They're avaiable on `deferred` as `deferred.join`, `deferred.all`, `deferred.first`. Let's access them directly:
 
 	// let's access them directly:
 	var join = deferred.join;
 	var all = deferred.all;
 	var first = deferred.first;
-
-	join(p1, p2, p3, ...).then(...);
-	all(p1, p2, p3, ...).then(...);
-	first(p1, p2, p3, ...).then(...);
 
 As with other API methods, they can also be imported individually:
 
@@ -235,6 +225,18 @@ Chain methods take arguments of any type and internally distinguish between prom
 	join(p1, p2, p3);
 	join([p1, p2, p3]); // same behavior
 
+`join` and `all` return another promise, which resolves with combined result of resolved arguments:
+
+	join(p1, p2, p3).then(function (result) {
+		// result is array of resolved values of p1, p2 and p3.
+	});
+
+`first` results with value of first resolved argument:
+
+	first(p1, p2, p3).then(function (result) {
+		// result is resolved p1, p2 or p3, whichever was first
+	});
+
 <a name="control-flow-join" />
 ### join(...)
 
@@ -245,7 +247,7 @@ Values may be anything, also errors (rejected promises, functions that thrown er
 ### all(...)
 
 Same as `join`, with that difference that all arguments need to be succesful.
-If there's any error, chain execution is stopped (following functions are not called), and promise is rejected with error that broke the chain. In succesful case returned promise value is same as with `join`, array of results.
+If there's any error, chain execution is stopped (following functions are not called), and promise is rejected with error that broke the chain. In succesful case returned promise value is same as in `join`.
 
 <a name="control-flow-first" />
 ### first(...)
@@ -256,7 +258,7 @@ with error that occurred last.
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above, chain methods take any arguments, not only promises. Function arguments are called with previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
+As mentioned above, chain functions take any arguments, not only promises. Function arguments are called with fully resolved previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
@@ -497,7 +499,7 @@ It's a question of combining `all` chains. First example from docs:
 <a name="comparision-to-async-loop" />
 ##### async.whilst, async.until
 
-See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example, it shows how easily loops can be configured.
+See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example, it shows how easy is to configure loops.
 
 <a name="comparision-to-async-array-iterators" />
 ##### async.forEach, async.map, async.filter ..etc.
