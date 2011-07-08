@@ -42,7 +42,7 @@ For browser or other environments it needs to be bundled with few dependencies f
 <a name="deferred-promise-basics" />
 ### Basics
 
-When there's work to do that doesn't return immediately (asynchronous) `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added via `deferred.promise.then`) are notified with value of fulfilled promise.
+When there's work to do that doesn't return immediately (asynchronous), `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added in meantime via `deferred.promise.then`) are notified with value of fulfilled promise.
 
 Example:
 
@@ -207,7 +207,7 @@ Node.js example, reading file, changing it's content  and writing under differen
 <a name="control-flow" />
 ## Control-flow, sophisticated chaining
 
-There are three dedicated methods for constructing flow chain. They're avaiable on `deferred` as `deferred.join`, `deferred.all`, `deferred.first`. Let's access them directly:
+There are three dedicated methods for constructing flow chain. They're avaiable on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
 
 	// let's access them directly:
 	var join = deferred.join;
