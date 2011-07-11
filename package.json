@@ -13,6 +13,9 @@
 		"mail": "medikoo+deferred@medikoo.com",
 		"web": "https://github.com/medikoo/deferred/issues"
 	},
+	"engines": {
+		"node": ">=0.1.103"
+	},
 	"dependencies": {
 		"es5-ext": "0.5.x"
 	}
