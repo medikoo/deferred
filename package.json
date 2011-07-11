@@ -1,6 +1,6 @@
 {
 	"name": "deferred",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Asynchronous control-flow with deferred and promises",
 	"keywords": ["deferred", "promise", "promises", "async", "asynchronous", "future", "futures", "continuations", "flow"],
 	"author": "Mariusz Nowak <medikoo+deferred@medikoo.com> (http://www.medikoo.com/)",
