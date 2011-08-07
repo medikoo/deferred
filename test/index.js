@@ -8,19 +8,20 @@ var path       = require('path')
   , dir = path.dirname(__dirname) + '/lib';
 
 module.exports = {
-	"": indexTest(indexTest.readDir(dir)
-		.then(function (o) {
-			delete o.deferred;
-			delete o.chain;
-			delete o.isPromise;
-			delete o.promise;
+	"": indexTest(indexTest.readDir(dir)(function (o) {
+		delete o.deferred;
+		delete o.join;
+		delete o.isPromise;
+		delete o.promise;
 
-			return indexTest.readDir(dir + '/chain')
-				.then(function (o2) {
-					delete o2.base;
-					return merge(o, o2);
-				});
-		}), "index"),
+		return indexTest.readDir(dir + '/join')
+			.then(function (o2) {
+				delete o2.base;
+				o2.join = o2.default;
+				delete o2.default;
+				return merge(o, o2);
+			});
+	}), "index"),
 	"Deferred function is main object": function (t, a) {
 		var d = t();
 		d.resolve({});

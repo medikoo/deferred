@@ -9,7 +9,7 @@ This work is highly inspired by other deferred/promise implementations, in parti
 	* [Basics](#deferred-promise-basics)
 	* [Error handling](#deferred-promise-error-handling)
 * [Asynchronous functions as promises](#asynchronous-functions-as-promises)
-* [Control-flow, sophisticated chaining](#control-flow)
+* [Control-flow, joining promises](#control-flow)
 	* [`join`](#control-flow-join)
 	* [`all`](#control-flow-all)
 	* [`first`](#control-flow-first)
@@ -60,29 +60,36 @@ Example:
 		console.log(n); // 1
 	});
 
-`then` takes callback and returns another promise. Returned promise will resolve with value that is a result of callback function, this way, promises can be chained:
+`promise` is really a `then` function, so you may use it directly:
 
 	later()
-		.then(function (n) {
-			var d = deferred();
-			setTimeout(function () {
-				d.resolve(n + 1);
-			}, 1000);
-			return d.promise;
-		})
-		.then(function (n) {
-			console.log(n); // 2
-		});
+	(function (n) {
+		console.log(n); // 1
+	});
 
-Callback passed to `then` may return anything, it may also be regular synchronous function:
+`promise` takes callback and returns another promise. Returned promise will resolve with value that is a result of callback function, this way, promises can be chained:
 
 	later()
-		.then(function (n) {
-			return n + 1;
-		})
-		.then(function (n) {
-			console.log(n); // 2
-		});
+	(function (n) {
+		var d = deferred();
+		setTimeout(function () {
+			d.resolve(n + 1);
+		}, 1000);
+		return d.promise;
+	})
+	(function (n) {
+		console.log(n); // 2
+	});
+
+Callback passed to `promise` may return anything, it may also be regular synchronous function:
+
+	later()
+	(function (n) {
+		return n + 1;
+	})
+	(function (n) {
+		console.log(n); // 2
+	});
 
 Promises can be nested. If promise resolves with another promise, it's not really resolved. It's resolved only when final promise returns real value:
 
@@ -96,47 +103,47 @@ Promises can be nested. If promise resolves with another promise, it's not reall
 		return d.promise;
 	};
 
-	laterNested(1).then(function (n) {
+	laterNested(1)(function (n) {
 		console.log(n); // 8
 	});
 
-Promise can be resolved only once, and callbacks passed to `then` are also called only once, no exceptions. For deeper insight into this concept, and to better understand design decisions please see Kris Kowal [design notes](https://github.com/kriskowal/q/blob/master/design/README.js), it's well worth read.
+Promise can be resolved only once, and callbacks passed to `promise` are also called only once, no exceptions. For deeper insight into this concept, and to better understand design decisions please see Kris Kowal [design notes](https://github.com/kriskowal/q/blob/master/design/README.js), it's well worth read.
 
 <a name="deferred-promise-error-handling" />
 ### Error handling
 
-Promise is rejected when it's resolved with an error, same way if callback passed to `then` throws exception it becomes resolution of promise returned by `then`. To handle error, pass second callback to `then`:
+Promise is rejected when it's resolved with an error, same way if callback passed to `promise` throws exception it becomes resolution of promise returned by `promise` call. To handle error, pass second callback to `promise`:
 
 	later()
-		.then(function (n) {
-			throw new Error('error!')
-		})
-		.then(function () {
-			// never called
-		}, function (e) {
-			// handle error;
-		});
+	(function (n) {
+		throw new Error('error!')
+	})
+	(function () {
+		// never called
+	}, function (e) {
+		// handle error;
+	});
 
 When there is no error callback passed, error is silent. To expose error, end chain with `.end()`, then error that broke the chain will be thrown:
 
 	later()
-		.then(function (n) {
-			throw new Error('error!')
-		})
-		.then(function (n) {
-			// never executed
-		})
-		.end(); // throws error!
+	(function (n) {
+		throw new Error('error!')
+	})
+	(function (n) {
+		// never executed
+	})
+	.end(); // throws error!
 
-`end` takes optional handler so instead of throwing, error can be handled other way. Behavior is exactly same as when passing second callback to `then`:
+`end` takes optional handler so instead of throwing, error can be handled other way. Behavior is exactly same as when passing second callback to `promise`:
 
 	later()
-		.then(function (n) {
-			throw new Error('error!')
-		})
-		.end(function (e) {
-			// handle error!
-		});
+	(function (n) {
+		throw new Error('error!')
+	})
+	.end(function (e) {
+		// handle error!
+	});
 
 <a name="asynchronous-functions-as-promises" />
 ## Asynchronous functions as promises
@@ -165,7 +172,8 @@ First way is to  assign it directly to asynchronous method:
 
 	afunc.a2p = a2p;
 
-	afunc.a2p(3, 4).then(function (n) {
+	afunc.a2p(3, 4)
+	(function (n) {
 		console.log(n); // 7
 	});
 
@@ -173,7 +181,8 @@ Second way is more traditional (I personally favor this one as it doesn't touch 
 
 	a2p = a2p.call;
 
-	a2p(afunc, 3, 4).then(function (n) {
+	a2p(afunc, 3, 4)
+	(function (n) {
 		console.log(n); // 7
 	});
 
@@ -184,7 +193,8 @@ Third way is to bind method for later execution. We'll use `ba2p` name for that:
 	var abinded = ba2p(afunc, 3, 4);
 
 	// somewhere in other context:
-	abinded().then(function (n) {
+	abinded()
+	(function (n) {
 		console.log(n); // 7
 	});
 
@@ -197,17 +207,17 @@ Node.js example, reading file, changing it's content  and writing under differen
 	var fs   = require('fs');
 
 	a2p(fs.readFile, __filename, 'utf-8')
-		.then(function (content) {
-			// change content
-			return content;
-		})
-		.then(ba2p(fs.writeFile, __filename + '.changed'))
-		.end();
+	(function (content) {
+		// change content
+		return content;
+	})
+	(ba2p(fs.writeFile, __filename + '.changed'))
+	.end();
 
 <a name="control-flow" />
-## Control-flow, sophisticated chaining
+## Control-flow, joining promises
 
-There are three dedicated methods for constructing flow chain. They're avaiable on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
+There are three dedicated methods for joining promises. They're avaiable on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
 
 	// let's access them directly:
 	var join = deferred.join;
@@ -216,24 +226,26 @@ There are three dedicated methods for constructing flow chain. They're avaiable 
 
 As with other API methods, they can also be imported individually:
 
-	var join  = require('deferred/lib/chain/join')
-	  , all   = require('deferred/lib/chain/all')
-	  , first = require('deferred/lib/chain/first');
+	var join  = require('deferred/lib/join/default')
+	  , all   = require('deferred/lib/join/all')
+	  , first = require('deferred/lib/join/first');
 
-Chain methods take arguments of any type and internally distinguish between promises, functions and others. Call them with list of arguments or an array:
+Join methods take arguments of any type and internally distinguish between promises, functions and others. Call them with list of arguments or an array:
 
 	join(p1, p2, p3);
 	join([p1, p2, p3]); // same behavior
 
 `join` and `all` return another promise, which resolves with combined result of resolved arguments:
 
-	join(p1, p2, p3).then(function (result) {
+	join(p1, p2, p3)
+	(function (result) {
 		// result is array of resolved values of p1, p2 and p3.
 	});
 
 `first` results with value of first resolved argument:
 
-	first(p1, p2, p3).then(function (result) {
+	first(p1, p2, p3)
+	(function (result) {
 		// result is resolved p1, p2 or p3, whichever was first
 	});
 
@@ -247,7 +259,7 @@ Values may be anything, also errors (rejected promises, functions that thrown er
 ### all(...)
 
 Same as `join`, with that difference that all arguments need to be succesful.
-If there's any error, chain execution is stopped (following functions are not called), and promise is rejected with error that broke the chain. In succesful case returned promise value is same as in `join`.
+If there's any error, join execution is stopped (following functions are not called), and promise is rejected with error that broke the join chain. In succesful case returned promise value is same as in `join`.
 
 <a name="control-flow-first" />
 ### first(...)
@@ -258,7 +270,7 @@ with error that occurred last.
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above, chain functions take any arguments, not only promises. Function arguments are called with fully resolved previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
+As mentioned above, join functions take any arguments, not only promises. Function arguments are called with fully resolved previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
@@ -365,18 +377,18 @@ Deferred loop:
 
 	var n = 1, result;
 	getPage('/page/' + n++)
-		.then(function process (content) {
-			// populate result
-			// decide whether we need to download next page
-			if (isNextPage) {
-				return getPage('/page/' + n++).then(process);
-			} else {
-				return result;
-			}
-		})
-		.then(function (result) {
-			// play with final result
-		}).end();
+	(function process (content) {
+		// populate result
+		// decide whether we need to download next page
+		if (isNextPage) {
+			return getPage('/page/' + n++)(process);
+		} else {
+			return result;
+		}
+	})
+	(function (result) {
+		// play with final result
+	}).end();
 
 We can also make it with `all`:
 
@@ -387,7 +399,7 @@ We can also make it with `all`:
 			// populate result
 			// decide whether we need to download next page
 			if (isNextPage) {
-				return getPage('/page/' + n++).then(process);
+				return getPage('/page/' + n++)(process);
 			} else {
 				return result;
 			}
@@ -407,23 +419,21 @@ Following are examples from documentation of other solutions rewritten deferred/
 
 First example from Step [README](https://github.com/creationix/step/blob/master/README.markdown), using chained promises:
 
-	all(
-		a2p(fs.readFile, __filename, 'utf-8'),
-		function capitalize (txt) {
-			return txt.toUpperCase();
-		},
-		function showIt (newTxt) {
-			console.log(newTxt);
-		}
-	).end();
+	a2p(fs.readFile, __filename, 'utf-8')
+	(function capitalize (txt) {
+		return txt.toUpperCase();
+	})
+	(function showIt (newTxt) {
+		console.log(newTxt);
+	})
+	.end();
 
 Again we can make it even more concise with functional sugar:
 
-	all(
-		a2p(fs.readFile, __filename, 'utf-8'),
-		invoke('toUpperCase'),
-		console.log
-	).end();
+	a2p(fs.readFile, __filename, 'utf-8')
+	(invoke('toUpperCase'))
+	(console.log)
+	.end();
 
 <a name="comparision-to-async" />
 #### Async -> https://github.com/caolan/async
@@ -441,7 +451,7 @@ Again we can make it even more concise with functional sugar:
 			return 'two';
 		}
 	)
-	.then(function (results) {
+	(function (results) {
 		// results is now equal to ['one', 'two']
 	},
 	function (err) {
@@ -458,7 +468,7 @@ For parallel execution we pass already initialized promises:
 		a2p(asyncFunc, arg1, arg2),
 		promise2
 	)
-	.then(function (results) {
+	(function (results) {
 		// results are resolved values of promise1, asyncFunc and promise2
 	},
 	function (err) {
@@ -485,7 +495,7 @@ Resolved values are always passed to following functions, so again we have it ou
 <a name="comparision-to-async-auto" />
 ##### async.auto
 
-It's a question of combining `all` chains. First example from docs:
+It's a question of combining `all` joins. First example from docs:
 
 	all(
 		all(
@@ -506,15 +516,15 @@ See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example, it sh
 
 Asynchronous handlers for array iterators, forEach and map:
 
-	all(arr.map(function (item) {
+	all(arr, function (item) {
 		// logic
 		return promise;
 	})
-	.then(function (results) {
+	(function (results) {
 		// deal with results
 		// if it's forEach than results are obsolete
 	})
 	.end();
 
 I decided not to implement array iterator functions in this library, for two reasons,
-first is as you see above - it's very easy and straightforward to setup them with provided chain methods, second it's unlikely we need most of them.
+first is as you see above - it's very easy and straightforward to setup them with provided join methods, second it's unlikely we need most of them.
