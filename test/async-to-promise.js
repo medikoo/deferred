@@ -1,7 +1,5 @@
 'use strict';
 
-var neverCalled = require('tad/lib/utils/never-called');
-
 module.exports = {
 	"Successful": function (t, a, d) {
 		var x = {};
@@ -10,9 +8,9 @@ module.exports = {
 			setTimeout(function () {
 				callback(null, x);
 			}, 0);
-		}).then(function (result) {
-			a.equal(result, x); d();
-		}, neverCalled(a));
+		})(function (result) {
+			a(result, x); d();
+		}, a.never);
 	},
 	"Erroneous": function (t, a, d) {
 		var x = new Error('Test');
@@ -21,8 +19,8 @@ module.exports = {
 			setTimeout(function () {
 				callback(x);
 			}, 0);
-		}).then(neverCalled(a), function (result) {
-			a.equal(result, x); d();
+		}).then(a.never, function (result) {
+			a(result, x); d();
 		});
 	},
 	"True/False": function (t, a, d) {
@@ -31,8 +29,8 @@ module.exports = {
 			setTimeout(function () {
 				callback(false);
 			}, 0);
-		}).then(function (result) {
-			a.equal(result, false); d();
-		}, neverCalled(a));
+		})(function (result) {
+			a(result, false); d();
+		}, a.never);
 	}
 };

@@ -3,11 +3,7 @@
 var deferred = require('../lib/deferred')
   , promise  = require('../lib/promise');
 
-module.exports = {
-	"Deferred promise is promise": function (t, a) {
-		a.equal(t(deferred().promise), true);
-	},
-	"Object promise is promise": function (t, a) {
-		a.equal(t(promise({})), true);
-	}
+module.exports = function (t, a) {
+	a(t(deferred().resolve()), true, "Deferred promise is promise");
+	a(t(promise({})), true, "Object promise is promise");
 };
