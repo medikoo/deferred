@@ -1,5 +1,7 @@
-v0.2.0  -- 2011.08.08
+v0.2.1  --  2011.08.08
+* Use process.nextTick instead of setTimeout if available
 
+v0.2.0  --  2011.08.08
 * Renamed 'chain' dir into 'join' as it's more about joining promises
 * promise is now promise.then function (promise === promise.then)
 * resolve returns promise, handful for quick function returns (return d.resolve(x))
