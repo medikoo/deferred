@@ -1,7 +1,19 @@
-v0.1.2
-* Make it open to work in older JavaScript implementations
+v0.2.0  -- 2011.08.08
+
+* Renamed 'chain' dir into 'join' as it's more about joining promises
+* promise is now promise.then function (promise === promise.then)
+* resolve returns promise, handful for quick function returns (return d.resolve(x))
+* syncToPromise function
+* Compatibility with es5-ext v0.6
+* Test with TAD
+
+v0.1.2  --  2011.07.11
+* Make it possible to use it with older JavaScript implementations
 * Removed dead code
 * Better tests coverage
 
-v0.1.1
+v0.1.1  --  2011.07.07
 * Documentation
+
+v0.1.0  --  2011.07.05
+* Initial version
