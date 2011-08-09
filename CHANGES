@@ -1,3 +1,7 @@
+v0.2.3  --  2011.08.09
+* 'delay' function: delay execution of given function,
+  return promise for function result
+
 v0.2.2  --  2011.08.08
 * Added TAD test suite to devDependencies, configured test commands.
   Tests can be run with 'make test' or 'npm test'
@@ -8,7 +12,8 @@ v0.2.1  --  2011.08.08
 v0.2.0  --  2011.08.08
 * Renamed 'chain' dir into 'join' as it's more about joining promises
 * promise is now promise.then function (promise === promise.then)
-* resolve returns promise, handful for quick function returns (return d.resolve(x))
+* resolve returns promise, handful for quick function returns
+  (return d.resolve(x))
 * syncToPromise function
 * Compatibility with es5-ext v0.6
 * Test with TAD
