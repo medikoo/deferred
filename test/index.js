@@ -12,7 +12,6 @@ module.exports = {
 		delete o.deferred;
 		delete o.join;
 		delete o.isPromise;
-		delete o.promise;
 
 		return indexTest.readDir(dir + '/join')
 			.then(function (o2) {
