@@ -1,6 +1,6 @@
 # Asynchronous JavaScript with deferred and promises
 
- Promises simple, straightforward and powerful way. It was build with  _less is more_ mantra in mind, API consist of just 7 functions which should give all you need to configure complicated asynchronous control flow.
+ Promises in a simple, straightforward and powerful way. It was built with the _less is more_ mantra in mind.  The API consists of just 7 functions which should give all you need to configure complicated asynchronous control flow.
 
 This work is highly inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
 
@@ -30,11 +30,11 @@ This work is highly inspired by other deferred/promise implementations, in parti
 <a name="installation" />
 ## Installation
 
-It's plain EcmaScript, but out of the box currently works only with node & npm (due to it's CommonJS package):
+It's plain ECMAScript, but out of the box currently works only with node & npm (due to it's CommonJS package):
 
 	$ npm install deferred
 
-For browser or other environments it needs to be bundled with few dependencies from [es5-ext](https://github.com/medikoo/es5-ext) project (code states specifically which). Browser ready files will be available in near future.
+For browser or other environments it needs to be bundled with a few dependencies from [es5-ext](https://github.com/medikoo/es5-ext) project (code states specifically which). Browser ready files will be available in the near future.
 
 <a name="deferred-promise-concept" />
 ## Deferred/Promise concept
@@ -42,7 +42,7 @@ For browser or other environments it needs to be bundled with few dependencies f
 <a name="deferred-promise-basics" />
 ### Basics
 
-When there's work to do that doesn't return immediately (asynchronous), `deferred` object is created and promise (`deferred.promise`) is returned to the world. When finally value is obtained, deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added in meantime via `deferred.promise.then`) are notified with value of fulfilled promise.
+When there's work to do that doesn't return immediately (asynchronous), a `deferred` object is created and a promise (`deferred.promise`) is returned to the world. When finally a value is obtained, the deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added in meantime via `deferred.promise.then`) are notified with the value of fulfilled promise.
 
 Example:
 
@@ -67,7 +67,7 @@ Example:
 		console.log(n); // 1
 	});
 
-`promise` takes callback and returns another promise. Returned promise will resolve with value that is a result of callback function, this way, promises can be chained:
+`promise` takes a callback and returns another promise. The returned promise will resolve with the value that is a result of the callback function, this way, promises can be chained:
 
 	later()
 	(function (n) {
@@ -81,7 +81,7 @@ Example:
 		console.log(n); // 2
 	});
 
-Callback passed to `promise` may return anything, it may also be regular synchronous function:
+The callback passed to `promise` may return anything, it may also be a regular synchronous function:
 
 	later()
 	(function (n) {
@@ -91,7 +91,7 @@ Callback passed to `promise` may return anything, it may also be regular synchro
 		console.log(n); // 2
 	});
 
-Promises can be nested. If promise resolves with another promise, it's not really resolved. It's resolved only when final promise returns real value:
+Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise returns a real value:
 
 	var count = 0;
 	var laterNested = function fn (value) {
@@ -107,12 +107,12 @@ Promises can be nested. If promise resolves with another promise, it's not reall
 		console.log(n); // 8
 	});
 
-Promise can be resolved only once, and callbacks passed to `promise` are also called only once, no exceptions. For deeper insight into this concept, and to better understand design decisions please see Kris Kowal [design notes](https://github.com/kriskowal/q/blob/master/design/README.js), it's well worth read.
+A promise can be resolved only once, and callbacks passed to `promise` are also called only once, no exceptions. For deeper insight into this concept, and to better understand design decisions please see Kris Kowal [design notes](https://github.com/kriskowal/q/blob/master/design/README.js), it's well worth reading.
 
 <a name="deferred-promise-error-handling" />
 ### Error handling
 
-Promise is rejected when it's resolved with an error, same way if callback passed to `promise` throws exception it becomes resolution of promise returned by `promise` call. To handle error, pass second callback to `promise`:
+A promise is rejected when it's resolved with an error, similarly if a callback passed to `promise` throws exception it becomes the resolution of a promise returned by `promise` call. To handle error, pass second callback to `promise`:
 
 	later()
 	(function (n) {
@@ -124,7 +124,7 @@ Promise is rejected when it's resolved with an error, same way if callback passe
 		// handle error;
 	});
 
-When there is no error callback passed, error is silent. To expose error, end chain with `.end()`, then error that broke the chain will be thrown:
+When there is no error callback passed, error is silent. To expose the error, end chain with `.end()`, then the error that broke the chain will be thrown:
 
 	later()
 	(function (n) {
@@ -135,7 +135,7 @@ When there is no error callback passed, error is silent. To expose error, end ch
 	})
 	.end(); // throws error!
 
-`end` takes optional handler so instead of throwing, error can be handled other way. Behavior is exactly same as when passing second callback to `promise`:
+`end` takes an optional handler so instead of throwing, the error can be handled another way. The behavior is exactly same as when passing a second callback to `promise`:
 
 	later()
 	(function (n) {
@@ -148,7 +148,7 @@ When there is no error callback passed, error is silent. To expose error, end ch
 <a name="asynchronous-functions-as-promises" />
 ## Asynchronous functions as promises
 
-There is a known convention in JavaScript for working with asynchronous calls. Following approach is widely used within node.js:
+There is a known convention in JavaScript for working with asynchronous calls. The following approach is widely used within node.js:
 
 	var afunc = function (x, y, callback) {
 		setTimeout(function () {
@@ -160,7 +160,7 @@ There is a known convention in JavaScript for working with asynchronous calls. F
 		}, 1000);
 	};
 
-Asynchronous function receives callback argument, callback handles both error and success. There's easy way to turn such functions into promises and take advantage of promise design. There's `deferred.asyncToPromise` for that, let's use shorter name:
+An asynchronous function receives a callback argument and the callback handles both error and success. There's an easy way to turn such functions into promises and take advantage of the promise design. There's `deferred.asyncToPromise` for that, let's use a shorter name:
 
 	var a2p = deferred.asyncToPromise;
 
@@ -168,7 +168,7 @@ Asynchronous function receives callback argument, callback handles both error an
 	a2p = require('deferred/lib/async-to-promise');
 
 This method can be used in various ways.  
-First way is to  assign it directly to asynchronous method:
+The first way is to assign it directly to an asynchronous method:
 
 	afunc.a2p = a2p;
 
@@ -177,7 +177,7 @@ First way is to  assign it directly to asynchronous method:
 		console.log(n); // 7
 	});
 
-Second way is more traditional (I personally favor this one as it doesn't touch asynchronous function):
+The second way is more traditional (I personally favor this one as it doesn't touch the asynchronous function):
 
 	a2p = a2p.call;
 
@@ -186,7 +186,7 @@ Second way is more traditional (I personally favor this one as it doesn't touch 
 		console.log(n); // 7
 	});
 
-Third way is to bind method for later execution. We'll use `ba2p` name for that:
+The third way is to bind the method for later execution. We'll use `ba2p` name for that:
 
 	var ba2p = require('deferred/lib/async-to-promise').bind;
 
@@ -198,11 +198,11 @@ Third way is to bind method for later execution. We'll use `ba2p` name for that:
 		console.log(n); // 7
 	});
 
-Note that this way of using it is not perfectly safe. We need to be sure that `abinded` will be called without any not expected arguments, if it's the case, then it won't execute as expected:
+Note that this way of using it is not perfectly safe. We need to be sure that `abinded` will be called without any unexpected arguments, otherwise it won't execute as expected:
 
 	abinded(7, 4); // TypeError: number is not a function.
 
-Node.js example, reading file, changing it's content  and writing under different name:
+Here is a node.js example, reading a file, changing it's content and writing under different name:
 
 	var fs   = require('fs');
 
@@ -230,12 +230,12 @@ As with other API methods, they can also be imported individually:
 	  , all   = require('deferred/lib/join/all')
 	  , first = require('deferred/lib/join/first');
 
-Join methods take arguments of any type and internally distinguish between promises, functions and others. Call them with list of arguments or an array:
+Join methods take arguments of any type and internally distinguish between promises, functions and others. Call them with either a list of arguments or an array:
 
 	join(p1, p2, p3);
 	join([p1, p2, p3]); // same behavior
 
-`join` and `all` return another promise, which resolves with combined result of resolved arguments:
+`join` and `all` return another promise, which resolves with the combined result of resolved arguments:
 
 	join(p1, p2, p3)
 	(function (result) {
@@ -252,25 +252,25 @@ Join methods take arguments of any type and internally distinguish between promi
 <a name="control-flow-join" />
 ### join(...)
 
-`join` returns promise which resolves with an array of resolved values of all arguments.
-Values may be anything, also errors (rejected promises, functions that thrown errors, errors itself). Returned promise always fulfills, never rejects.
+`join` returns a promise which resolves with an array of the resolved values of all arguments.
+Values may be anything, including errors (rejected promises, functions that thrown errors, errors itself). The returned promise always fulfills, never rejects.
 
 <a name="control-flow-all" />
 ### all(...)
 
-Same as `join`, with that difference that all arguments need to be succesful.
-If there's any error, join execution is stopped (following functions are not called), and promise is rejected with error that broke the join chain. In succesful case returned promise value is same as in `join`.
+Same as `join`, with that difference that all arguments need to be successful.
+If there's any error, join execution is stopped (following functions are not called), and promise is rejected with error that broke the join chain. In the successful case the returned promise value is same as in `join`.
 
 <a name="control-flow-first" />
 ### first(...)
 
-Fulfills with first succesfully resolved argument. If all arguments fail, then promise rejects
-with error that occurred last.
+Fulfills with the first successfully resolved argument. If all arguments fail, then the promise rejects
+with the error that occurred last.
 
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above, join functions take any arguments, not only promises. Function arguments are called with fully resolved previous argument, if one resolved succesfully. If previous argument failed then function is never called. Error that rejected previous argument becomes also result of following function within returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
+As mentioned above, join functions take any arguments, not only promises. Function arguments are called with the fully resolved previous argument, if one resolved succesfully. If the previous argument failed then the function is never called. The error that rejected previous argument also becomes the result of the following function within the returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
@@ -288,7 +288,7 @@ Previous read/write file example written with `all`:
 		ba2p(fs.writeFile, __filename + '.changed')
 	).end();
 
-Concat all JavaScript files in given directory and save it to lib.js:
+Concat all JavaScript files in a given directory and save it to lib.js:
 
 	all(
 		// Read all filenames in given path
@@ -317,7 +317,7 @@ Concat all JavaScript files in given directory and save it to lib.js:
 		ba2p(fs.writeFile, __dirname + '/lib.js')
 	).end();
 
-We can shorten it a bit with introduction of functional sugar, it's out of scope of this library but I guess worth an example:
+We can shorten it a bit with the introduction of functional sugar, it's out of scope of this library but I guess worth an example:
 
 	var invoke = require('es5-ext/lib/Function/invoke');
 
@@ -342,14 +342,14 @@ We can shorten it a bit with introduction of functional sugar, it's out of scope
 		ba2p(fs.writeFile, __dirname + '/lib.js')
 	).end();
 
-`invoke` implementation can be found in `es5-ext` project: https://github.com/medikoo/es5-ext/blob/master/lib/Function/invoke.js
+The `invoke` implementation can be found in `es5-ext` project: https://github.com/medikoo/es5-ext/blob/master/lib/Function/invoke.js
 
 <a name="control-flow-examples-asynchronous-loop" />
 #### Asynchronous loop
 
 Let's say we're after content that is paginated over many pages on some website (like search results). We don't know how many pages it spans. We only know by reading page _n_ whether page _n + 1_ exists.
 
-First things first. Simple download function, it downloads page at given path from predefinied domain and returns promise:
+First things first. Here is a simple download function that downloads the page at the given path from a predefinied domain and returns a promise:
 
 	var http = require('http');
 
@@ -412,7 +412,7 @@ We can also make it with `all`:
 <a name="comparision" />
 ### Comparision to other solutions that take non promise approach
 
-Following are examples from documentation of other solutions rewritten deferred/promise way. You'll be the judge, which solution you find more powerful and friendly.
+The following are examples from documentation of other solutions rewritten in a deferred/promise way. You'll be the judge, which solution you find more powerful and friendly.
 
 <a name="comparision-to-step" />
 #### Step -> https://github.com/creationix/step
@@ -478,7 +478,7 @@ For parallel execution we pass already initialized promises:
 <a name="comparision-to-async-waterfall" />
 ##### async.waterfall:
 
-Resolved values are always passed to following functions, so again we have it out of a box:
+Resolved values are always passed to following functions, so again we have it out of the box:
 
 	all(
 		function () {
@@ -526,5 +526,5 @@ Asynchronous handlers for array iterators, forEach and map:
 	})
 	.end();
 
-I decided not to implement array iterator functions in this library, for two reasons,
-first is as you see above - it's very easy and straightforward to setup them with provided join methods, second it's unlikely we need most of them.
+I decided not to implement array iterator functions in this library, for two reasons:
+first, as you see above - it's very easy and straightforward to setup them with provided join methods, second it's unlikely we need most of them.
