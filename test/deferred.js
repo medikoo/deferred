@@ -76,5 +76,21 @@ module.exports = {
 			a(count, 1); d();
 		}, end: noop});
 		defer.promise.end();
+	},
+	"Regular async callback": function (t, a, d) {
+		var defer = t(), x = {};
+		defer.resolve(x);
+		a(defer.promise.cb(function (err, res) {
+			a(err, null, "Error object is null");
+			a(res, x); d();
+		}), undefined, "Does not return anything");
+	},
+	"Regular async callback, error": function (t, a, d) {
+		var defer = t(), x = new Error('Error');
+		defer.resolve(x);
+		defer.promise.cb(function (err, res) {
+			a(err, x);
+			a(res, null, "Result is null"); d();
+		});
 	}
 };

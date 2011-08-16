@@ -29,5 +29,19 @@ module.exports = {
 		t(x).end(function (e) {
 			a(e, x); d();
 		});
+	},
+	"Regular async callback": function (t, a, d) {
+		var x = {};
+		a(t(x).cb(function (err, res) {
+			a(err, null, "Error object is null");
+			a(res, x); d();
+		}), undefined, "Does not return anything");
+	},
+	"Regular async callback, error": function (t, a, d) {
+		var x = new Error('Error');
+		t(x).cb(function (err, res) {
+			a(err, x);
+			a(res, null, "Result is null"); d();
+		});
 	}
 };
