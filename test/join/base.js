@@ -11,6 +11,28 @@ module.exports = {
 		return {
 			"Result length matches chain length": function (t, a, d) {
 				p(function (r) {
+					a(r.length, 2); d();
+				}, a.never).end();
+			},
+			"Result #1 matches promise #1": function (t, a, d) {
+				p(function (r) {
+					a(x, r[0]); d();
+				}, a.never).end();
+			},
+			"Result #2 matches promise #2": function (t, a, d) {
+				p(function (r) {
+					a(y, r[1]); d();
+				}, a.never).end();
+			}
+		};
+	},
+	"Array with map": function (t, a) {
+		var x = {}, y = {};
+		var p = Object.create(t).init([[x, y], promise]);
+
+		return {
+			"Result length matches chain length": function (t, a, d) {
+				p(function (r) {
 					// console.log("RUN THEN", r);
 					a(r.length, 2); d();
 				}, a.never).end();
@@ -23,6 +45,31 @@ module.exports = {
 			"Result #2 matches promise #2": function (t, a, d) {
 				p(function (r) {
 					a(y, r[1]); d();
+				}, a.never).end();
+			}
+		};
+	},
+	"Array with map sequence": function (t, a) {
+		var x = { name: 'x' }, y = { name: 'y'};
+		var p = Object.create(t).init([[x, y], promise, function (x) {
+			return x.name;
+		}, promise]);
+
+		return {
+			"Result length matches chain length": function (t, a, d) {
+				p(function (r) {
+					// console.log("RUN THEN", r);
+					a(r.length, 2); d();
+				}, a.never).end();
+			},
+			"Result #1 matches promise #1": function (t, a, d) {
+				p(function (r) {
+					a('x', r[0]); d();
+				}, a.never).end();
+			},
+			"Result #2 matches promise #2": function (t, a, d) {
+				p(function (r) {
+					a('y', r[1]); d();
 				}, a.never).end();
 			}
 		};
