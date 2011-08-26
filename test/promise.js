@@ -82,5 +82,13 @@ module.exports = {
 				a(r, e); d();
 			}).end();
 		}
+	},
+	"Invoke": function (t, a, d) {
+		var z = {}, x = { bar: z }
+		  , y = { foo: function (n) { return x[n]; } };
+		t(y).invoke('foo', 'bar')
+		(function (r) {
+			a(r, z); d();
+		}, d).end();
 	}
 };

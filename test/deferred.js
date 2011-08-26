@@ -131,5 +131,13 @@ module.exports = {
 				a(r, e); d();
 			}).end();
 		}
+	},
+	"Invoke": function (t, a, d) {
+		var defer = t(), z = {}, x = { bar: z }
+		  , y = { foo: function (n) { return x[n]; } };
+		defer.resolve(y).invoke('foo', 'bar')
+		(function (r) {
+			a(r, z); d();
+		}, d).end();
 	}
 };
