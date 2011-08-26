@@ -58,13 +58,14 @@ module.exports = {
 		}).end();
 	},
 	"Error handler in end": function (t, a, d) {
-		var defer = t(), x = new Error('Test error');
+		var defer = t(), x = new Error('Test error'), p;
 		defer.resolve(1);
-		defer.promise(function () {
+		p = defer.promise(function () {
 			throw x;
-		}).end(function (e) {
-			a(e, x); d();
 		});
+		a(p.end(function (e) {
+			a(e, x); d();
+		}), p, "Returns self promise");
 	},
 	"Prevent double then callbacks with alien promise": function (t, a, d) {
 		var defer = t(), count = 0;

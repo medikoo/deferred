@@ -25,10 +25,11 @@ module.exports = {
 		}).end();
 	},
 	"End with custom error handler": function (t, a, d) {
-		var x = new Error('Test');
-		t(x).end(function (e) {
+		var x = new Error('Test'), p;
+		p = t(x);
+		a(p.end(function (e) {
 			a(e, x); d();
-		});
+		}), p, "Returns self promise");
 	},
 	"Regular async callback": function (t, a, d) {
 		var x = {};
