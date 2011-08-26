@@ -93,5 +93,43 @@ module.exports = {
 			a(err, x);
 			a(res, null, "Result is null"); d();
 		});
+	},
+	"Join": function (t, a, d) {
+		var defer = t(), x = 0, e = new Error();
+		defer.resolve([1,2,3]).join(function (y) {
+			return y == 1 ? e : y;
+		})
+		(function (r) {
+			a.deep(r, [e, 2, 3]); d();
+		}, d).end();
+	},
+	"First": function (t, a, d) {
+		var defer = t(), x = 0;
+		defer.resolve([1,2,3]).first(function (y) {
+			return y == 1 ? new Error() : y;
+		})
+		(function (r) {
+			a(r, 2); d();
+		}, d).end();
+	},
+	"All": {
+		"": function (t, a, d) {
+			var defer = t(), x = 0
+			defer.resolve([1,2,3]).all(function (y) {
+				return x += y;
+			})
+			(function (r) {
+				a.deep(r, [1, 3, 6]); d();
+			}, d).end();
+		},
+		"Error": function (t, a, d) {
+			var defer = t(), x = 0, e = new Error();
+			defer.resolve([1,2,3]).all(function (y) {
+				return y == 1 ? e : y;
+			})
+			(a.never, function (r) {
+				a(r, e); d();
+			}).end();
+		}
 	}
 };
