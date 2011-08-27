@@ -12,6 +12,8 @@ module.exports = {
 		delete o.deferred;
 		delete o.join;
 		delete o.isPromise;
+		delete o.ports;
+		delete o.port;
 
 		return indexTest.readDir(dir + '/join')
 			.then(function (o2) {
@@ -25,5 +27,13 @@ module.exports = {
 		var d = t();
 		d.resolve({});
 		a.ok(isFunction(d.resolve) && isFunction(d.promise.then));
+	},
+	"Ports are loaded": function (t, a) {
+		var p = t().resolve();
+		a.ok(p.all, "All");
+		a.ok(p.cb, "Cb");
+		a.ok(p.first, "First");
+		a.ok(p.invoke, "Invoke");
+		a.ok(p.join, "Join");
 	}
 };
