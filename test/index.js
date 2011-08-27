@@ -34,6 +34,7 @@ module.exports = {
 		a.ok(p.cb, "Cb");
 		a.ok(p.first, "First");
 		a.ok(p.invoke, "Invoke");
+		a.ok(p.invokeAsync, "Invoke async");
 		a.ok(p.join, "Join");
 	}
 };
