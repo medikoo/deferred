@@ -12,6 +12,17 @@ module.exports = {
 			a(result, x); d();
 		}, a.never);
 	},
+	"Successful: Many args": function (t, a, d) {
+		var x = {}, y = {}, z = {};
+		t = t.call;
+		t(function (callback) {
+			setTimeout(function () {
+				callback(null, x, y, z);
+			}, 0);
+		})(function (result) {
+			a.deep(result, [x, y, z]); d();
+		}, a.never);
+	},
 	"Erroneous": function (t, a, d) {
 		var x = new Error('Test');
 		t = t.call;
