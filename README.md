@@ -217,7 +217,7 @@ Here is a node.js example, reading a file, changing it's content and writing und
 <a name="control-flow" />
 ## Control-flow, joining promises
 
-There are three dedicated methods for joining promises. They're avaiable on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
+There are three dedicated methods for joining promises. They're available on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
 
 	// let's access them directly:
 	var join = deferred.join;
@@ -270,7 +270,7 @@ with the error that occurred last.
 <a name="control-flow-non-promise-arguments" />
 ### Non promise arguments
 
-As mentioned above, join functions take any arguments, not only promises. Function arguments are called with the fully resolved previous argument, if one resolved succesfully. If the previous argument failed then the function is never called. The error that rejected previous argument also becomes the result of the following function within the returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
+As mentioned above, join functions take any arguments, not only promises. Function arguments are called with the fully resolved previous argument, if one resolved successfully. If the previous argument failed then the function is never called. The error that rejected previous argument also becomes the result of the following function within the returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
 
 <a name="control-flow-examples" />
 ### Examples:
