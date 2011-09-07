@@ -56,16 +56,5 @@ module.exports = {
 		})(a.never, function (e) {
 			a(e, x); d();
 		}).end();
-	},
-	"Prevent double then callbacks with alien promise": function (t, a, d) {
-		var defer = t(), count = 0;
-		defer.promise.then(function () {
-			++count;
-		});
-		defer.resolve({ then: function (callback) {
-			callback(); callback();
-			a(count, 1); d();
-		}, end: noop});
-		defer.promise.end();
 	}
 };
