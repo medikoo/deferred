@@ -1,7 +1,6 @@
 'use strict';
 
-var deferred = require('../../lib/deferred')
-  , promise  = require('../../lib/promise');
+var deferred = require('../../lib/deferred');
 
 module.exports = {
 	"Deferred": function (a, d) {
@@ -23,7 +22,7 @@ module.exports = {
 				cb(null, y);
 			}, 10);
 		};
-		promise({ foo: fn }).invokeAsync('foo', x)
+		deferred({ foo: fn }).invokeAsync('foo', x)
 		(function (r) {
 			a(r, x); d();
 		}, d).end();

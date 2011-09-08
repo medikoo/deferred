@@ -1,9 +1,9 @@
 'use strict';
 
-var promise = require('../../lib/promise');
+var deferred = require('../../lib/deferred');
 
 module.exports = function (t, a, d) {
-	t(promise(1), promise(2), promise(3))(function (r) {
+	t(deferred(1), deferred(2), deferred(3))(function (r) {
 		a(r.join('|'), '1|2|3'); d();
 	}, a.never).end();
 };

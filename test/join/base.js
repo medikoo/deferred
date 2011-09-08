@@ -1,12 +1,11 @@
 'use strict';
 
-var deferred = require('../../lib/deferred')
-  , promise  = require('../../lib/promise');
+var deferred = require('../../lib/deferred');
 
 module.exports = {
 	"Array as argument": function (t, a) {
 		var x = {}, y = {};
-		var p = Object.create(t).init([[promise(x), promise(y)]]);
+		var p = Object.create(t).init([[deferred(x), deferred(y)]]);
 
 		return {
 			"Result length matches chain length": function (t, a, d) {
@@ -28,7 +27,7 @@ module.exports = {
 	},
 	"Array with map": function (t, a) {
 		var x = {}, y = {};
-		var p = Object.create(t).init([[x, y], promise]);
+		var p = Object.create(t).init([[x, y], deferred]);
 
 		return {
 			"Result length matches chain length": function (t, a, d) {
@@ -51,9 +50,9 @@ module.exports = {
 	},
 	"Array with map sequence": function (t, a) {
 		var x = { name: 'x' }, y = { name: 'y'};
-		var p = Object.create(t).init([[x, y], promise, function (x) {
+		var p = Object.create(t).init([[x, y], deferred, function (x) {
 			return x.name;
-		}, promise]);
+		}, deferred]);
 
 		return {
 			"Result length matches chain length": function (t, a, d) {
@@ -77,8 +76,8 @@ module.exports = {
 	"Promises": function (t, a) {
 		var x = {}, y = {}, z = {};
 		var d = deferred();
-		var p = Object.create(t).init([promise(x), d.promise, promise(z)]);
-		d.resolve(promise(y));
+		var p = Object.create(t).init([deferred(x), d.promise, deferred(z)]);
+		d.resolve(deferred(y));
 		return {
 			"Result length matches chain length": function (t, a, d) {
 				p(function (r) {
@@ -136,10 +135,10 @@ module.exports = {
 	"Promise & function": function (t, a) {
 		var w = {}, x = {}, y = {}, z = {}, x2, y2;
 		var p = Object.create(t).init([function () {
-			return promise(w);
-		}, promise(x), function (r) {
+			return deferred(w);
+		}, deferred(x), function (r) {
 			x2 = r;
-			return promise(y);
+			return deferred(y);
 		}, function (r) {
 			y2 = r;
 			return z;
@@ -209,7 +208,7 @@ module.exports = {
 	"Error": function (t, a) {
 		var e = new Error('Test'), x = {};
 		var p = Object.create(t).init(
-			[promise(e), a.never, promise(x)]);
+			[deferred(e), a.never, deferred(x)]);
 		return {
 			"Result length matches chain length": function (t, a, d) {
 				p(function (r) {
@@ -242,7 +241,7 @@ module.exports = {
 		};
 
 		var x = {}, y = {}, z = {};
-		var p = Object.create(base).init([promise(x), y, promise(z)]);
+		var p = Object.create(base).init([deferred(x), y, deferred(z)]);
 		p(function (r) {
 			a(r, y); d();
 		});

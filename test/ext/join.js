@@ -1,7 +1,6 @@
 'use strict';
 
-var deferred = require('../../lib/deferred')
-  , promise  = require('../../lib/promise');
+var deferred = require('../../lib/deferred');
 
 module.exports = {
 	"Deferred": function (a, d) {
@@ -15,7 +14,7 @@ module.exports = {
 	},
 	"Promise": function (a, d) {
 		var x = 0, e = new Error();
-		promise([1,2,3]).join(function (y) {
+		deferred([1,2,3]).join(function (y) {
 			return y == 1 ? e : y;
 		})
 		(function (r) {

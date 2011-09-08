@@ -2,9 +2,9 @@
 
 module.exports = function (t, a, d) {
 	var x = {}, y = {}, p;
-	t(function () {
+	t(100).call(function () {
 		return y;
-	}, 100)(function (r) {
+	})(function (r) {
 		x = r;
 	}).end();
 	a.not(x, y, "Not yet");
