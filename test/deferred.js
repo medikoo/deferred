@@ -56,5 +56,31 @@ module.exports = {
 		})(a.never, function (e) {
 			a(e, x); d();
 		}).end();
+	},
+	"Object promise resolves to same object": function (t, a, d) {
+		var x = {};
+		t(x)(function (result) {
+			a(result, x); d();
+		}, a.never).end();
+	},
+	"Promise returns promise": function (t, a) {
+		var p = t({});
+		a(t(p), p);
+	},
+	"Error returns rejected promise": function (t, a, d) {
+		var x = new Error('Test');
+		t(x)(a.never, function (e) {
+			a(e, x); d();
+		}).end();
+	},
+	"End": function (t, a, d) {
+		var defer = t(), x = new Error('Test error'), p;
+		defer.resolve(1);
+		p = defer.promise(function () {
+			throw x;
+		});
+		a(p.end(function (e) {
+			a(e, x); d();
+		}), p, "Returns self promise");
 	}
 };
