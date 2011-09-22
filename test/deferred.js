@@ -82,5 +82,11 @@ module.exports = {
 		a(p.end(function (e) {
 			a(e, x); d();
 		}), p, "Returns self promise");
+	},
+	"ValueOf": function (t, a) {
+		var defer = t(), x = {};
+		a(defer.promise.valueOf(), defer.promise, "Unresolved");
+		defer.resolve(x);
+		a(defer.promise.valueOf(), x, "Resolved");
 	}
 };
