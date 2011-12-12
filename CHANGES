@@ -1,3 +1,6 @@
+v0.2.6  --  2011.12.12
+* Cleared npm warning for misnamed property in package.json
+
 v0.2.5  --  2011.11.08
 * Fix for bug introduced with node.js >= 0.5.7 ( https://github.com/joyent/node/issues/1877 )
 
