@@ -2,7 +2,7 @@
 
 var path       = require('path')
   , isFunction = require('es5-ext/lib/Function/is-function')
-  , merge      = require('es5-ext/lib/Object/plain/merge').call
+  , merge      = require('es5-ext/lib/Object/prototype/merge')
   , indexTest  = require('tad/lib/utils/index-test')
 
   , dir = path.dirname(__dirname) + '/lib';
@@ -20,7 +20,7 @@ module.exports = {
 				delete o2.base;
 				o2.join = o2.default;
 				delete o2.default;
-				return merge(o, o2);
+				return merge.call(o, o2);
 			});
 	}), "index"),
 	"Deferred function is main object": function (t, a) {
