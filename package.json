@@ -1,6 +1,6 @@
 {
 	"name": "deferred",
-	"version": "0.2.6",
+	"version": "0.3.0",
 	"description": "Asynchronous control-flow with deferred and promises",
 	"keywords": ["deferred", "promise", "promises", "async", "asynchronous", "future", "futures", "continuations", "flow"],
 	"author": "Mariusz Nowak <medikoo+deferred@medikoo.com> (http://www.medikoo.com/)",
@@ -20,7 +20,7 @@
 		"es5-ext": "0.6.x",
 		"clock": "0.1.x"
 	},
-	"scripts": { "test": "./node_modules/tad/bin/tad lib" },
+	"scripts": { "test": "node ./node_modules/tad/bin/tad lib" },
 	"devDependencies": {
 		"tad": "0.1.x"
 	}
