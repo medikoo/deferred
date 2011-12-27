@@ -40,13 +40,12 @@ module.exports = {
 			a(x, e); d();
 		}).end();
 	},
-	"Error on second resolve": function (t, a) {
+	"Only first resolve is taken": function (t, a) {
 		var defer = t();
 		defer.promise.end();
 		defer.resolve(1);
-		a.throws(function () {
-			defer.resolve(2);
-		});
+		defer.resolve(2);
+		a(defer.promise.valueOf(), 1);
 	},
 	"Erroneous callback rejects promise": function (t, a, d) {
 		var defer = t(), x = new Error('Test error');
@@ -88,5 +87,27 @@ module.exports = {
 		a(defer.promise.valueOf(), defer.promise, "Unresolved");
 		defer.resolve(x);
 		a(defer.promise.valueOf(), x, "Resolved");
+	},
+	"Many promises": function (t, a) {
+		var x = {}, y = {};
+		return {
+			"Success": function (a, d) {
+				t(t(x), y, null)
+				(function (r) {
+					a.deep(r, [x, y, null]); d();
+				}).end();
+			},
+			"Error": function (a, d) {
+				var d1 = t(), v, res = false;
+				setTimeout(d1.resolve, 20);
+				t(t(x), d1.promise(function () {
+					a(res, true, "Resolved"); d();
+				}), v = new Error("Error"), {})
+				(a.never, function (e) {
+					a(e, v);
+					res = true;
+				}).end();
+			}
+		};
 	}
 };

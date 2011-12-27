@@ -1,6 +1,7 @@
 'use strict';
 
-var deferred = require('../../lib/deferred');
+var aritize = require('es5-ext/lib/Function/prototype/aritize')
+  , deferred = aritize.call(require('../../lib/deferred'), 1);
 
 module.exports = {
 	"Array as argument": function (t, a) {
