@@ -1,0 +1,56 @@
+'use strict';
+
+var deferred = require('../lib/deferred');
+
+module.exports = {
+	"Successful": function (t, a, d) {
+		var x = {}, y = {}, z = {}, defer;
+		defer = deferred();
+		defer.promise(function (result) {
+			a(result, z); d();
+		}, a.never);
+		t(function (arg1, arg2, callback) {
+			a.deep([arg1, arg2], [x, y], "Arguments");
+			setTimeout(function () {
+				callback(null, z);
+			}, 0);
+		}, null, [x, y], defer.resolve);
+	},
+	"Successful: Many args": function (t, a, d) {
+		var x = {}, y = {}, z = {}, defer;
+		defer = deferred();
+		defer.promise(function (result) {
+			a.deep(result, [x, y, z]); d();
+		}, a.never);
+		t(function (arg1, arg2, callback) {
+			a.deep([arg1, arg2], [x, y], "Arguments");
+			setTimeout(function () {
+				callback(null, x, y, z);
+			}, 0);
+		}, null, [x, y], defer.resolve);
+	},
+	"Erroneous": function (t, a, d) {
+		var x = new Error('Test'), defer;
+		defer = deferred();
+		defer.promise(a.never, function (result) {
+			a(result, x); d();
+		});
+		t(function (callback) {
+			setTimeout(function () {
+				callback(x);
+			}, 0);
+		}, null, [], defer.resolve);
+	},
+	"True/False": function (t, a, d) {
+		var defer;
+		defer = deferred();
+		defer.promise(function (result) {
+			a(result, false); d();
+		}, a.never);
+		t(function (callback) {
+			setTimeout(function () {
+				callback(false);
+			}, 0);
+		}, null, [], defer.resolve);
+	}
+};
