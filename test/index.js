@@ -15,6 +15,7 @@ module.exports = {
 		delete o.ext;
 		delete o.base;
 		delete o.asyncFn;
+		delete o.fn;
 		return o;
 		return indexTest.readDir(dir + '/join')
 			.then(function (o2) {
@@ -23,7 +24,7 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['afn', 'bafn']),
+	}), ['afn', 'bafn', 'fn', 'bfn']),
 	"Deferred function is main object": function (t, a) {
 		var d = t();
 		d.resolve({});
