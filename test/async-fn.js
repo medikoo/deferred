@@ -3,7 +3,7 @@
 module.exports = {
 	"Successful": function (t, a, d) {
 		var x = {};
-		t = t.call;
+		t = require('../lib').afn
 		t(function (callback) {
 			setTimeout(function () {
 				callback(null, x);
@@ -14,7 +14,7 @@ module.exports = {
 	},
 	"Successful: Many args": function (t, a, d) {
 		var x = {}, y = {}, z = {};
-		t = t.call;
+		t = require('../lib').afn
 		t(function (callback) {
 			setTimeout(function () {
 				callback(null, x, y, z);
@@ -25,7 +25,7 @@ module.exports = {
 	},
 	"Erroneous": function (t, a, d) {
 		var x = new Error('Test');
-		t = t.call;
+		t = require('../lib').afn
 		t(function (callback) {
 			setTimeout(function () {
 				callback(x);
@@ -35,7 +35,7 @@ module.exports = {
 		});
 	},
 	"True/False": function (t, a, d) {
-		t = t.call;
+		t = require('../lib').afn
 		t(function (callback) {
 			setTimeout(function () {
 				callback(false);
