@@ -1,8 +1,10 @@
 'use strict';
 
 var path       = require('path')
+  , readdir    = require('fs').readdir
   , isFunction = require('es5-ext/lib/Function/is-function')
   , merge      = require('es5-ext/lib/Object/prototype/merge')
+  , convert    = require('es5-ext/lib/String/prototype/dash-to-camel-case')
   , indexTest  = require('tad/lib/utils/index-test')
 
   , dir = path.dirname(__dirname) + '/lib';
@@ -30,13 +32,20 @@ module.exports = {
 		d.resolve({});
 		a.ok(isFunction(d.resolve) && isFunction(d.promise.then));
 	},
-	"Ports are loaded": function (t, a) {
+	"Ports are loaded": function (t, a, d) {
 		var p = t().resolve();
-		a.ok(p.all, "All");
-		a.ok(p.cb, "Cb");
-		a.ok(p.first, "First");
-		a.ok(p.invoke, "Invoke");
-		a.ok(p.invokeAsync, "Invoke async");
-		a.ok(p.join, "Join");
+		readdir(dir + '/ext', function (err, files) {
+			if (err) {
+				d(err);
+				return;
+			}
+			files.map(function (file) {
+				var name;
+				if ((file.slice(-3) === '.js') && (file[0] !== '_')) {
+					a(isFunction(p[name = convert.call(file.slice(0, -3))]), true, name);
+				}
+			});
+			d();
+		});
 	}
 };

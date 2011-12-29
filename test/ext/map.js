@@ -6,7 +6,7 @@ module.exports = {
 	"Deferred": {
 		"": function (a, d) {
 			var defer = deferred(), x = 0;
-			defer.resolve([1,2,3]).all(function (y) {
+			defer.resolve([1,2,3]).map(function (y) {
 				return x += y;
 			})
 			(function (r) {
@@ -15,7 +15,7 @@ module.exports = {
 		},
 		"Error": function (a, d) {
 			var defer = deferred(), x = 0, e = new Error();
-			defer.resolve([1,2,3]).all(function (y) {
+			defer.resolve([1,2,3]).map(function (y) {
 				return y == 1 ? e : y;
 			})
 			(a.never, function (r) {
@@ -26,7 +26,7 @@ module.exports = {
 	"Promise": {
 		"": function (a, d) {
 			var x = 0;
-			deferred([1,2,3]).all(function (y) {
+			deferred([1,2,3]).map(function (y) {
 				return x += y;
 			})
 			(function (r) {
@@ -35,7 +35,7 @@ module.exports = {
 		},
 		"Error": function (a, d) {
 			var x = 0, e = new Error();
-			deferred([1,2,3]).all(function (y) {
+			deferred([1,2,3]).map(function (y) {
 				return y == 1 ? e : y;
 			})
 			(a.never, function (r) {
