@@ -15,6 +15,7 @@ module.exports = {
 		delete o.join;
 		delete o.isPromise;
 		delete o.ext;
+		delete o.extend;
 		delete o.base;
 		delete o.asyncFn;
 		delete o.fn;

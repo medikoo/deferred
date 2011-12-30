@@ -3,12 +3,6 @@
 var noop = require('es5-ext/lib/Function/noop');
 
 module.exports = {
-	"Pass resolved value to then": function (t, a, d) {
-		var defer = t(), x = {};
-		defer.resolve(x)(function (result) {
-			a(result, x); d();
-		}, a.never).end();
-	},
 	"Then callback run in next tick": function (t, a, d) {
 		var defer = t(), x = {}, invoked = false;
 		defer.resolve(x).then(function (result) {
@@ -78,15 +72,9 @@ module.exports = {
 		p = defer.promise(function () {
 			throw x;
 		});
-		a(p.end(function (e) {
+		p.end(function (e) {
 			a(e, x); d();
-		}), p, "Returns self promise");
-	},
-	"ValueOf": function (t, a) {
-		var defer = t(), x = {};
-		a(defer.promise.valueOf(), defer.promise, "Unresolved");
-		defer.resolve(x);
-		a(defer.promise.valueOf(), x, "Resolved");
+		});
 	},
 	"Many promises": function (t, a) {
 		var x = {}, y = {};
