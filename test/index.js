@@ -19,6 +19,7 @@ module.exports = {
 		delete o.base;
 		delete o.asyncFn;
 		delete o.fn;
+		delete o.promise;
 		return o;
 		return indexTest.readDir(dir + '/join')
 			.then(function (o2) {
