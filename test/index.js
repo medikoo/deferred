@@ -49,7 +49,7 @@ module.exports = {
 	},
 	"Ports are loaded": function (t, a, d) {
 		var p = t().resolve();
-		readdir(dir + '/ext', function (err, files) {
+		readdir(dir + '/ext/promise', function (err, files) {
 			if (err) {
 				d(err);
 				return;

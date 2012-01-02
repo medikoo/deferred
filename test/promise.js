@@ -57,7 +57,7 @@ module.exports = {
 				a(res, x); d();
 			});
 		},
-		"ValueOf": function (t, a, d) {
+		"ValueOf": function (t, a) {
 			var y = t();
 			a(y.valueOf(), y, "Unresolved");
 			y._base.resolve(x);

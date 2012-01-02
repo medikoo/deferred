@@ -14,7 +14,7 @@ module.exports = function (t, a) {
 				a(result, z); d();
 			}, a.never);
 		},
-		"Sync": function () {
+		"Sync": function (a, d) {
 			t.call(function (arg1, arg2) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
@@ -23,7 +23,7 @@ module.exports = function (t, a) {
 				a(result, z); d();
 			}, a.never);
 		},
-		"Sync error": function () {
+		"Sync error": function (a, d) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;

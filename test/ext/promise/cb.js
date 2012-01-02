@@ -17,7 +17,7 @@ module.exports = {
 			defer.resolve(x);
 			defer.promise.cb(function (err, res) {
 				a(err, x);
-				a(res, null, "Result is null"); d();
+				a(res, undefined, "Result is undefined"); d();
 			});
 		}
 	},
@@ -33,7 +33,7 @@ module.exports = {
 			var x = new Error('Error');
 			deferred(x).cb(function (err, res) {
 				a(err, x);
-				a(res, null, "Result is null"); d();
+				a(res, undefined, "Result is undefined"); d();
 			});
 		}
 	}
