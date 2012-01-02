@@ -25,12 +25,20 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['delay']),
+	}), ['delay', 'promisify']),
 	"Delay": function (t, a, d) {
 		var x = {};
 		t.delay(function (r) {
 			return r
 		}, 5)(x)(function (r) {
+			a(r, x); d();
+		});
+	},
+	"Promisify": function (t, a, d) {
+		var x = {};
+		t.promisify(function (cb) {
+			cb(null, x);
+		})()(function (r) {
 			a(r, x); d();
 		});
 	},
