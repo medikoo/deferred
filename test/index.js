@@ -25,7 +25,15 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['afn', 'bafn', 'fn', 'bfn']),
+	}), ['delay']),
+	"Delay": function (t, a, d) {
+		var x = {};
+		t.delay(function (r) {
+			return r
+		}, 5)(x)(function (r) {
+			a(r, x); d();
+		});
+	},
 	"Deferred function is main object": function (t, a) {
 		var d = t();
 		d.resolve({});
