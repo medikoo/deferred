@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../lib/deferred');
+var deferred = require('../../../lib/deferred');
 
 module.exports = {
 	"Deferred": {
