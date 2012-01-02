@@ -8,7 +8,7 @@ module.exports = function (t, a) {
 	return {
 		"Both": function (a, d) {
 			def = t('$test:both', function (arg1, arg2) {
-				this._base._next('$test:both', [y, z]);
+				this._base.next('$test:both', [y, z]);
 				return [arg1, arg2, x];
 			}, function (arg1, arg2) {
 				a.deep([arg1, arg2], [y, z], "Back"); d();
