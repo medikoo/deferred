@@ -8,7 +8,7 @@ module.exports = function (t, a) {
 		setTimeout(function () {
 			callback(null, z);
 		}, 0);
-	}, x).call(u, y)(function (result) {
+	}).call(u, x, y)(function (result) {
 		a(result, z); d();
 	}, a.never);
 };

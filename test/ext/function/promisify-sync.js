@@ -9,7 +9,7 @@ module.exports = function (t, a) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
-			}, x).call(u, y)(function (result) {
+			}).call(u, x, y)(function (result) {
 				a(result, z); d();
 			}, a.never);
 		},
