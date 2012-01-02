@@ -22,14 +22,6 @@ module.exports = function (t, a) {
 			}, x).call(u, y)(function (result) {
 				a(result, z); d();
 			}, a.never);
-		},
-		"Sync error": function (a, d) {
-			var e = new Error("Error");
-			t.call(function () {
-				throw e;
-			})()(a.never, function (result) {
-				a(result, e); d();
-			});
 		}
 	};
 };

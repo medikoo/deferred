@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../lib/deferred');
+var deferred = require('../../../lib/deferred');
 
 module.exports = {
 	"Successful": function (t, a, d) {
@@ -14,7 +14,7 @@ module.exports = {
 			setTimeout(function () {
 				callback(null, z);
 			}, 0);
-		}, null, [x, y], defer.resolve);
+		}, [x, y], defer.resolve);
 	},
 	"Successful: Many args": function (t, a, d) {
 		var x = {}, y = {}, z = {}, defer;
@@ -27,7 +27,7 @@ module.exports = {
 			setTimeout(function () {
 				callback(null, x, y, z);
 			}, 0);
-		}, null, [x, y], defer.resolve);
+		}, [x, y], defer.resolve);
 	},
 	"Erroneous": function (t, a, d) {
 		var x = new Error('Test'), defer;
@@ -39,7 +39,7 @@ module.exports = {
 			setTimeout(function () {
 				callback(x);
 			}, 0);
-		}, null, [], defer.resolve);
+		}, [], defer.resolve);
 	},
 	"True/False": function (t, a, d) {
 		var defer;
@@ -51,6 +51,6 @@ module.exports = {
 			setTimeout(function () {
 				callback(false);
 			}, 0);
-		}, null, [], defer.resolve);
+		}, [], defer.resolve);
 	}
 };
