@@ -7,7 +7,7 @@ module.exports = {
 		var defer = deferred(), z = {}, x = { bar: z }
 		  , y = { foo: function (n) { return x[n]; } }
 		  , invoked = false;
-		defer.resolve(y).invoke('foo', 'bar')
+		defer.resolve(y).invokeSync('foo', 'bar')
 		(function (r) {
 			invoked = true;
 			a(r, z); d();
@@ -17,7 +17,7 @@ module.exports = {
 	"Promise": function (a, d) {
 		var z = {}, x = { bar: z }
 		  , y = { foo: function (n) { return x[n]; } };
-		deferred(y).invoke('foo', 'bar')
+		deferred(y).invokeSync('foo', 'bar')
 		(function (r) {
 			a(r, z); d();
 		}, d).end();
