@@ -3,6 +3,8 @@
 var path       = require('path')
   , readdir    = require('fs').readdir
   , isFunction = require('es5-ext/lib/Function/is-function')
+  , not        = require('es5-ext/lib/Function/prototype/not')
+  , contains   = require('es5-ext/lib/Array/prototype/contains')
   , merge      = require('es5-ext/lib/Object/prototype/merge')
   , convert    = require('es5-ext/lib/String/prototype/dash-to-camel-case')
   , indexTest  = require('tad/lib/utils/index-test')
@@ -55,11 +57,13 @@ module.exports = {
 				return;
 			}
 			files.map(function (file) {
-				var name;
 				if ((file.slice(-3) === '.js') && (file[0] !== '_')) {
-					a(isFunction(p[name = convert.call(file.slice(0, -3))]), true, name);
+					return convert.call(file.slice(0, -3));
 				}
-			});
+			}).filter(Boolean).filter(not.call(contains),
+				['invokeAsync', 'invokeSync']).forEach(function (file) {
+					a(isFunction(p[file]), true, file);
+				});
 			d();
 		});
 	}
