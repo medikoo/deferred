@@ -11,7 +11,7 @@ module.exports = function (t, a) {
 				return z;
 			}).call(u, x, y)(function (result) {
 				a(result, z); d();
-			}, a.never);
+			}, a.never).end(d);
 		},
 		"Error": function (a, d) {
 			var e = new Error("Error");
@@ -19,7 +19,7 @@ module.exports = function (t, a) {
 				throw e;
 			})()(a.never, function (result) {
 				a(result, e); d();
-			});
+			}).end(d);
 		}
 	};
 };

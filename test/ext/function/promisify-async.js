@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (t, a) {
+module.exports = function (t, a, d) {
 	var u = {}, x = {}, y = {}, z = {};
 	t.call(function (arg1, arg2, callback) {
 		a(this, u, "Context");
@@ -10,5 +10,5 @@ module.exports = function (t, a) {
 		}, 0);
 	}).call(u, x, y)(function (result) {
 		a(result, z); d();
-	}, a.never);
+	}, a.never).end(d);
 };
