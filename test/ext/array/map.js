@@ -25,10 +25,14 @@ module.exports = function (t) {
 					}, a.never);
 				},
 				"Callback": function (a, d) {
-					t.call([x], function (arg) {
+					var list = [x];
+					t.call(list, function (arg, index, target) {
 						a(arg, x, "Argument");
+						a(index, 0, "Index");
+						a(target, list, "Target");
+						a(this, x, "Context");
 						return y;
-					})(function (result) {
+					}, x)(function (result) {
 						a.deep(result, [y]); d();
 					}, a.never);
 				}

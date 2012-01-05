@@ -61,9 +61,12 @@ module.exports = function (t) {
 					},
 					"Callback": {
 						"": function (a, d) {
-							t.call([x], function (acc, arg) {
+							var list = [x];
+							t.call(list, function (acc, arg, i, target) {
 								a(acc, undefined, "Accumulator");
 								a(arg, x, "Argument");
+								a(i, 0, "Index");
+								a(target, list, "Target");
 								return y;
 							})
 							(function (res) {

@@ -27,7 +27,7 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['delay', 'promisify']),
+	}), ['delay', 'promisify', 'map', 'reduce']),
 	"Delay": function (t, a, d) {
 		var x = {};
 		t.delay(function (r) {
@@ -43,6 +43,22 @@ module.exports = {
 		})()(function (r) {
 			a(r, x); d();
 		});
+	},
+	"Map": function (t, a, d) {
+		var x = {};
+		t.map([t(1), t(2), 3], function (res) {
+			return t(res*res);
+		})(function (r) {
+			a.deep(r, [1, 4, 9]); d();
+		}, a.never);
+	},
+	"Reduce": function (t, a, d) {
+		var x = {};
+		t.reduce([t(1), t(2), 3], function (arg1, arg2) {
+			return t(arg1*arg2);
+		}, 1)(function (r) {
+			a(r, 6); d();
+		}, a.never);
 	},
 	"Deferred function is main object": function (t, a) {
 		var d = t();
