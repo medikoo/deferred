@@ -15,7 +15,6 @@ module.exports = {
 	"": indexTest(indexTest.readDir(dir)(function (o) {
 		delete o.deferred;
 		delete o.join;
-		delete o.isPromise;
 		delete o.ext;
 		delete o.extend;
 		delete o.promise;
@@ -28,6 +27,10 @@ module.exports = {
 				return merge.call(o, o2);
 			});
 	}), ['delay', 'promisify', 'map', 'reduce']),
+	"isPromise": function (t, a) {
+		a(t.isPromise(t(null)), true);
+		a(t.isPromise({}), false);
+	},
 	"Delay": function (t, a, d) {
 		var x = {};
 		t.delay(function (r) {
