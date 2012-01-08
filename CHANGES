@@ -1,3 +1,34 @@
+v0.3.0  --  2012.01.08
+Major update:
+* Revised promise collections approach:
+  There's no longer all, join & first functions.
+  Instead we may use deferred for grouping promises: deferred(p1, p2, p3)
+  or use map or reduce extensions e.g. deferred.map(paths, readFile). See
+  documentation for more info
+* Introduced promise extensions.
+  * cb - end promise chain with regular asynchronous callback
+  * get - get property of resolved object
+  * invoke - invoke function on resolved object (supports both synchronous and
+    asynchrouns functions)
+  * map - promise aware version of Array's map
+  * match - match result array to function arguments
+  * reduce promise aware version of Array's reduce
+* Replaced asyncToPromise (used as a2p or ba2p) and syncToPromise (used as s2p
+  or bs2p) with 'promisify', it works as 'bind' version for both asynchronous
+  and synchrounous functions and is available on deferred as deferred.promisify.
+  It has also been improved to support asynchronous functions that return more
+  than one value.
+* Rewritten internal logic. Currently promises are backed with _base object
+  which is different for resolved and unresolved promises
+* Removed nextTick rule, now new event loops are introduced by deferred.
+* Unresolved promises can now be tracked via deferred.MONITOR
+* valueOf promise function. Returns self promise if unresolved and resolved
+  value if resolved
+* isPromise returns true only for deferred's like promise, as deferred api
+  diverged from other promises implementations api it's no open anymore to work
+  with foreign promises - it wouldn't work.
+* Exposed 'isPromise' & 'delay' function on deferred
+
 v0.2.6  --  2011.12.12
 * Cleared npm warning for misnamed property in package.json
 
