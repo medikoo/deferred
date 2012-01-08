@@ -62,29 +62,21 @@ module.exports = function (t) {
 					"Callback": {
 						"": function (a, d) {
 							var list = [x];
-							t.call(list, function (acc, arg, i, target) {
-								a(acc, undefined, "Accumulator");
-								a(arg, x, "Argument");
-								a(i, 0, "Index");
-								a(target, list, "Target");
-								return y;
-							})
+							t.call(list, a.never)
 							(function (res) {
-								a(res, y); d();
+								a(res, x); d();
 							}, a.never).end(d);
 						},
 						"Promise": function (a, d) {
-							t.call([x], function (arg) {
-								return promise(y);
-							})
+							t.call([x], a.never)
 							(function (res) {
-								a(res, y); d();
+								a(res, x); d();
 							}, a.never).end(d);
 						},
 						"Throw Error": function (a, d) {
 							t.call([x], function (acc, arg) {
 								throw e;
-							})
+							}, null)
 							(a.never, function (res) {
 								a(res, e); d();
 							}).end(d);
@@ -92,7 +84,7 @@ module.exports = function (t) {
 						"Return Error": function (a, d) {
 							t.call([promise(e)], function (acc, arg) {
 								return e;
-							})
+							}, null)
 							(a.never, function (res) {
 								a(res, e); d();
 							}).end(d);
@@ -108,10 +100,10 @@ module.exports = function (t) {
 					},
 					"Callback": function (a, d) {
 						t.call([promise(x)], function (acc, arg) {
-							a(acc, undefined, "Accumulator");
+							a(acc, null, "Accumulator");
 							a(arg, x, "Argument");
 							return y;
-						})
+						}, null)
 						(function (res) {
 							a(res, y); d();
 						}, a.never).end(d);
@@ -139,10 +131,10 @@ module.exports = function (t) {
 					"Callback": {
 						"": function (a, d) {
 							t.call([e], function (acc, arg) {
-								a(acc, undefined, "Accumulator");
+								a(acc, null, "Accumulator");
 								a(arg, e, "Argument");
 								return y;
-							})
+							}, null)
 							(function (res) {
 								a(res, y); d();
 							}, a.never).end(d);
@@ -158,7 +150,7 @@ module.exports = function (t) {
 							t.call([e], function (acc, arg) {
 								a(arg, e, "Argument");
 								throw e2;
-							})
+							}, null)
 							(a.never, function (res) {
 								a(res, e2); d();
 							}).end(d);
@@ -168,7 +160,7 @@ module.exports = function (t) {
 							t.call([e], function (acc, arg) {
 								a(arg, e, "Argument");
 								return e2;
-							})
+							}, null)
 							(a.never, function (res) {
 								a(res, e2); d();
 							}).end(d);
