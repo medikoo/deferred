@@ -139,7 +139,7 @@ You can easily create browser bundle with help of [modules-webmake](https://gith
 <a name="concept-deferred" />
 ### Deferred
 
-For work that doesn't return immediately (asynchronous) you may create `deferred` object. Deferred contains two function properties `resolve` and `promise`. Common pattern is to return `promise` to outer world and when you have value ready resolve it via `resolve` function
+For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred contains two function properties `resolve` and `promise`. Common pattern is to return `promise` to outer world and when you have value ready resolve it via `resolve` function
 
 Let's create generic `delay` function, that would produce delayed version of any function that was passed to it.
 
@@ -180,7 +180,7 @@ In `deferred` (and most of the other promise implementations) you may listen for
 
 	promise.then(onsuccess, onfail);
 
-In `deferred` promise is really a `then` function, so you may use promise _function_ directly:
+In __deferred__ promise is really a `then` function, so you may use promise _function_ directly:
 
 	promise === promise.then; // true
 	promise(onsuccess, onfail)
