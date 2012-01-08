@@ -7,7 +7,7 @@ This work is inspired by other deferred/promise implementations, in particular [
 <a name="example" />
 ## Example
 
-Practical Node.js example: Concat all JavaScript files in a given directory and save it to lib.js.
+Concat all JavaScript files in a given directory and save it to lib.js.
 
 Plain Node.js:
 
@@ -44,7 +44,7 @@ Plain Node.js:
 
 				if (!--waiting) {
 					// Got content of all files
-					// Concacanate in to one string and write into lib.js
+					// Concatenate into one string and write into lib.js
 					writeFile(__dirname + '/lib.js', result.join("\n"), function (err) {
 						if (err) {
 							// We cannot write lib.js file, throw error
@@ -68,7 +68,7 @@ Promises approach:
 	  , readFile = deferred.promisify(fs.readFile)
 	  , writeFile = deferred.promisify(fs.writeFile);
 
-	// Read all filenams in given path
+	// Read all filenames in given path
 	readdir(__dirname)
 
 	// Filter *.js files
@@ -131,7 +131,7 @@ In your project path:
 <a name="installation-browser" />
 ### Browser
 
-You can easily create browser bundle with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Mind that it relies on EcmaScript5 features, so for older browsers you would need as well [es5-shim](https://github.com/kriskowal/es5-shim)
+You can easily create browser bundle with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Mind that it relies on EcmaScript5 features, so for older browsers you need as well [es5-shim](https://github.com/kriskowal/es5-shim)
 
 <a name="concept" />
 ## Deferred/Promise concept
@@ -168,7 +168,7 @@ Let's create generic `delay` function, that would produce delayed version of any
 	console.log(deferred.isPromise(resultPromise)); // true
 
 	resultPromise(function (value) {
-		// Invoked after one hundred milliseconds
+		// Invoked after 100 milliseconds
 		console.log(value); // 5
 	});
 
@@ -180,7 +180,7 @@ In `deferred` (and most of the other promise implementations) you may listen for
 
 	promise.then(onsuccess, onfail);
 
-In `deferred` promise is really a `then` function, so you may use promise object directly:
+In `deferred` promise is really a `then` function, so you may use promise _function_ directly:
 
 	promise === promise.then; // true
 	promise(onsuccess, onfail)
@@ -192,7 +192,7 @@ A promise can be resolved only once, and callbacks passed to `promise` are also 
 <a name="concept-promise-chaining" />
 #### Chaining
 
-Promise function (formally `promise.then`)  takes callback(s) and returns another promise which is promise of a value that would be returned by observer you've just attached. This way promises can be chained:
+Promise function (formally `promise.then`)  takes callback(s) and returns another promise which is promise of a value that would be returned by attached callbacks. This way promises can be chained:
 
 	delayedAdd(2, 3)
 	(function (result) {
@@ -202,7 +202,7 @@ Promise function (formally `promise.then`)  takes callback(s) and returns anothe
 		console.log(result); // 25
 	});
 
-It's not just function arguments that promise function can take, it can be other promises or any other JavaScript value (but `null` or `undefined` will be treated as no value). With such approach you may override result of a promise chain with specific value. It may seem awkward approach at first, but it can be handy when you work with sophisticated promises chains.
+It's not just function arguments that promise function can take, it can be other promises or any other JavaScript value (however `null` or `undefined` will be treated as no value). With such approach you may override result of a promise chain with specific value. It may seem awkward approach at first, but it can be handy when you work with sophisticated promises chains.
 
 <a name="concept-promise-nesting" />
 #### Nesting
@@ -218,11 +218,11 @@ Promises can be nested. If a promise resolves with another promise, it's not rea
 <a name="concept-promise-errorhandling" />
 #### Error handling
 
-Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintanable then when using plain approach.
+Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintanable then when using plain asynchronous approach.
 
-A promise resolved (rejected) with an error, propagates this errors to all chained promises that were initiated by its observers. Also if observer function crash with error or returns error, it's promise is rejected with the error.
+A promise resolved with an error (rejected), propagates its error to all promises that were initiated by its observers. Also if observer function crash with error or returns error, its promise is rejected with the error.
 
-To handle error pass dedicated callback as second argument to promise function:
+To handle error, pass dedicated callback as second argument to promise function:
 
 	delayedAdd(2, 3)
 	(function (result) {
@@ -234,7 +234,7 @@ To handle error pass dedicated callback as second argument to promise function:
 		// handle error;
 	});
 
-When there is no error callback passed, error is silent. To expose the error, end promise chain with `.end()`, then the error that broke the chain will be thrown:
+When there is no error callback passed, eventual error is silent. To expose the error, end promise chain with `.end()`, then error that broke the chain will be thrown:
 
 	delayedAdd(2, 3)
 	(function (result) {
@@ -245,7 +245,7 @@ When there is no error callback passed, error is silent. To expose the error, en
 	})
 	.end(); // throws error!
 
-__It's very important to end your promise chains with `end` otherwise eventual errors that are not handled will not be exposed.__
+__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed.__
 
 Error can also be handled via `end` call:
 
@@ -260,7 +260,7 @@ Error can also be handled via `end` call:
 <a name="concept-promise-creatingresolved" />
 #### Creating resolved promises
 
-With `deferred` function you may create initially resolved promises. It may make no sense at first glance but it may be useful in for example function that is supposed to return promise, but have it's return value already available
+With `deferred` function you may create initially resolved promises. It may make no sense at first glance but it's useful in for example function that is supposed to return promise, but have it's return value already available
 
 	var promise = deferred(1);
 
@@ -283,7 +283,7 @@ There is a known convention (coined by Node.js) for working with asynchronous ca
 		// process content
 	});
 
-An asynchronous function receives a callback function which handles both error and expected value.
+An asynchronous function receives a callback argument which handles both error and expected value.
 
 `deferred` was created to make work with asynchronous flow straightforward and easy, however to take advantage of that, we need to work with functions that will actually return promises instead of taking callbacks. We can turn function that takes callback into one that returns promise with `deferred.promisify`:
 
@@ -299,7 +299,7 @@ An asynchronous function receives a callback function which handles both error a
 			// handle error
 		});
 
-There's no clear advantage of using `deffered` just for one asynchronous call, and I wouldn't recommend that. However it's different story when there's a lot of them, see [example](#example) this doc starts with
+There's no clear advantage of using `deffered` just for one asynchronous call, and I wouldn't recommend that. However it's different story when there's a lot of them, see [example](#example) this document starts with
 
 <a name="grouping" />
 ## Grouping promises
@@ -317,9 +317,9 @@ When we have some promises that we want to observe as a group. We may do it agai
 <a name="collections-map" />
 ### Map
 
-It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject promise and resolve it with same error.
+It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject map promise and resolve it with same error.
 
-Let's say we have list of filenames and we want to get each file's content
+Let's say we have list of filenames and we want to get each file's content:
 
 	var readFile = deferred.promisify(fs.readFile);
 
@@ -332,7 +332,7 @@ Let's say we have list of filenames and we want to get each file's content
 
 `map` is also available directly on a promise object, so we may invoke it directly on promise of a collection.
 
-Let's try again previous example but this time instead of relying on already existing filenames, we take list of files from current directory.
+Let's try again previous example but this time instead of relying on already existing filenames, we take list of files from current directory:
 
 	var readdir = deferred.promisify(fs.readdir)
 		, readFile = deferred.promisify(fs.readFile);
@@ -356,18 +356,18 @@ It's same as Array's reduce with that difference that it calls callback only aft
 		console.log(result); // 21
 	});
 
-As with `map`, `reduce` is also available directly as an extension on `promise` object.
+As with `map`, `reduce` is also available directly as an extension on promise object.
 
 <a name="extensions" />
 ## Promise extensions
 
-Promise objects are equipped with some useful extensions. All extension are optional but are loaded by default when `deferred` is loaded via `require('deferred')` import, and that's recommended way when youwork with Node.js.
-When preparing client-side file (with help of e.g. [modules-webmake](https://github.com/medikoo/modules-webmake)) you are free to decide, which extensions you want to take (see code of `lib/index.js` on how to do it)
+Promise objects are equipped with some useful extensions. All extension are optional but are loaded by default when `deferred` is loaded via `require('deferred')` import, and that's the recommended way when you work with Node.js.
+When preparing client-side file (with help of e.g. [modules-webmake](https://github.com/medikoo/modules-webmake)) you are free to decide, which extensions you want to take (see source of `lib/index.js` on how to do it)
 
 <a name="extensions-cb" />
 ### cb
 
-With `deferred.promisify` we make asynchronus function promise friendly. `cb` extension makes it easier to go other way. Let's say you write asynchronous function that you want to expose work as regular Node.js function but internally you'd like to take advantage of deferred, then `cb` is for you:
+With `deferred.promisify` we make asynchronous function promise friendly. `cb` extension makes it easy to go other way. Let's say you write asynchronous function that you want to expose work as regular Node.js function but internally you'd like to take advantage of deferred, then `cb` is made for you:
 
 	var asyncFn = function (arg1, arg2, cb) {
 		// ... processing, control flow with promises ...
@@ -434,12 +434,12 @@ If promise expected value is a list that you want to match into function argumen
 <a name="extensions-reduce" />
 ### reduce
 
-Described under [Processing collections](#api-collections-reduce) section. Promise aware version of Array's reduce
+Described under [Processing collections](#collections-reduce) section. Promise aware version of Array's reduce
 
 <a name="tests" />
 ## Tests
 
-Before running tests make sure you've installed project with dev dependiencies
+Before running tests make sure you've installed project with dev dependencies
 `npm install --dev`
 
 	$ npm test
