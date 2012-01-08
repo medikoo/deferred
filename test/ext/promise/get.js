@@ -3,15 +3,15 @@
 var deferred = require('../../../lib/deferred');
 
 module.exports = {
-	"Deferred": function (a, d) {
+	"Deferred": function (a) {
 		var defer = deferred(), x = {}, y = { foo: x }
 		  , invoked = false;
 		defer.resolve(y).get('foo')
 		(function (r) {
 			invoked = true;
-			a(r, x); d();
-		}, d).end();
-		a(invoked, false, "Resolve in next tick");
+			a(r, x);
+		}).end();
+		a(invoked, true, "Resolved in current tick");
 	},
 	"Promise": function (a, d) {
 		var x = {}, y = { foo: x };

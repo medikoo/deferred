@@ -5,10 +5,10 @@ var noop = require('es5-ext/lib/Function/noop')
   , x = {}, y = {}, e = new Error("Error");
 
 module.exports = {
-	"Then callback run in next tick": function (t, a, d) {
+	"Then callback run in current tick": function (t, a) {
 		var next = false;
 		t(null)(function (result) {
-			a(next, true); d();
+			a(next, false);
 		}, a.never).end();
 		next = true;
 	},

@@ -19,8 +19,7 @@
 		"node": ">=0.1.103"
 	},
 	"dependencies": {
-		"es5-ext": "0.7.x",
-		"clock": "0.1.x"
+		"es5-ext": "0.7.x"
 	},
 	"scripts": {
 		"test": "node ./node_modules/tad/bin/tad lib"
