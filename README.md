@@ -1,122 +1,232 @@
 # Asynchronous JavaScript with deferred and promises
 
- Promises in a simple, straightforward and powerful way. It was built with the _less is more_ mantra in mind.  The API consists of just 7 functions which should give all you need to configure complicated asynchronous control flow.
+Promises in a simple and powerful way. It was built with the _less is more_ mantra in mind. It's just few functions that should give all you need to easily configure complicated asynchronous control flow.
 
-This work is highly inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
+This work is inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
+
+<a name="example" />
+## Example
+
+Practical Node.js example: Concat all JavaScript files in a given directory and save it to lib.js.
+
+Plain Node.js:
+
+	var fs = require('fs')
+
+	  , readdir = fs.readdir
+	  , readFile = fs.readFile
+	  , writeFile = fs.writeFile
+
+	// Read all filenames in given path
+	readdir(__dirname, function (err, files) {
+		var result, waiting;
+		if (err) {
+			// if we're unable to get file listing throw error
+			throw err;
+		}
+
+		// Filter *.js files
+		files = files.filter(function (file) {
+			return (file.slice(-3) === '.js') && (file !== 'lib.js');
+		});
+
+		// Read content of each file
+		waiting = 0;
+		result = [];
+		files.forEach(function (file, index) {
+			++waiting;
+			readFile(file, 'utf8', function (err, content) {
+				if (err) {
+					// We were not able to read file content, throw error
+					throw err;
+				}
+				result[index] = content;
+
+				if (!--waiting) {
+					// Got content of all files
+					// Concacanate in to one string and write into lib.js
+					writeFile(__dirname + '/lib.js', result.join("\n"), function (err) {
+						if (err) {
+							// We cannot write lib.js file, throw error
+							throw err;
+						}
+
+						console.log("Done!");
+					});
+				}
+			});
+		});
+	});
+
+Promises approach:
+
+	var deferred = require('deferred')
+	  , fs = require('fs')
+
+	// We prepare promisified versions of each asynchronous function
+	  , readdir = deferred.promisify(fs.readdir)
+	  , readFile = deferred.promisify(fs.readFile)
+	  , writeFile = deferred.promisify(fs.writeFile);
+
+	// Read all filenams in given path
+	readdir(__dirname)
+
+	// Filter *.js files
+	.invoke('filter', function (file) {
+		return (file.slice(-3) === '.js') && (file !== 'lib.js');
+	})
+
+	// Read content of all files
+	.map(function (file) {
+		return readFile(file, 'utf-8');
+	})
+
+	// Concatenate files content into one string
+	.invoke('join', '\n')
+
+	// Write lib file
+	(function (content) {
+		return writeFile(__dirname + '/lib.js', content);
+	})
+
+	(function () { console.log("Done!"); })
+
+	// If there was eny error on the way throw it
+	.end();
 
 * [Installation](#installation)
-* [Deferred/Promise concept](#deferred-promise-concept)
-	* [Basics](#deferred-promise-basics)
-	* [Error handling](#deferred-promise-error-handling)
-* [Asynchronous functions as promises](#asynchronous-functions-as-promises)
-* [Control-flow, joining promises](#control-flow)
-	* [`join`](#control-flow-join)
-	* [`all`](#control-flow-all)
-	* [`first`](#control-flow-first)
-	* [Non promise arguments](#control-flow-non-promise-arguments)
-	* [Examples](#control-flow-examples)
-		* [Regular control-flow](#control-flow-examples)
-		* [Asynchronous loop](#control-flow-examples-asynchronous-loop)
-* [Comparision to other solutions that take non promise approach](#comparision)
-	* [Step](#comparision-to-step)
-	* [Async](#comparision-to-async)
-		* [async.series](#comparision-to-async-series)
-		* [async.parallels](#comparision-to-async-parallels)
-		* [async.waterfall](#comparision-to-async-waterfall)
-		* [async.auto](#comparision-to-async-auto)
-		* [async.whilst, async.until](#comparision-to-async-loop)
-		* [async.forEach, async.map, async.filter etc.](#comparision-to-async-array-iterators)
+	* [Node.js](#installation-nodejs)
+	* [Browser](#installation-browser)
+* [Deferred/Promise concept](#concept)
+	* [Deferred](#concept-deferred)
+	* [Promise](#concept-promise)
+		* [Chaining](#concept-promise-chaining)
+		* [Nesting](#concept-promise-nesting)
+		* [Error handling](#concept-promise-errorhandling)
+		* [Creating resolved promises](#concept-promise-creatingresolved)
+* [Promisify - working with asynchronous functions as we know it from Node.js](#promisify)
+* [Grouping promises](#grouping)
+* [Processing collections](#collections)
+	* [Map](#collections-map)
+	* [Reduce](#collections-reduce)
+* [Promise extensions](#extensions)
+	* [cb](#extensions-cb)
+	* [get](#extensions-get)
+	* [invoke](#extensions-invoke)
+	* [map](#extensions-map)
+	* [match](#extensions-match)
+	* [reduce](#extensions-reduce)
+* [Tests](#tests)
 
 <a name="installation" />
 ## Installation
 
-It's plain ECMAScript, but out of the box currently works only with node & npm (due to it's CommonJS package):
+<a name="installation-nodejs" />
+### Node.js
+
+In your project path:
 
 	$ npm install deferred
 
-For browser or other environments it needs to be bundled with a few dependencies from [es5-ext](https://github.com/medikoo/es5-ext) project (code states specifically which). Browser ready files will be available in the near future.
+<a name="installation-browser" />
+### Browser
 
-<a name="deferred-promise-concept" />
+You can easily create browser bundle with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Mind that it relies on EcmaScript5 features, so for older browsers you would need as well [es5-shim](https://github.com/kriskowal/es5-shim)
+
+<a name="concept" />
 ## Deferred/Promise concept
 
-<a name="deferred-promise-basics" />
-### Basics
+<a name="concept-deferred" />
+### Deferred
 
-When there's work to do that doesn't return immediately (asynchronous), a `deferred` object is created and a promise (`deferred.promise`) is returned to the world. When finally a value is obtained, the deferred is resolved with it `deferred.resolve(value)`. At that point all promise observers (added in meantime via `deferred.promise.then`) are notified with the value of fulfilled promise.
+For work that doesn't return immediately (asynchronous) you may create `deferred` object. Deferred contains two function properties `resolve` and `promise`. Common pattern is to return `promise` to outer world and when you have value ready resolve it via `resolve` function
 
-Example:
+Let's create generic `delay` function, that would produce delayed version of any function that was passed to it.
 
 	var deferred = require('deferred');
 
-	var later = function () {
-	  var d = deferred();
-		setTimeout(function () {
-			d.resolve(1);
-		}, 1000);
-		return d.promise;
+	var delay = function (fn, timeout) {
+		return function () {
+			var d = deferred()
+			  , self = this
+			  , args = arguments;
+
+			setTimeout(function () {
+				d.resolve(fn.apply(self, args));
+			}, timeout);
+
+			return d.promise;
+		};
 	};
 
-	later().then(function (n) {
-		console.log(n); // 1
+	var delayedAdd = delay(function (a, b) {
+		return a + b;
+	}, 100);
+
+	var resultPromise = delayedAdd(2, 3);
+
+	console.log(deferred.isPromise(resultPromise)); // true
+
+	resultPromise(function (value) {
+		// Invoked after one hundred milliseconds
+		console.log(value); // 5
 	});
 
-`promise` is really a `then` function, so you may use it directly:
+<a name="concept-promise" />
+### Promise
 
-	later()
-	(function (n) {
-		console.log(n); // 1
-	});
+Promise is a promise of a value that will be available in a future. It may succed or fail.
+In `deferred` (and most of the other promise implementations) you may listen for the value by passing observers to `then` function:
 
-`promise` takes a callback and returns another promise. The returned promise will resolve with the value that is a result of the callback function, this way, promises can be chained:
+	promise.then(onsuccess, onfail);
 
-	later()
-	(function (n) {
-		var d = deferred();
-		setTimeout(function () {
-			d.resolve(n + 1);
-		}, 1000);
-		return d.promise;
+In `deferred` promise is really a `then` function, so you may use promise object directly:
+
+	promise === promise.then; // true
+	promise(onsuccess, onfail)
+
+`onsuccess` and `onfail` are optional, you may pass just one of those
+
+A promise can be resolved only once, and callbacks passed to `promise` are also called only once (only either onsuccess or onfail is called) no exceptions.
+
+<a name="concept-promise-chaining" />
+#### Chaining
+
+Promise function (formally `promise.then`)  takes callback(s) and returns another promise which is promise of a value that would be returned by observer you've just attached. This way promises can be chained:
+
+	delayedAdd(2, 3)
+	(function (result) {
+		return result*result
 	})
-	(function (n) {
-		console.log(n); // 2
+	(function (result) {
+		console.log(result); // 25
 	});
 
-The callback passed to `promise` may return anything, it may also be a regular synchronous function:
+It's not just function arguments that promise function can take, it can be other promises or any other JavaScript value (but `null` or `undefined` will be treated as no value). With such approach you may override result of a promise chain with specific value. It may seem awkward approach at first, but it can be handy when you work with sophisticated promises chains.
 
-	later()
-	(function (n) {
-		return n + 1;
-	})
-	(function (n) {
-		console.log(n); // 2
-	});
+<a name="concept-promise-nesting" />
+#### Nesting
 
 Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise returns a real value:
 
-	var count = 0;
-	var laterNested = function fn (value) {
-	  var d = deferred();
-		setTimeout(function () {
-			value *= 2;
-			d.resolve((++count === 3) ? value : fn(value));
-		}, 1000);
-		return d.promise;
-	};
-
-	laterNested(1)(function (n) {
-		console.log(n); // 8
+	var d = deferred();
+	d.resolve(delayedAdd(2, 3));
+	d.promise(function (result) {
+		console.log(5); // 5;
 	});
 
-A promise can be resolved only once, and callbacks passed to `promise` are also called only once, no exceptions. For deeper insight into this concept, and to better understand design decisions please see Kris Kowal [design notes](https://github.com/kriskowal/q/blob/master/design/README.js), it's well worth reading.
+<a name="concept-promise-errorhandling" />
+#### Error handling
 
-<a name="deferred-promise-error-handling" />
-### Error handling
+Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintanable then when using plain approach.
 
-A promise is rejected when it's resolved with an error, similarly if a callback passed to `promise` throws exception it becomes the resolution of a promise returned by `promise` call. To handle error, pass second callback to `promise`:
+A promise resolved (rejected) with an error, propagates this errors to all chained promises that were initiated by its observers. Also if observer function crash with error or returns error, it's promise is rejected with the error.
 
-	later()
-	(function (n) {
-		throw new Error('error!')
+To handle error pass dedicated callback as second argument to promise function:
+
+	delayedAdd(2, 3)
+	(function (result) {
+		throw new Error('Error!')
 	})
 	(function () {
 		// never called
@@ -124,407 +234,212 @@ A promise is rejected when it's resolved with an error, similarly if a callback 
 		// handle error;
 	});
 
-When there is no error callback passed, error is silent. To expose the error, end chain with `.end()`, then the error that broke the chain will be thrown:
+When there is no error callback passed, error is silent. To expose the error, end promise chain with `.end()`, then the error that broke the chain will be thrown:
 
-	later()
-	(function (n) {
-		throw new Error('error!')
+	delayedAdd(2, 3)
+	(function (result) {
+		throw new Error('Error!')
 	})
-	(function (n) {
+	(function (result) {
 		// never executed
 	})
 	.end(); // throws error!
 
-`end` takes an optional handler so instead of throwing, the error can be handled another way. The behavior is exactly same as when passing a second callback to `promise`:
+__It's very important to end your promise chains with `end` otherwise eventual errors that are not handled will not be exposed.__
 
-	later()
-	(function (n) {
-		throw new Error('error!')
+Error can also be handled via `end` call:
+
+	delayedAdd(2, 3)
+	(function (result) {
+		throw new Error('Error!')
 	})
 	.end(function (e) {
-		// handle error!
+		// handle error
 	});
 
-<a name="asynchronous-functions-as-promises" />
-## Asynchronous functions as promises
+<a name="concept-promise-creatingresolved" />
+#### Creating resolved promises
 
-There is a known convention in JavaScript for working with asynchronous calls. The following approach is widely used within node.js:
+With `deferred` function you may create initially resolved promises. It may make no sense at first glance but it may be useful in for example function that is supposed to return promise, but have it's return value already available
 
-	var afunc = function (x, y, callback) {
+	var promise = deferred(1);
+
+	promise(function (result) {
+		console.log(result); // 1;
+	});
+
+<a name="promisify" />
+## Promisify - working with asynchronous functions as we know it from Node.js
+
+There is a known convention (coined by Node.js) for working with asynchronous calls. The following approach is widely used:
+
+	var fs = require('fs');
+
+	fs.readFile(__filename, 'utf-8', function (err, content) {
+		if (err) {
+			// handle error;
+			return;
+		}
+		// process content
+	});
+
+An asynchronous function receives a callback function which handles both error and expected value.
+
+`deferred` was created to make work with asynchronous flow straightforward and easy, however to take advantage of that, we need to work with functions that will actually return promises instead of taking callbacks. We can turn function that takes callback into one that returns promise with `deferred.promisify`:
+
+	var deferred = require('deferred')
+		, fs = require('fs')
+
+		, readFile = deferred.promisify(fs.readFile);
+
+		readFile(__filename, 'utf-8')
+		(function (content) {
+			// process content
+		}, function (err) {
+			// handle error
+		});
+
+There's no clear advantage of using `deffered` just for one asynchronous call, and I wouldn't recommend that. However it's different story when there's a lot of them, see [example](#example) this doc starts with
+
+<a name="grouping" />
+## Grouping promises
+
+When we have some promises that we want to observe as a group. We may do it again with help `deferred` function:
+
+	deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))
+	(function (result) {
+		console.log(result); // [5, 8, 8]
+	});
+
+<a name="collections" />
+## Processing collections
+
+<a name="collections-map" />
+### Map
+
+It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject promise and resolve it with same error.
+
+Let's say we have list of filenames and we want to get each file's content
+
+	var readFile = deferred.promisify(fs.readFile);
+
+	deferred.map(filenames, function (filename) {
+		return readFile(filename, 'utf-8');
+	})
+	(function (result) {
+		// result is an array of file's contents
+	});
+
+`map` is also available directly on a promise object, so we may invoke it directly on promise of a collection.
+
+Let's try again previous example but this time instead of relying on already existing filenames, we take list of files from current directory.
+
+	var readdir = deferred.promisify(fs.readdir)
+		, readFile = deferred.promisify(fs.readFile);
+
+	readdir(__dirname).map(function (filename) {
+		return readFile(filename, 'utf-8');
+	})
+	(function (result) {
+		// result is an array of file's contents
+	});
+
+<a name="collections-reduce" />
+### Reduce
+
+It's same as Array's reduce with that difference that it calls callback only after previous accummulated value is resolved, this way we may accumulate results of collection of promises or invoke some asynchronous tasks one after another.
+
+	deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)], function (a, b) {
+		return delayedAdd(a, b);
+	})
+	(function (result) {
+		console.log(result); // 21
+	});
+
+As with `map`, `reduce` is also available directly as an extension on `promise` object.
+
+<a name="extensions" />
+## Promise extensions
+
+Promise objects are equipped with some useful extensions. All extension are optional but are loaded by default when `deferred` is loaded via `require('deferred')` import, and that's recommended way when youwork with Node.js.
+When preparing client-side file (with help of e.g. [modules-webmake](https://github.com/medikoo/modules-webmake)) you are free to decide, which extensions you want to take (see code of `lib/index.js` on how to do it)
+
+<a name="extensions-cb" />
+### cb
+
+With `deferred.promisify` we make asynchronus function promise friendly. `cb` extension makes it easier to go other way. Let's say you write asynchronous function that you want to expose work as regular Node.js function but internally you'd like to take advantage of deferred, then `cb` is for you:
+
+	var asyncFn = function (arg1, arg2, cb) {
+		// ... processing, control flow with promises ...
+
+		// On final promise, call cb with received callback
+		promise.cb(cb);
+	};
+
+<a name="extensions-get" />
+### get
+
+If you're interested not in promised object, but rather in one of it's properties then use `get`
+
+	var promise = deferred({ foo: 'bar' });
+
+	promise(function (obj) {
+		console.log(obj.foo); // 'bar';
+	})
+
+	promise.get('foo')(function (value) {
+		console.log(value); // 'bar'
+	});
+
+<a name="extensions-invoke" />
+### invoke
+
+Schedule function call on promised object
+
+	var promise = deferred({ foo: function (arg) { return arg*arg; } });
+
+	promise.invoke('foo', 3)
+	(function (result) {
+		console.log(result); // 9
+	});
+
+	// It works also with asynchronous functions
+	var promise = deferred({ foo: function (arg, callback) {
 		setTimeout(function () {
-			try {
-				callback(null, x + y);
-			} catch (e) {
-				callback(e);
-			}
-		}, 1000);
-	};
+			callback(null, arg*arg);
+		}, 100);
+	} });
 
-An asynchronous function receives a callback argument and the callback handles both error and success. There's an easy way to turn such functions into promises and take advantage of the promise design. There's `deferred.asyncToPromise` for that, let's use a shorter name:
-
-	var a2p = deferred.asyncToPromise;
-
-	// we can also import it individually:
-	a2p = require('deferred/lib/async-to-promise');
-
-This method can be used in various ways.  
-The first way is to assign it directly to an asynchronous method:
-
-	afunc.a2p = a2p;
-
-	afunc.a2p(3, 4)
-	(function (n) {
-		console.log(n); // 7
-	});
-
-The second way is more traditional (I personally favor this one as it doesn't touch the asynchronous function):
-
-	a2p = a2p.call;
-
-	a2p(afunc, 3, 4)
-	(function (n) {
-		console.log(n); // 7
-	});
-
-The third way is to bind the method for later execution. We'll use `ba2p` name for that:
-
-	var ba2p = require('deferred/lib/async-to-promise').bind;
-
-	var abinded = ba2p(afunc, 3, 4);
-
-	// somewhere in other context:
-	abinded()
-	(function (n) {
-		console.log(n); // 7
-	});
-
-Note that this way of using it is not perfectly safe. We need to be sure that `abinded` will be called without any unexpected arguments, otherwise it won't execute as expected:
-
-	abinded(7, 4); // TypeError: number is not a function.
-
-Here is a node.js example, reading a file, changing it's content and writing under different name:
-
-	var fs   = require('fs');
-
-	a2p(fs.readFile, __filename, 'utf-8')
-	(function (content) {
-		// change content
-		return content;
-	})
-	(ba2p(fs.writeFile, __filename + '.changed'))
-	.end();
-
-<a name="control-flow" />
-## Control-flow, joining promises
-
-There are three dedicated methods for joining promises. They're available on `deferred` as `deferred.join`, `deferred.all` and `deferred.first`. Let's access them directly:
-
-	// let's access them directly:
-	var join = deferred.join;
-	var all = deferred.all;
-	var first = deferred.first;
-
-As with other API methods, they can also be imported individually:
-
-	var join  = require('deferred/lib/join/default')
-	  , all   = require('deferred/lib/join/all')
-	  , first = require('deferred/lib/join/first');
-
-Join methods take arguments of any type and internally distinguish between promises, functions and others. Call them with either a list of arguments or an array:
-
-	join(p1, p2, p3);
-	join([p1, p2, p3]); // same behavior
-
-`join` and `all` return another promise, which resolves with the combined result of resolved arguments:
-
-	join(p1, p2, p3)
+	promise.invoke('foo', 3)
 	(function (result) {
-		// result is array of resolved values of p1, p2 and p3.
+		console.log(result); // 9
 	});
 
-`first` results with value of first resolved argument:
+<a name="extensions-map" />
+### map
 
-	first(p1, p2, p3)
-	(function (result) {
-		// result is resolved p1, p2 or p3, whichever was first
+As described in [Processing collections](#collections-map) section it's promise aware version of Array's map
+
+<a name="extensions-match" />
+### match
+
+If promise expected value is a list that you want to match into function arguments then use `match`
+
+	var promise = deferred([2, 3]);
+
+	promise.match(function (a, b) {
+		console.log(a + b); // 5
 	});
 
-<a name="control-flow-join" />
-### join(...)
+<a name="extensions-reduce" />
+### reduce
 
-`join` returns a promise which resolves with an array of the resolved values of all arguments.
-Values may be anything, including errors (rejected promises, functions that thrown errors, errors itself). The returned promise always fulfills, never rejects.
+Described under [Processing collections](#api-collections-reduce) section. Promise aware version of Array's reduce
 
-<a name="control-flow-all" />
-### all(...)
+<a name="tests" />
+## Tests
 
-Same as `join`, with that difference that all arguments need to be successful.
-If there's any error, join execution is stopped (following functions are not called), and promise is rejected with error that broke the join chain. In the successful case the returned promise value is same as in `join`.
+Before running tests make sure you've installed project with dev dependiencies
+`npm install --dev`
 
-<a name="control-flow-first" />
-### first(...)
-
-Fulfills with the first successfully resolved argument. If all arguments fail, then the promise rejects
-with the error that occurred last.
-
-<a name="control-flow-non-promise-arguments" />
-### Non promise arguments
-
-As mentioned above, join functions take any arguments, not only promises. Function arguments are called with the fully resolved previous argument, if one resolved successfully. If the previous argument failed then the function is never called. The error that rejected previous argument also becomes the result of the following function within the returned result array. Any other values (neither promises or functions) are treated as if they were values of resolved promises.
-
-<a name="control-flow-examples" />
-### Examples:
-
-#### Regular control-flow
-
-Previous read/write file example written with `all`:
-
-	all(
-		a2p(fs.readFile, __filename, 'utf-8'),
-		function (content) {
-			// change content
-			return content;
-		},
-		ba2p(fs.writeFile, __filename + '.changed')
-	).end();
-
-Concat all JavaScript files in a given directory and save it to lib.js:
-
-	all(
-		// Read all filenames in given path
-		a2p(fs.readdir, __dirname),
-
-		// Filter *.js files
-		function (files) {
-			return files.filter(function (name) {
-				return (name.slice(-3) === '.js');
-			});
-		},
-
-		// Read files content
-		function (files) {
-			return join(files.map(function (name) {
-				return a2p(fs.readFile, name, 'utf-8');
-			}));
-		},
-
-		// Concat into one string
-		function (data) {
-			return data.join("\n");
-		},
-
-		// Write to lib.js
-		ba2p(fs.writeFile, __dirname + '/lib.js')
-	).end();
-
-We can shorten it a bit with the introduction of functional sugar, it's out of scope of this library but I guess worth an example:
-
-	var invoke = require('es5-ext/lib/Function/invoke');
-
-	all(
-		// Read all filenames in given path
-		a2p(fs.readdir, __dirname),
-
-		// Filter *.js files
-		invoke('filter', function (name) {
-			return (name.slice(-3) === '.js');
-		}),
-
-		// Read files content
-		invoke('map', function (name) {
-			return a2p(fs.readFile, name, 'utf-8');
-		}), join,
-
-		// Concat into one string
-		invoke('join', "\n"),
-
-		// Write to lib.js
-		ba2p(fs.writeFile, __dirname + '/lib.js')
-	).end();
-
-The `invoke` implementation can be found in `es5-ext` project: https://github.com/medikoo/es5-ext/blob/master/lib/Function/invoke.js
-
-<a name="control-flow-examples-asynchronous-loop" />
-#### Asynchronous loop
-
-Let's say we're after content that is paginated over many pages on some website (like search results). We don't know how many pages it spans. We only know by reading page _n_ whether page _n + 1_ exists.
-
-First things first. Here is a simple download function that downloads the page at the given path from a predefinied domain and returns a promise:
-
-	var http = require('http');
-
-	var getPage = function (path) {
-		var d = deferred();
-
-		http.get({
-			host: 'www.example.com',
-			path: path
-		}, function(res) {
-			res.setEncoding('utf-8');
-			var content = "";
-			res.on('data', function (data) {
-				content += data;
-			});
-			res.on('end', function () {
-				d.resolve(content);
-			});
-		}).on('error', d.resolve);
-
-		return d.promise;
-	};
-
-Deferred loop:
-
-	var n = 1, result;
-	getPage('/page/' + n++)
-	(function process (content) {
-		// populate result
-		// decide whether we need to download next page
-		if (isNextPage) {
-			return getPage('/page/' + n++)(process);
-		} else {
-			return result;
-		}
-	})
-	(function (result) {
-		// play with final result
-	}).end();
-
-We can also make it with `all`:
-
-	var n = 1, result;
-	all(
-		getPage('/page/' + n++),
-		function process (content) {
-			// populate result
-			// decide whether we need to download next page
-			if (isNextPage) {
-				return getPage('/page/' + n++)(process);
-			} else {
-				return result;
-			}
-		},
-		function (result) {
-			// play with final result
-		}
-	).end();
-
-<a name="comparision" />
-### Comparision to other solutions that take non promise approach
-
-The following are examples from documentation of other solutions rewritten in a deferred/promise way. You'll be the judge, which solution you find more powerful and friendly.
-
-<a name="comparision-to-step" />
-#### Step -> https://github.com/creationix/step
-
-First example from Step [README](https://github.com/creationix/step/blob/master/README.markdown), using chained promises:
-
-	a2p(fs.readFile, __filename, 'utf-8')
-	(function capitalize (txt) {
-		return txt.toUpperCase();
-	})
-	(function showIt (newTxt) {
-		console.log(newTxt);
-	})
-	.end();
-
-Again we can make it even more concise with functional sugar:
-
-	a2p(fs.readFile, __filename, 'utf-8')
-	(invoke('toUpperCase'))
-	(console.log)
-	.end();
-
-<a name="comparision-to-async" />
-#### Async -> https://github.com/caolan/async
-
-<a name="comparision-to-async-series" />
-##### async.series:
-
-	all(
-		function () {
-			// do some stuff ...
-			return 'one';
-		},
-		function () {
-			// do some more stuff
-			return 'two';
-		}
-	)
-	(function (results) {
-		// results is now equal to ['one', 'two']
-	},
-	function (err) {
-		// handle err
-	});
-
-<a name="comparision-to-async-parallels" />
-##### async.paralles:
-
-For parallel execution we pass already initialized promises:
-
-	all(
-		promise1,
-		a2p(asyncFunc, arg1, arg2),
-		promise2
-	)
-	(function (results) {
-		// results are resolved values of promise1, asyncFunc and promise2
-	},
-	function (err) {
-		// handle err
-	});
-
-<a name="comparision-to-async-waterfall" />
-##### async.waterfall:
-
-Resolved values are always passed to following functions, so again we have it out of the box:
-
-	all(
-		function () {
-			return ['one', 'two'];
-		},
-		function (args) {
-			return 'three';
-		},
-		function (arg1) {
-			// arg1 now equals 'three'
-		}
-	);
-
-<a name="comparision-to-async-auto" />
-##### async.auto
-
-It's a question of combining `all` joins. First example from docs:
-
-	all(
-		all(
-			a2p(get_data),
-			a2p(make_folder)
-		),
-		ba2p(write_file)
-		ba2p(email_link)
-	).end();
-
-<a name="comparision-to-async-loop" />
-##### async.whilst, async.until
-
-See [Asynchronous loop](#control-flow-examples-asynchronous-loop) example, it shows how easy is to configure loops.
-
-<a name="comparision-to-async-array-iterators" />
-##### async.forEach, async.map, async.filter ..etc.
-
-Asynchronous handlers for array iterators, forEach and map:
-
-	all(arr, function (item) {
-		// logic
-		return promise;
-	})
-	(function (results) {
-		// deal with results
-		// if it's forEach than results are obsolete
-	})
-	.end();
-
-I decided not to implement array iterator functions in this library, for two reasons:
-first, as you see above - it's very easy and straightforward to setup them with provided join methods, second it's unlikely we need most of them.
+	$ npm test
