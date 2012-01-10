@@ -20,14 +20,14 @@ Major update:
   than one value.
 * Rewritten internal logic. Currently promises are backed with _base object
   which is different for resolved and unresolved promises
-* Removed nextTick rule, now new event loops are introduced by deferred.
+* Removed nextTick rule, no new event loops are introduced by deferred.
 * Unresolved promises can now be tracked via deferred.MONITOR
 * valueOf promise function. Returns self promise if unresolved and resolved
   value if resolved
 * isPromise returns true only for deferred's like promise, as deferred api
-  diverged from other promises implementations api it's no open anymore to work
-  with foreign promises - it wouldn't work.
-* Exposed 'isPromise' & 'delay' function on deferred
+  diverged from other promises implementations it's no open anymore to work
+  with foreign promises.
+* Exposed 'isPromise' & 'delay' functions on deferred
 
 v0.2.6  --  2011.12.12
 * Cleared npm warning for misnamed property in package.json
