@@ -1,3 +1,9 @@
+v0.3.1  --  2012.01.13
+* Promisify and invoke extension now resolves also input arguments before
+  calling the function
+* Possibility to preset fixed number of arguments for promisified function,
+  it makes promisified functions less error prone
+
 v0.3.0  --  2012.01.08
 Major update:
 * Revised promise collections approach:
