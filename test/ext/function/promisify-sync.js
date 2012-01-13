@@ -33,6 +33,15 @@ module.exports = function (t) {
 				a(result, z); d();
 			}, a.never).end(d);
 		},
+		"Length": function (a, d) {
+			t.call(function (arg1, arg2, arg3) {
+				a(this, u, "Context");
+				a.deep([arg1, arg2, arg3], [x, y, undefined], "Arguments");
+				return z;
+			}, 2).call(u, x, y, {}, {}, {})(function (result) {
+				a(result, z); d();
+			}, a.never).end(d);
+		},
 		"Error": function (a, d) {
 			var e = new Error("Error");
 			t.call(function () {
