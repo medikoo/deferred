@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = function (t, a) {
+var promise = require('../../../lib/promise');
+
+module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
 
 	return {
@@ -10,6 +12,24 @@ module.exports = function (t, a) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
 			}).call(u, x, y)(function (result) {
+				a(result, z); d();
+			}, a.never).end(d);
+		},
+		"Promise arguments": function (a, d) {
+			t.call(function (arg1, arg2) {
+				a(this, u, "Context");
+				a.deep([arg1, arg2], [x, y], "Arguments");
+				return z;
+			}).call(u, promise(x), y)(function (result) {
+				a(result, z); d();
+			}, a.never).end(d);
+		},
+		"Promise argument": function (a, d) {
+			t.call(function (arg1) {
+				a(this, u, "Context");
+				a(arg1, x, "Arguments");
+				return z;
+			}).call(u, promise(x))(function (result) {
 				a(result, z); d();
 			}, a.never).end(d);
 		},
