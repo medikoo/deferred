@@ -83,7 +83,7 @@ Promises approach:
 		// Concatenate files content into one string
 		.invoke('join', '\n')
 
-	).end(); 	// If there was eny error on the way throw it
+	).end(); // If there was eny error on the way throw it
 
 * [Installation](#installation)
 	* [Node.js](#installation-nodejs)
@@ -239,7 +239,7 @@ When there is no error callback passed, eventual error is silent. To expose the 
 		// never executed
 	})
 	.end(); // throws error!
-`
+
 __It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` in general is exit from promises flow.
 It can be called with one callback argument and one will be called same way as callback passed to Node.js style asynchronous function:
 
