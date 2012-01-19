@@ -240,7 +240,7 @@ When there is no error callback passed, eventual error is silent. To expose the 
 	})
 	.end(); // throws error!
 
-__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` is exit door from promises flow. You can call it with one callback argument and it will be called same way as callback passed to Node.js style asynchronous function:
+__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` is exit from promises flow. You can call it with one callback argument and it will be called same way as callback passed to Node.js style asynchronous function:
 
 	promise(function (value) {
 		// process
@@ -252,7 +252,7 @@ __It's very important to end your promise chains with `end` otherwise eventual e
 		// process result
 	});
 
-Or with two callbacks _onsuccess_ and _onerror_ and that will resemble way `.then` works, with that difference that it won't extend chain with another promise:
+Altenatively you can pass two callbacks _onsuccess_ and _onerror_ and that will resemble way `.then` works, with that difference that it won't extend chain with another promise:
 
 	promise(function (value) {
 		// process
@@ -262,7 +262,7 @@ Or with two callbacks _onsuccess_ and _onerror_ and that will resemble way `.the
 		// handle error
 	});
 
-We may provide just _onerror_:
+Just _onerror_ may be provided:
 
 	promise(function (value) {
 		// process
