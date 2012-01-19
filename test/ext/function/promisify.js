@@ -35,7 +35,7 @@ module.exports = function (t, a) {
 				}, 0);
 			}).call(u, promise(x), y)(function (result) {
 				a(result, z); d();
-			}, a.never).end(d);
+			}, a.never).end(null, d);
 		},
 		"Promise argument": function (a, d) {
 			t.call(function (arg1, callback) {
@@ -46,7 +46,7 @@ module.exports = function (t, a) {
 				}, 0);
 			}).call(u, promise(x))(function (result) {
 				a(result, z); d();
-			}, a.never).end(d);
+			}, a.never).end(null, d);
 		},
 		"Length": function (a, d) {
 			t.call(function (arg1, arg2, callback) {
