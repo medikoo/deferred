@@ -1,6 +1,7 @@
 'use strict';
 
-var promise = require('../../../lib/promise');
+var deferred = require('../../../lib/deferred')
+  , promise  = require('../../../lib/promise');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
@@ -106,6 +107,18 @@ module.exports = function (t) {
 					}, a.never);
 				}
 			}
+		},
+		"Resolve not via then": function (a) {
+			// With v0.3.0 we introduced a bug - resolve of map in some cases was
+			// called within callback passed to then, therefore any following errors
+			// in given event loop were silent - this test makes sure it's not the
+			// case anymore
+
+			var d = deferred();
+			t.call([d.promise]).end(function () {
+				throw new Error("ERROR");
+			});
+			a.throws(d.resolve);
 		}
 	};
 };
