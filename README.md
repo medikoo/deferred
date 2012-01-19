@@ -68,31 +68,24 @@ Promises approach:
 	  , readFile = deferred.promisify(fs.readFile)
 	  , writeFile = deferred.promisify(fs.writeFile);
 
-	// Read all filenames in given path
-	readdir(__dirname)
+	writeFile(__dirname + '/lib.js',
+		// Read all filenames in given path
+		readdir(__dirname)
 
-	// Filter *.js files
-	.invoke('filter', function (file) {
-		return (file.slice(-3) === '.js') && (file !== 'lib.js');
-	})
+		// Filter *.js files
+		.invoke('filter', function (file) {
+			return (file.slice(-3) === '.js') && (file !== 'lib.js');
+		})
 
-	// Read content of all files
-	.map(function (file) {
-		return readFile(file, 'utf-8');
-	})
+		// Read content of all files
+		.map(function (file) {
+			return readFile(file, 'utf-8');
+		})
 
-	// Concatenate files content into one string
-	.invoke('join', '\n')
+		// Concatenate files content into one string
+		.invoke('join', '\n')
 
-	// Write lib file
-	(function (content) {
-		return writeFile(__dirname + '/lib.js', content);
-	})
-
-	(function () { console.log("Done!"); })
-
-	// If there was eny error on the way throw it
-	.end();
+	).end(); 	// If there was eny error on the way throw it
 
 * [Installation](#installation)
 	* [Node.js](#installation-nodejs)
@@ -103,6 +96,7 @@ Promises approach:
 		* [Chaining](#concept-promise-chaining)
 		* [Nesting](#concept-promise-nesting)
 		* [Error handling](#concept-promise-errorhandling)
+		* [Ending chain](#concept-promise-errorhandling)
 		* [Creating resolved promises](#concept-promise-creatingresolved)
 * [Promisify - working with asynchronous functions as we know it from Node.js](#promisify)
 * [Grouping promises](#grouping)
@@ -234,6 +228,9 @@ To handle error, pass dedicated callback as second argument to promise function:
 		// handle error;
 	});
 
+<a name="concept-promise-end" />
+#### Ending chain
+
 When there is no error callback passed, eventual error is silent. To expose the error, end promise chain with `.end()`, then error that broke the chain will be thrown:
 
 	delayedAdd(2, 3)
@@ -244,16 +241,35 @@ When there is no error callback passed, eventual error is silent. To expose the 
 		// never executed
 	})
 	.end(); // throws error!
+`
+__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` in general is exit from promises flow.
+It can be called with one callback argument and one will be called same way as callback passed to Node.js style asynchronous function:
 
-__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed.__
+	promise(function (value) {
+		// process
+	}).end(function (err, result) {
+		if (err) {
+			// handle error
+			return;
+		}
+		// process result
+	});
 
-Error can also be handled via `end` call:
+Or with two callbacks _onsuccess_ and _onerror_ and that will resemble way `.then` works, with that difference that it won't extend chain with another promise:
 
-	delayedAdd(2, 3)
-	(function (result) {
-		throw new Error('Error!')
-	})
-	.end(function (e) {
+	promise(function (value) {
+		// process
+	}).end(function (result) {
+		// process result
+	}, function (err) {
+		// handle error
+	});
+
+We may provide just _onerror_:
+
+	promise(function (value) {
+		// process
+	}).end(null, function (err) {
 		// handle error
 	});
 
@@ -363,18 +379,6 @@ As with `map`, `reduce` is also available directly as an extension on promise ob
 
 Promise objects are equipped with some useful extensions. All extension are optional but are loaded by default when `deferred` is loaded via `require('deferred')` import, and that's the recommended way when you work with Node.js.
 When preparing client-side file (with help of e.g. [modules-webmake](https://github.com/medikoo/modules-webmake)) you are free to decide, which extensions you want to take (see source of `lib/index.js` on how to do it)
-
-<a name="extensions-cb" />
-### cb
-
-With `deferred.promisify` we make asynchronous function promise friendly. `cb` extension makes it easy to go other way. Let's say you write asynchronous function that you want to expose work as regular Node.js function but internally you'd like to take advantage of deferred, then `cb` is made for you:
-
-	var asyncFn = function (arg1, arg2, cb) {
-		// ... processing, control flow with promises ...
-
-		// On final promise, call cb with received callback
-		promise.cb(cb);
-	};
 
 <a name="extensions-get" />
 ### get
