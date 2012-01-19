@@ -12,6 +12,7 @@ v0.4.0  --  2012.01.19
 * Fixed `map` extension. There was logic error: in specific cases resolve of map
   was called in callback passed to promise, cause of that any errors that
   occured in same event loop were silent.
+* Removed `cb` extension as now `end` has same functionality
 
 v0.3.1  --  2012.01.13
 * Promisify and invoke extension now resolves also input arguments before
