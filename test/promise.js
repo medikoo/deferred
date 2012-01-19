@@ -52,10 +52,8 @@ module.exports = {
 		a(t(p), p);
 	},
 	"Front": {
-		"End": function (t, a, d) {
-			t(x).end(a.never)(function (res) {
-				a(res, x); d();
-			});
+		"End": function (t, a) {
+			a(t(x).end(), undefined);
 		},
 		"ValueOf": function (t, a) {
 			var y = t();
@@ -88,13 +86,41 @@ module.exports = {
 			}
 		},
 		"End": {
-			"Success": function (t, a, d) {
-				t(null).end(a.never)(d);
+			"No args": {
+				"Success": function (t, a) {
+					a(t(null).end(), undefined);
+				},
+				"Error": function (t, a) {
+					a.throws(function () {
+						t(e).end();
+					});
+				}
 			},
-			"Error": function (t, a, d) {
-				t(e).end(function (arg) {
-					a(arg, e); d();
-				});
+			"One arg": {
+				"Success": function (t, a) {
+					t(x).end(function (err, res) {
+						a(err, null, "Error");
+						a(res, x, "Result");
+					});
+				},
+				"Error": function (t, a) {
+					t(e).end(function (err, res) {
+						a(err, e, "Error");
+						a(res, undefined, "Result");
+					});
+				}
+			},
+			"Two args": {
+				"Success": function (t, a) {
+					t(x).end(function (res) {
+						a(res, x, "Result");
+					}, a.never);
+				},
+				"Error": function (t, a) {
+					t(e).end(a.never, function (err) {
+						a(err, e, "Error");
+					});
+				}
 			}
 		}
 	}
