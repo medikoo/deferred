@@ -1,3 +1,18 @@
+v0.4.0  --  2012.01.19
+* Changed the way `end` behaves:
+  * When called without arguments, throws error if promise is rejected
+  * When called with one function argument, it's treated as callback passed to
+    Node.js style asynchronous function. When promise is resolved it is called
+    with two arguments, first is error if promise is rejected, second is
+    resolved value if promise succeeds.
+	* When called with two function arguments, first one is taken as onsuccess and
+    second as onerror (it behaves similar as `then` but it doesn't extend chain
+    with another promise)
+	* It no longer returns its promise
+* Fixed `map` extension. There was logic error: in specific cases resolve of map
+  was called in callback passed to promise, cause of that any errors that
+  occured in same event loop were silent.
+
 v0.3.1  --  2012.01.13
 * Promisify and invoke extension now resolves also input arguments before
   calling the function
