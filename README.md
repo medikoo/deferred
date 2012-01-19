@@ -240,8 +240,7 @@ When there is no error callback passed, eventual error is silent. To expose the 
 	})
 	.end(); // throws error!
 
-__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` in general is exit from promises flow.
-It can be called with one callback argument and one will be called same way as callback passed to Node.js style asynchronous function:
+__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` is exit door from promises flow. You can call it with one callback argument and it will be called same way as callback passed to Node.js style asynchronous function:
 
 	promise(function (value) {
 		// process
