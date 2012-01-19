@@ -50,8 +50,6 @@ Plain Node.js:
 							// We cannot write lib.js file, throw error
 							throw err;
 						}
-
-						console.log("Done!");
 					});
 				}
 			});
