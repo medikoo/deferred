@@ -135,18 +135,16 @@ You can easily create browser bundle with help of [modules-webmake](https://gith
 <a name="concept-deferred" />
 ### Deferred
 
-For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred contains two function properties `resolve` and `promise`. Common pattern is to return `promise` to outer world and when you have value ready resolve it via `resolve` function
+For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred holds both `resolve` and `promise` objects. Observers interested in value are attached to `promise` object, With `resolve` we resolve promise with actual value. In common usage `promise` is returned to the world and `resolve` is kept internally
 
-Let's create generic `delay` function, that would produce delayed version of any function that was passed to it.
+Let's create `delay` function decorator. Decorates function so its execution is delayed in time.
 
 ```javascript
 var deferred = require('deferred');
 
 var delay = function (fn, timeout) {
 	return function () {
-		var d = deferred()
-		  , self = this
-		  , args = arguments;
+		var d = deferred(), self = this, args = arguments;
 
 		setTimeout(function () {
 			d.resolve(fn.apply(self, args));
@@ -173,7 +171,9 @@ resultPromise(function (value) {
 <a name="concept-promise" />
 ### Promise
 
-Promise is a promise of a value that will be available in a future. It may succed or fail.
+Promise is an object that represents eventual value which may already be available or is expected to be available in a future.  
+Promise may succeed (fulfillment) or fail (rejection).  
+Promise can be resolved only once.  
 In `deferred` (and most of the other promise implementations) you may listen for the value by passing observers to `then` function:
 
 ```javascript
@@ -187,14 +187,14 @@ promise === promise.then; // true
 promise(onsuccess, onfail)
 ```
 
-`onsuccess` and `onfail` are optional, you may pass just one of those
+__However if you want to keep clear visible distinction between promises and other object I encourage you to always use `promise.then` notation.__
 
-A promise can be resolved only once, and callbacks passed to `promise` are also called only once (only either onsuccess or onfail is called) no exceptions.
+Both callbacks `onsuccess` and `onfail` are optional. They will be called only once aand only either `onsuccess` or `onfail` will be called.
 
 <a name="concept-promise-chaining" />
 #### Chaining
 
-Promise function (formally `promise.then`)  takes callback(s) and returns another promise which is promise of a value that would be returned by attached callbacks. This way promises can be chained:
+Promises by nature can be chained. `promise` function returns another promise which is resolved with a value returned by a callback function:
 
 ```javascript
 delayedAdd(2, 3)
@@ -211,7 +211,7 @@ It's not just function arguments that promise function can take, it can be other
 <a name="concept-promise-nesting" />
 #### Nesting
 
-Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise returns a real value:
+Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise is resolved with a real value:
 
 ```javascript
 var d = deferred();
@@ -224,9 +224,10 @@ d.promise(function (result) {
 <a name="concept-promise-errorhandling" />
 #### Error handling
 
-Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintanable then when using plain asynchronous approach.
+Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintanable than when using callbacks approach.
 
-A promise resolved with an error (rejected), propagates its error to all promises that were initiated by its observers. Also if observer function crash with error or returns error, its promise is rejected with the error.
+A promise resolved with an error (rejected), propagates its error to all promises that depend on this promise (e.g. promises initiated by adding observers).  
+If observer function crashes with error or returns error, its promise is rejected with the error.
 
 To handle error, pass dedicated callback as second argument to promise function:
 
@@ -258,7 +259,8 @@ delayedAdd(2, 3)
 .end(); // throws error!
 ```
 
-__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__. `end` is exit from promises flow. You can call it with one callback argument and it will be called same way as callback passed to Node.js style asynchronous function:
+__It's very important to end your promise chains with `end` otherwise eventual errors that were not handled will not be exposed__.  
+`end` is an exit from promises flow. You can call it with one callback argument and it will be called same way as callback passed to Node.js style asynchronous function:
 
 ```javascript
 promise(function (value) {
@@ -272,7 +274,7 @@ promise(function (value) {
 });
 ```
 
-Altenatively you can pass two callbacks _onsuccess_ and _onerror_ and that will resemble way `.then` works, with that difference that it won't extend chain with another promise:
+Altenatively you can pass two callbacks _onsuccess_ and _onerror_ and that will resemble way `.then` works, with difference that it won't extend chain with another promise:
 
 ```javascript
 promise(function (value) {
@@ -297,7 +299,7 @@ promise(function (value) {
 <a name="concept-promise-creatingresolved" />
 #### Creating resolved promises
 
-With `deferred` function you may create initially resolved promises. It may make no sense at first glance but it's useful in for example function that is supposed to return promise, but have it's return value already available
+With `deferred` function you may create initially resolved promises.
 
 ```javascript
 var promise = deferred(1);
@@ -324,9 +326,8 @@ fs.readFile(__filename, 'utf-8', function (err, content) {
 });
 ```
 
-An asynchronous function receives a callback argument which handles both error and expected value.
-
-`deferred` was created to make work with asynchronous flow straightforward and easy, however to take advantage of that, we need to work with functions that will actually return promises instead of taking callbacks. We can turn function that takes callback into one that returns promise with `deferred.promisify`:
+An asynchronous function receives a callback argument which handles both error and expected value.  
+It's not convienient to work with both promises and callback style functions. When you decide to build your flow with promises __don't mix both concepts just `promisify` asynchronous functions so they return promises instead__.
 
 ```javascript
 var deferred = require('deferred')
@@ -342,12 +343,14 @@ var deferred = require('deferred')
 	});
 ```
 
-There's no clear advantage of using `deffered` just for one asynchronous call, and I wouldn't recommend that. However it's different story when there's a lot of them, see [example](#example) this document starts with
+With second argument passed to `promisify` we may specify length of arguments that function takes before callback argument. It's very handy if we want to work with functions that may call our function with unexpected arguments (e.g. Array's `forEach` or `map`)
+
+`promisify` also takes care of input arguments. __It makes sure that all arguments that are to be passed to asynchronous function are first resolved.__
 
 <a name="grouping" />
 ## Grouping promises
 
-When we have some promises that we want to observe as a group. We may do it again with help `deferred` function:
+Sometimes we're interested in results of more than one promise object. We may do it again with help `deferred` function:
 
 ```javascript
 deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))
@@ -362,7 +365,7 @@ deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))
 <a name="collections-map" />
 ### Map
 
-It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject map promise and resolve it with same error.
+It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject the promise and resolve it with same error.
 
 Let's say we have list of filenames and we want to get each file's content:
 
