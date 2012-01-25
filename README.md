@@ -135,9 +135,9 @@ You can easily create browser bundle with help of [modules-webmake](https://gith
 <a name="concept-deferred" />
 ### Deferred
 
-For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred holds both `resolve` and `promise` objects. Observers interested in value are attached to `promise` object, With `resolve` we resolve promise with actual value. In common usage `promise` is returned to the world and `resolve` is kept internally
+For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred holds both `resolve` and `promise` objects. Observers interested in value are attached to `promise` object, with `resolve` we resolve promise with an actual value. In common usage `promise` is returned to the world and `resolve` is kept internally
 
-Let's create `delay` function decorator. Decorates function so its execution is delayed in time.
+Let's create `delay` function decorator. Decorates function so its execution is delayed in time:
 
 ```javascript
 var deferred = require('deferred');
@@ -171,9 +171,7 @@ resultPromise(function (value) {
 <a name="concept-promise" />
 ### Promise
 
-Promise is an object that represents eventual value which may already be available or is expected to be available in a future.  
-Promise may succeed (fulfillment) or fail (rejection).  
-Promise can be resolved only once.  
+Promise is an object that represents eventual value which may already be available or is expected to be available in a future. Promise may succeed (fulfillment) or fail (rejection). Promise can be resolved only once.  
 In `deferred` (and most of the other promise implementations) you may listen for the value by passing observers to `then` function:
 
 ```javascript
@@ -327,7 +325,7 @@ fs.readFile(__filename, 'utf-8', function (err, content) {
 ```
 
 An asynchronous function receives a callback argument which handles both error and expected value.  
-It's not convienient to work with both promises and callback style functions. When you decide to build your flow with promises __don't mix both concepts just `promisify` asynchronous functions so they return promises instead__.
+It's not convienient to work with both promises and callback style functions. When you decide to build your flow with promises __don't mix both concepts, just `promisify` asynchronous functions so they return promises instead__.
 
 ```javascript
 var deferred = require('deferred')
