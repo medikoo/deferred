@@ -39,6 +39,13 @@ module.exports = {
 					a(e, v);
 					res = true;
 				}).end();
+			},
+			"Resolve not via then": function (a) {
+				var d = t();
+				t(1, d.promise).end(function () {
+					throw new Error("ERROR");
+				});
+				a.throws(d.resolve);
 			}
 		};
 	},
