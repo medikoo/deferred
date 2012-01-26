@@ -1,3 +1,9 @@
+v0.4.1  --  2012.01.26
+* Fixed logic error for multi argument `deferred` call. It was same case as with
+  `map` fixed with v0.4.0: In specific cases resolve was called in callback
+  passed to promise, cause of that any errors that occured in same event loop
+  were silent.
+
 v0.4.0  --  2012.01.19
 * Changed the way `end` behaves:
   * When called without arguments, throws error if promise is rejected
