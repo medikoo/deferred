@@ -1,6 +1,6 @@
 {
 	"name": "deferred",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"description": "Asynchronous control-flow with deferred and promises",
 	"keywords": ["deferred", "promise", "promises", "async", "asynchronous",
 		"future", "futures", "continuations", "flow"],
