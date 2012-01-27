@@ -26,7 +26,7 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['delay', 'promisify', 'map', 'reduce']),
+	}), ['delay', 'promisify', 'map', 'queue', 'reduce']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -54,6 +54,22 @@ module.exports = {
 		})(function (r) {
 			a.deep(r, [1, 4, 9]); d();
 		}, a.never);
+	},
+	"Queue": function (t, a) {
+		var count = 0, ps = []
+		t.queue([1, 2, 3, 4, 5, 6], 3, function () {
+			++count;
+			var d = t();
+			ps.push(d.resolve);
+			return d.promise;
+		}).end();
+		a(count, 3, "Limit");
+		ps.shift()();
+		a(count, 4, "Limit");
+		while (ps.length) {
+			ps.shift()();
+		}
+		a(count, 6, "All run");
 	},
 	"Reduce": function (t, a, d) {
 		var x = {};
