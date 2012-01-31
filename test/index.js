@@ -26,7 +26,7 @@ module.exports = {
 				delete o2.default;
 				return merge.call(o, o2);
 			});
-	}), ['delay', 'promisify', 'map', 'queue', 'reduce']),
+	}), ['delay', 'promisify', 'promisifyAsync', 'map', 'queue', 'reduce']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -46,6 +46,15 @@ module.exports = {
 		})()(function (r) {
 			a(r, x); d();
 		});
+	},
+	"PromisifyAsync": function (t, a, d) {
+		var x = {};
+		t.promisifyAsync(function (cb) {
+			setTimeout(cb.bind(null, null, x), 0);
+			return {};
+		})()(function (r) {
+			a(r, x);
+		}).end(d);
 	},
 	"Map": function (t, a, d) {
 		var x = {};
