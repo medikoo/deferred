@@ -104,8 +104,7 @@ module.exports = {
 				if ((file.slice(-3) === '.js') && (file[0] !== '_')) {
 					return convert.call(file.slice(0, -3));
 				}
-			}).filter(Boolean).filter(not.call(contains),
-				['invokeAsync', 'invokeSync']).forEach(function (file) {
+			}).filter(Boolean).forEach(function (file) {
 					a(isFunction(p[file]), true, file);
 				});
 			d();
