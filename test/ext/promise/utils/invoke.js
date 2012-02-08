@@ -4,7 +4,7 @@ var slice    = Array.prototype.slice
   , deferred = require('../../../../lib/deferred');
 
 module.exports = function (t) {
-	var x = {}, y = {}, z = {}, fn, fn2;
+	var x = {}, y = {}, z = {}, fn, fn2, count;
 	require('../../../../lib/extend')('$test-invoke', null,
 		function (args, resolve) {
 			var fn = args[0];
@@ -13,8 +13,10 @@ module.exports = function (t) {
 				resolve);
 		});
 
+	count = 0;
 	fn = function (y, cb) {
 		var a = this;
+		++count;
 		setTimeout(function () {
 			cb(null, a, y);
 		}, 0);
@@ -41,8 +43,10 @@ module.exports = function (t) {
 		},
 		"Function name": function (a, d) {
 			x.foo = fn;
+			count = 0;
 			deferred(x)['$test-invoke']('foo', y)
 			(function (r) {
+				a(count, 1, "Once");
 				a.deep(r, [x, y]); d();
 			}, a.never);
 		},
