@@ -41,6 +41,16 @@ module.exports = {
 			}, 0);
 		}, [], defer.resolve);
 	},
+	"Function crash": function (t, a, d) {
+		var x = new Error('Test'), defer;
+		defer = deferred();
+		defer.promise(a.never, function (result) {
+			a(result, x); d();
+		});
+		t(function (callback) {
+			throw x;
+		}, [], defer.resolve);
+	},
 	"True/False": function (t, a, d) {
 		var defer;
 		defer = deferred();
