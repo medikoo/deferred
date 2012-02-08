@@ -9,8 +9,8 @@ module.exports = function (t) {
 		function (args, resolve) {
 			var fn = args[0];
 			args = slice.call(args, 1);
-			t(this, fn, args, require('../../../../lib/ext/utils/apply-async'),
-				resolve);
+			return t(this, fn, args, require('../../../../lib/ext/utils/apply-async'),
+				resolve, true);
 		});
 
 	count = 0;
@@ -36,8 +36,7 @@ module.exports = function (t) {
 			}).end();
 		},
 		"Method": function (a, d) {
-			deferred(x)['$test-invoke'](fn, y)
-			(function (r) {
+			deferred(x)['$test-invoke'](fn, y)(function (r) {
 				a.deep(r, [x, y]); d();
 			}, a.never);
 		},

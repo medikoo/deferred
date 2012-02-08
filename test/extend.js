@@ -27,7 +27,7 @@ module.exports = function (t, a) {
 			var p;
 			def = t('$test:back', null, function (args, resolve) {
 				a.deep(toArray.call(args), [x, y], "Back: args");
-				resolve(v);
+				return resolve(v);
 			});
 			a(isPromise(p = def(null)['$test:back'](x, y)), true, "Front");
 			p(function (arg) {
