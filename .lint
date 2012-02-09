@@ -1,0 +1,6 @@
+indent 2
+maxlen 80
+bitwise
+nomen
+plusplus
+predef setTimeout
