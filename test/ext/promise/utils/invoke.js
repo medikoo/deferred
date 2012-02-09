@@ -30,38 +30,34 @@ module.exports = function (t) {
 	return {
 		"Fail": function (a, d) {
 			var e = new Error("Error");
-			deferred(e)['$test-invoke']('bla')
-			(a.never, function (r) {
-				a(r, e); d();
-			}).end();
+			deferred(e)['$test-invoke']('bla')(a.never, function (r) {
+				a(r, e);
+			}).end(d);
 		},
 		"Method": function (a, d) {
 			deferred(x)['$test-invoke'](fn, y)(function (r) {
-				a.deep(r, [x, y]); d();
-			}, a.never);
+				a.deep(r, [x, y]);
+			}, a.never).end(d);
 		},
 		"Function name": function (a, d) {
 			x.foo = fn;
 			count = 0;
-			deferred(x)['$test-invoke']('foo', y)
-			(function (r) {
+			deferred(x)['$test-invoke']('foo', y)(function (r) {
 				a(count, 1, "Once");
-				a.deep(r, [x, y]); d();
-			}, a.never);
+				a.deep(r, [x, y]);
+			}, a.never).end(d);
 		},
 		"Promise arguments": function (a, d) {
 			x.foo = fn2;
-			deferred(x)['$test-invoke']('foo', deferred(y), z)
-			(function (r) {
-				a.deep(r, [x, y, z]); d();
-			}, a.never);
+			deferred(x)['$test-invoke']('foo', deferred(y), z)(function (r) {
+				a.deep(r, [x, y, z]);
+			}, a.never).end(d);
 		},
 		"Promise argument": function (a, d) {
 			x.foo = fn;
-			deferred(x)['$test-invoke']('foo', deferred(y))
-			(function (r) {
-				a.deep(r, [x, y]); d();
-			}, a.never);
+			deferred(x)['$test-invoke']('foo', deferred(y))(function (r) {
+				a.deep(r, [x, y]);
+			}, a.never).end(d);
 		}
 	};
 };

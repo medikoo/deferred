@@ -6,8 +6,7 @@ module.exports = {
 	"Deferred": function (a) {
 		var defer = deferred(), x = {}, y = { foo: x }
 		  , invoked = false;
-		defer.resolve(y).get('foo')
-		(function (r) {
+		defer.resolve(y).get('foo')(function (r) {
 			invoked = true;
 			a(r, x);
 		}).end();
@@ -15,9 +14,8 @@ module.exports = {
 	},
 	"Promise": function (a, d) {
 		var x = {}, y = { foo: x };
-		deferred(y).get('foo')
-		(function (r) {
-			a(r, x); d();
-		}, d).end();
+		deferred(y).get('foo')(function (r) {
+			a(r, x);
+		}).end(d);
 	}
 };

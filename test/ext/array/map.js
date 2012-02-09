@@ -11,21 +11,21 @@ module.exports = function (t) {
 		"Empty": {
 			"": function (a, d) {
 				t.call([])(function (result) {
-					a.deep(result, []); d();
-				}, a.never);
+					a.deep(result, []);
+				}, a.never).end(d);
 			},
 			"Callback": function (a, d) {
 				t.call([], a.never)(function (result) {
-					a.deep(result, []); d();
-				}, a.never);
+					a.deep(result, []);
+				}, a.never).end(d);
 			}
 		},
 		"One": {
 			"Value": {
 				"": function (a, d) {
 					t.call([x])(function (result) {
-						a.deep(result, [x]); d();
-					}, a.never);
+						a.deep(result, [x]);
+					}, a.never).end(d);
 				},
 				"Callback": function (a, d) {
 					var list = [x];
@@ -36,23 +36,23 @@ module.exports = function (t) {
 						a(this, x, "Context");
 						return y;
 					}, x)(function (result) {
-						a.deep(result, [y]); d();
-					}, a.never);
+						a.deep(result, [y]);
+					}, a.never).end(d);
 				}
 			},
 			"Promise": {
 				"": function (a, d) {
 					t.call([promise(x)])(function (result) {
-						a.deep(result, [x]); d();
-					}, a.never);
+						a.deep(result, [x]);
+					}, a.never).end(d);
 				},
 				"Callback": function (a, d) {
 					t.call([promise(x)], function (arg) {
 						a(arg, x, "Argument");
 						return y;
 					})(function (result) {
-						a.deep(result, [y]); d();
-					}, a.never);
+						a.deep(result, [y]);
+					}, a.never).end(d);
 				}
 			}
 		},
@@ -60,18 +60,19 @@ module.exports = function (t) {
 			"No callback": {
 				"Error": function (a, d) {
 					t.call([x, y, promise(x), e, z])(a.never, function (res) {
-						a(res, e); d();
+						a(res, e);
+						d();
 					});
 				},
 				"Values & Promises": function (a, d) {
 					t.call([x, y, promise(x), z, promise(y)])(function (res) {
-						a.deep(res, [x, y, x, z, y]); d();
-					}, a.never);
+						a.deep(res, [x, y, x, z, y]);
+					}, a.never).end(d);
 				},
 				"Error promise": function (a, d) {
 					t.call([x, y, promise(e), z, promise(y)])(a.never, function (res) {
-						a(res, e); d();
-					}, a.never);
+						a(res, e);
+					}, a.never).end(d);
 				}
 			},
 			"Callback": {
@@ -83,30 +84,30 @@ module.exports = function (t) {
 						}
 						return e;
 					})(a.never, function (res) {
-						a(res, e); d();
-					});
+						a(res, e);
+					}).end(d);
 				},
 				"Error via input": function (a, d) {
 					var count = 0;
 					t.call([x, y, promise(e), z], function (res) {
 						return x;
 					})(a.never, function (res) {
-						a(res, e); d();
-					});
+						a(res, e);
+					}).end(d);
 				},
 				"Values & Promises": function (a, d) {
 					t.call([1, promise(2), 3, promise(4), 5], function (val) {
-						return val*val;
+						return val * val;
 					})(function (res) {
-						a.deep(res, [1, 4, 9, 16, 25]); d();
-					}, a.never);
+						a.deep(res, [1, 4, 9, 16, 25]);
+					}, a.never).end(d);
 				},
 				"Values & Promises, through promise": function (a, d) {
 					t.call([1, promise(2), 3, promise(4), 5], function (val) {
-						return promise(val*val);
+						return promise(val * val);
 					})(function (res) {
-						a.deep(res, [1, 4, 9, 16, 25]); d();
-					}, a.never);
+						a.deep(res, [1, 4, 9, 16, 25]);
+					}, a.never).end(d);
 				}
 			}
 		},
@@ -156,7 +157,7 @@ module.exports = function (t) {
 					a(list, arr, "List");
 					a(this, x, "Context");
 					++count;
-					return res = res + res;
+					return (res = res + res);
 				}, x, 3)(function (res) {
 					a.deep(res, [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024], "Result");
 				}).end();

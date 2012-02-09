@@ -10,8 +10,7 @@ module.exports = function (t, a, d) {
 		}, 0);
 		return y;
 	};
-	t({}).invokeSync(fn, x)
-	(function (r) {
-		a(r, x); d();
-	});
+	t({}).invokeSync(fn, x)(function (r) {
+		a(r, x);
+	}).end(d);
 };

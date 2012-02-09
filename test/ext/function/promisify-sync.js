@@ -12,8 +12,8 @@ module.exports = function (t) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
 			}).call(u, x, y)(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Promise arguments": function (a, d) {
 			t.call(function (arg1, arg2) {
@@ -21,8 +21,8 @@ module.exports = function (t) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
 			}).call(u, promise(x), y)(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Promise argument": function (a, d) {
 			t.call(function (arg1) {
@@ -30,8 +30,8 @@ module.exports = function (t) {
 				a(arg1, x, "Arguments");
 				return z;
 			}).call(u, promise(x))(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Length": function (a, d) {
 			t.call(function (arg1, arg2, arg3) {
@@ -39,16 +39,16 @@ module.exports = function (t) {
 				a.deep([arg1, arg2, arg3], [x, y, undefined], "Arguments");
 				return z;
 			}, 2).call(u, x, y, {}, {}, {})(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Error": function (a, d) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;
 			})()(a.never, function (result) {
-				a(result, e); d();
-			}).end(null, d);
+				a(result, e);
+			}).end(d);
 		}
 	};
 };

@@ -11,7 +11,8 @@ module.exports = function (t, a) {
 				this._base.next('$test:both', [y, z]);
 				return [arg1, arg2, x];
 			}, function (arg1, arg2) {
-				a.deep([arg1, arg2], [y, z], "Back"); d();
+				a.deep([arg1, arg2], [y, z], "Back");
+				d();
 			});
 
 			a.deep(def(null)['$test:both'](u, v), [u, v, x], "Front");
@@ -31,8 +32,8 @@ module.exports = function (t, a) {
 			});
 			a(isPromise(p = def(null)['$test:back'](x, y)), true, "Front");
 			p(function (arg) {
-				a(arg, v, "Back: resolve"); d();
-			});
+				a(arg, v, "Back: resolve");
+			}).end(d);
 		}
 	};
 };

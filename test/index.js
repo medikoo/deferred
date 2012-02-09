@@ -19,13 +19,6 @@ module.exports = {
 		delete o.extend;
 		delete o.promise;
 		return o;
-		return indexTest.readDir(dir + '/join')
-			.then(function (o2) {
-				delete o2.base;
-				o2.join = o2.default;
-				delete o2.default;
-				return merge.call(o, o2);
-			});
 	}), ['delay', 'promisify', 'promisifyAsync', 'map', 'reduce']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
@@ -34,18 +27,18 @@ module.exports = {
 	"Delay": function (t, a, d) {
 		var x = {};
 		t.delay(function (r) {
-			return r
+			return r;
 		}, 5)(x)(function (r) {
-			a(r, x); d();
-		});
+			a(r, x);
+		}).end(d);
 	},
 	"Promisify": function (t, a, d) {
 		var x = {};
 		t.promisify(function (cb) {
 			cb(null, x);
 		})()(function (r) {
-			a(r, x); d();
-		});
+			a(r, x);
+		}).end(d);
 	},
 	"PromisifyAsync": function (t, a, d) {
 		var x = {};
@@ -59,18 +52,18 @@ module.exports = {
 	"Map": function (t, a, d) {
 		var x = {};
 		t.map([t(1), t(2), 3], function (res) {
-			return t(res*res);
+			return t(res * res);
 		})(function (r) {
-			a.deep(r, [1, 4, 9]); d();
-		}, a.never);
+			a.deep(r, [1, 4, 9]);
+		}, a.never).end(d);
 	},
 	"Reduce": function (t, a, d) {
 		var x = {};
 		t.reduce([t(1), t(2), 3], function (arg1, arg2) {
-			return t(arg1*arg2);
+			return t(arg1 * arg2);
 		}, 1)(function (r) {
-			a(r, 6); d();
-		}, a.never);
+			a(r, 6);
+		}, a.never).end(d);
 	},
 	"Deferred function is main object": function (t, a) {
 		var d = t();
@@ -89,8 +82,8 @@ module.exports = {
 					return convert.call(file.slice(0, -3));
 				}
 			}).filter(Boolean).forEach(function (file) {
-					a(isFunction(p[file]), true, file);
-				});
+				a(isFunction(p[file]), true, file);
+			});
 			d();
 		});
 	}

@@ -18,34 +18,34 @@ module.exports = {
 			++count;
 		}, a.never).end();
 		promise(function (result) {
-			a(count, 1); d();
-		}, a.never).end();
+			a(count, 1);
+		}, a.never).end(d);
 		promise._base.resolve(x);
 	},
 	"Resolve promise with other promise": function (t, a, d) {
 		var p1 = t(), x = {}, p2 = t();
 		p1(function (result) {
-			a(result, x); d();
-		}, a.never).end();
+			a(result, x);
+		}, a.never).end(d);
 		p1._base.resolve(p2);
 		p2._base.resolve(x);
 	},
 	"Reject": function (t, a, d) {
 		t(e)(a.never, function (res) {
-			a(res, e); d();
-		}).end();
+			a(res, e);
+		}).end(d);
 	},
 	"Erroneous callback rejects promise": function (t, a, d) {
 		t(1)(function () {
 			throw e;
 		})(a.never, function (res) {
-			a(res, e); d();
-		}).end();
+			a(res, e);
+		}).end(d);
 	},
 	"Object promise resolves to same object": function (t, a, d) {
 		t(x)(function (result) {
-			a(result, x); d();
-		}, a.never).end();
+			a(result, x);
+		}, a.never).end(d);
 	},
 	"Promise returns promise": function (t, a) {
 		var p = t({});
@@ -66,23 +66,23 @@ module.exports = {
 		"Then": {
 			"Callback": function (t, a, d) {
 				t(x)(function (result) {
-					a(result, x); d();
-				}, a.never).end();
+					a(result, x);
+				}, a.never).end(d);
 			},
 			"Null": function (t, a, d) {
 				t(x)(null, a.never)(function (result) {
-					a(result, x); d();
-				}, a.never).end();
+					a(result, x);
+				}, a.never).end(d);
 			},
 			"Other value": function (t, a, d) {
 				t(x)(y, a.never)(function (result) {
-					a(result, y); d();
-				}, a.never).end();
+					a(result, y);
+				}, a.never).end(d);
 			},
 			"Error": function (t, a, d) {
 				t(e)(a.never, function (result) {
-					a(result, e); d();
-				}).end();
+					a(result, e);
+				}).end(d);
 			}
 		},
 		"End": {

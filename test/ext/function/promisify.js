@@ -14,8 +14,8 @@ module.exports = function (t, a) {
 					callback(null, z);
 				}, 0);
 			}).call(u, x, y)(function (result) {
-				a(result, z); d();
-			}, a.never);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Sync": function (a, d) {
 			t.call(function (arg1, arg2) {
@@ -23,8 +23,8 @@ module.exports = function (t, a) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
 			}).call(u, x, y)(function (result) {
-				a(result, z); d();
-			}, a.never);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Promise arguments": function (a, d) {
 			t.call(function (arg1, arg2, callback) {
@@ -34,8 +34,8 @@ module.exports = function (t, a) {
 					callback(null, z);
 				}, 0);
 			}).call(u, promise(x), y)(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Promise argument": function (a, d) {
 			t.call(function (arg1, callback) {
@@ -45,8 +45,8 @@ module.exports = function (t, a) {
 					callback(null, z);
 				}, 0);
 			}).call(u, promise(x))(function (result) {
-				a(result, z); d();
-			}, a.never).end(null, d);
+				a(result, z);
+			}, a.never).end(d);
 		},
 		"Length": function (a, d) {
 			t.call(function (arg1, arg2, callback) {
@@ -56,8 +56,8 @@ module.exports = function (t, a) {
 					callback(null, z);
 				}, 0);
 			}, 2).call(u, x, y, {}, {}, {})(function (result) {
-				a(result, z); d();
-			}, a.never);
+				a(result, z);
+			}, a.never).end(d);
 		}
 	};
 };
