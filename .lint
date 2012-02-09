@@ -3,4 +3,4 @@ maxlen 80
 bitwise
 nomen
 plusplus
-predef setTimeout
+predef clearTimeout, setTimeout
