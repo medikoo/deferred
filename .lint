@@ -3,4 +3,5 @@ maxlen 80
 bitwise
 nomen
 plusplus
+tabs
 predef clearTimeout, setTimeout
