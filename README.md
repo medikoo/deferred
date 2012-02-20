@@ -395,7 +395,7 @@ readdir(__dirname).map(function (filename) {
 });
 ```
 
-There are cases when we don't want to run too many tasks simultaneously. There is common case in Node.js when we don't want to open too many file descriptors at once. `deferred.map` accepts fourth argument which is maximum number of tasks that should be run at once:
+There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors at once. `deferred.map` accepts fourth argument which is maximum number of tasks that should be run at once:
 
 ```javascript
 // Open maximum 100 file descriptors at once
