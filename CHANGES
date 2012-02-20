@@ -1,3 +1,17 @@
+v0.4.3  --  2012.02.20
+* Improvements:
+  * Added support for fourth argument in deffered.map through which we can set
+    maximum number of tasks that should be run simultaneusly
+  * Exposed `promisifyAsync` and `promisifySync` on deferred, and exposed by
+    defult `invokeSync` and `invokeAsync` promise extensions
+  * Added possibility to add just onsuccess callback to `end`
+  * Optimize internal logic by reducing number of created unresolved promises
+  * Code validation with JSLint
+
+* Fixes:
+  * Removed invalid doubled call from invoke extensions
+  * Handle exceptions thrown by asynchronous functions
+
 v0.4.2  --  2012.01.26
 * Optimization. Cut down promise creation time about 60%
 
