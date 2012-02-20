@@ -195,11 +195,9 @@ Both callbacks `onsuccess` and `onfail` are optional. They will be called only o
 Promises by nature can be chained. `promise` function returns another promise which is resolved with a value returned by a callback function:
 
 ```javascript
-delayedAdd(2, 3)
-(function (result) {
-	return result*result
-})
-(function (result) {
+delayedAdd(2, 3)(function (result) {
+	return result * result
+})(function (result) {
 	console.log(result); // 25
 });
 ```
@@ -230,11 +228,9 @@ If observer function crashes with error or returns error, its promise is rejecte
 To handle error, pass dedicated callback as second argument to promise function:
 
 ```javascript
-delayedAdd(2, 3)
-(function (result) {
+delayedAdd(2, 3)(function (result) {
 	throw new Error('Error!')
-})
-(function () {
+})(function () {
 	// never called
 }, function (e) {
 	// handle error;
@@ -250,8 +246,7 @@ When there is no error callback passed, eventual error is silent. To expose the 
 delayedAdd(2, 3)
 (function (result) {
 	throw new Error('Error!')
-})
-(function (result) {
+})(function (result) {
 	// never executed
 })
 .end(); // throws error!
@@ -294,6 +289,16 @@ promise(function (value) {
 });
 ```
 
+and just _onsuccess_ either (we need to pass `null` as second argument)
+
+```javascript
+promise(function (value) {
+	// process
+}).end(function (res) {
+	// handle result
+}, null); // throw on error
+```
+
 <a name="concept-promise-creatingresolved" />
 #### Creating resolved promises
 
@@ -333,12 +338,11 @@ var deferred = require('deferred')
 
 	, readFile = deferred.promisify(fs.readFile);
 
-	readFile(__filename, 'utf-8')
-	(function (content) {
-		// process content
-	}, function (err) {
-		// handle error
-	});
+readFile(__filename, 'utf-8')(function (content) {
+	// process content
+}, function (err) {
+	// handle error
+});
 ```
 
 With second argument passed to `promisify` we may specify length of arguments that function takes before callback argument. It's very handy if we want to work with functions that may call our function with unexpected arguments (e.g. Array's `forEach` or `map`)
@@ -351,8 +355,7 @@ With second argument passed to `promisify` we may specify length of arguments th
 Sometimes we're interested in results of more than one promise object. We may do it again with help `deferred` function:
 
 ```javascript
-deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))
-(function (result) {
+deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function (result) {
 	console.log(result); // [5, 8, 8]
 });
 ```
@@ -372,8 +375,7 @@ var readFile = deferred.promisify(fs.readFile);
 
 deferred.map(filenames, function (filename) {
 	return readFile(filename, 'utf-8');
-})
-(function (result) {
+})(function (result) {
 	// result is an array of file's contents
 });
 ```
@@ -388,8 +390,18 @@ var readdir = deferred.promisify(fs.readdir)
 
 readdir(__dirname).map(function (filename) {
 	return readFile(filename, 'utf-8');
-})
-(function (result) {
+})(function (result) {
+	// result is an array of file's contents
+});
+```
+
+There are cases when we don't want to run too many tasks simultaneously. Like when we operating on files we don't want to open too many file descriptors. `deferred.map` accepts fourth argument which is maximum number of tasks that can be run at once e.g.:
+
+```javascript
+// Open maximum 100 file descriptors at once
+deferred.map(filenames, function (filename) {
+	return readFile(filename, 'utf-8');
+}, null, 100)(function (result) {
 	// result is an array of file's contents
 });
 ```
