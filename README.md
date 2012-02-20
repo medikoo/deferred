@@ -182,7 +182,7 @@ In __deferred__ promise is really a `then` function, so you may use promise _fun
 
 ```javascript
 promise === promise.then; // true
-promise(onsuccess, onfail)
+promise(onsuccess, onfail);
 ```
 
 __However if you want to keep clear visible distinction between promises and other object I encourage you to always use `promise.then` notation.__
@@ -395,7 +395,7 @@ readdir(__dirname).map(function (filename) {
 });
 ```
 
-There are cases when we don't want to run too many tasks simultaneously. Like when we operating on files we don't want to open too many file descriptors. `deferred.map` accepts fourth argument which is maximum number of tasks that can be run at once e.g.:
+There are cases when we don't want to run too many tasks simultaneously. There is common case in Node.js when we don't want to open too many file descriptors at once. `deferred.map` accepts fourth argument which is maximum number of tasks that should be run at once:
 
 ```javascript
 // Open maximum 100 file descriptors at once
@@ -495,7 +495,7 @@ promise.match(function (a, b) {
 Described under [Processing collections](#collections-reduce) section. Promise aware version of Array's reduce
 
 <a name="tests" />
-## Tests
+## Tests [![Build Status](https://secure.travis-ci.org/medikoo/deferred.png?branch=master)](https://secure.travis-ci.org/medikoo/deferred)
 
 Before running tests make sure you've installed project with dev dependencies
 `npm install --dev`
