@@ -187,7 +187,7 @@ promise(onsuccess, onfail);
 
 __However if you want to keep clear visible distinction between promises and other object I encourage you to always use `promise.then` notation.__
 
-Both callbacks `onsuccess` and `onfail` are optional. They will be called only once aand only either `onsuccess` or `onfail` will be called.
+Both callbacks `onsuccess` and `onfail` are optional. They will be called only once and only either `onsuccess` or `onfail` will be called.
 
 <a name="concept-promise-chaining" />
 #### Chaining
