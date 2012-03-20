@@ -19,7 +19,8 @@ module.exports = {
 		delete o.extend;
 		delete o.promise;
 		return o;
-	}), ['delay', 'promisify', 'promisifyAsync', 'map', 'reduce']),
+	}), ['delay', 'promisify', 'promisifyAsync', 'promisifySync', 'map',
+		'reduce']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -47,6 +48,13 @@ module.exports = {
 			return {};
 		})()(function (r) {
 			a(r, x);
+		}).end(d);
+	},
+	"PromisifySync": function (t, a, d) {
+		t.promisifySync(function () {
+			return;
+		})()(function (r) {
+			a(r, undefined);
 		}).end(d);
 	},
 	"Map": function (t, a, d) {

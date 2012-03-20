@@ -121,6 +121,18 @@ module.exports = {
 						a(err, e, "Error");
 					});
 				}
+			},
+			"Two args, second null": {
+				"Success": function (t, a) {
+					t(x).end(function (res) {
+						a(res, x, "Result");
+					}, null);
+				},
+				"Error": function (t, a) {
+					a.throws(function () {
+						t(e).end(a.never, null);
+					});
+				}
 			}
 		}
 	}
