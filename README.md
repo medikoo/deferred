@@ -4,6 +4,8 @@ Promises in a simple and powerful way. It was built with the _less is more_ mant
 
 This work is inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
 
+For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: __[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)__
+
 <a name="example" />
 ## Example
 
