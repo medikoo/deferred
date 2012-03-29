@@ -19,14 +19,14 @@
 		"node": ">=0.1.103"
 	},
 	"dependencies": {
-		"es5-ext": "0.8.x"
+		"es5-ext": "git://github.com/medikoo/es5-ext.git"
+	},
+	"devDependencies": {
+		"tad": "0.1.x"
 	},
 	"scripts": {
 		"test": "node ./node_modules/tad/bin/tad lib",
 		"lint": "node ./node_modules/jslint/bin/jslint.js --color --git"
-	},
-	"devDependencies": {
-		"tad": "0.1.x"
 	},
 	"licence": "MIT"
 }
