@@ -1,6 +1,6 @@
 'use strict';
 
-var toArray   = require('es5-ext/lib/Object/prototype/to-array')
+var toArray   = require('es5-ext/lib/Object/to-array')
   , isPromise = require('../lib/is-promise');
 
 module.exports = function (t, a) {
@@ -27,7 +27,7 @@ module.exports = function (t, a) {
 		"Back": function (a, d) {
 			var p;
 			def = t('$test:back', null, function (args, resolve) {
-				a.deep(toArray.call(args), [x, y], "Back: args");
+				a.deep(toArray(args), [x, y], "Back: args");
 				return resolve(v);
 			});
 			a(isPromise(p = def(null)['$test:back'](x, y)), true, "Front");
