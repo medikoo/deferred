@@ -18,7 +18,7 @@ module.exports = {
 		delete o.extend;
 		delete o.promise;
 		return o;
-	}), ['delay', 'promisify', 'promisifyAsync', 'promisifySync', 'map',
+	}), ['delay', 'gate', 'promisify', 'promisifyAsync', 'promisifySync', 'map',
 		'reduce']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
@@ -31,6 +31,22 @@ module.exports = {
 		}, 5)(x)(function (r) {
 			a(r, x);
 		}).end(d);
+	},
+	"Gate": function (t, a) {
+		var fn, dx, dy, ready;
+		fn = t.gate(function (p) {
+			return p;
+		}, 1)
+		dx = t();
+		fn(dx.promise);
+		dy = t();
+		fn(dy.promise).end(function (err, r) {
+			a(ready, true);
+		});
+		dy.resolve({});
+		ready = true;
+		dx.resolve({});
+		ready = false;
 	},
 	"Promisify": function (t, a, d) {
 		var x = {};
