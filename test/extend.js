@@ -24,16 +24,31 @@ module.exports = function (t, a) {
 
 			a.deep(def(null)['$test:front'](u, v), [u, x, v], "Front");
 		},
-		"Back": function (a, d) {
+		"Back": function (a) {
 			var p;
 			def = t('$test:back', null, function (args, resolve) {
 				a.deep(toArray.call(args), [x, y], "Back: args");
 				return resolve(v);
 			});
 			a(isPromise(p = def(null)['$test:back'](x, y)), true, "Front");
-			p(function (arg) {
+			p.end(function (arg) {
 				a(arg, v, "Back: resolve");
-			}).end(d);
+			}, null)
+		},
+		"Front validators": function (a) {
+			var p;
+			def = t('$test:valid', [function (arg) {
+				a(arg, x, "#1");
+			}, function (arg) {
+				a(arg, y, "#2");
+			}], function (args, resolve) {
+				a.deep(toArray(args), [x, y], "Back: args");
+				return resolve(v);
+			});
+			a(isPromise(p = def(null)['$test:back'](x, y)), true, "Front");
+			p.end(function (arg) {
+				a(arg, v, "Back: resolve");
+			}, null);
 		}
 	};
 };
