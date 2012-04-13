@@ -4,7 +4,7 @@ var toArray  = require('es5-ext/lib/Object/to-array')
   , deferred = require('../../../lib/deferred');
 
 module.exports = function (t, a) {
-	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved;
+	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved, released;
 
 	fn = function (p) { // console.log("ARGS", arguments);
 		 args = toArray(arguments); return p; };
@@ -18,6 +18,7 @@ module.exports = function (t, a) {
 			dz = deferred();
 			a.not(hz = gfn(dz.promise, 'z'), dz.promise, "#3 blocked");
 			hz.end(function (err, r) {
+				released = true;
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
 			});
@@ -25,6 +26,7 @@ module.exports = function (t, a) {
 			dz.resolve(z);
 			resolved = true;
 			dy.resolve(y); // z, 4
+			a(released, true, "Released");
 			resolved = false;
 			dx.resolve(x);
 			a.deep(args, [x, y, z], "Held Arguments");
