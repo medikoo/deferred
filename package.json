@@ -1,32 +1,41 @@
 {
-	"name": "deferred",
-	"version": "0.4.3",
-	"description": "Asynchronous control-flow with deferred and promises",
-	"keywords": ["deferred", "promise", "promises", "async", "asynchronous",
-		"future", "futures", "continuations", "flow"],
-	"author":
-	"Mariusz Nowak <medikoo+deferred@medikoo.com> (http://www.medikoo.com/)",
-	"main": "lib",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/medikoo/deferred.git"
-	},
-	"bugs": {
-		"mail": "medikoo+deferred@medikoo.com",
-		"url": "https://github.com/medikoo/deferred/issues"
-	},
-	"engines": {
-		"node": ">=0.1.103"
-	},
-	"dependencies": {
-		"es5-ext": "0.7.x"
-	},
-	"scripts": {
-		"test": "node ./node_modules/tad/bin/tad lib",
-		"lint": "node ./node_modules/jslint/bin/jslint.js --color --git"
-	},
-	"devDependencies": {
-		"tad": "0.1.x"
-	},
-	"licence": "MIT"
+  "name": "deferred",
+  "version": "0.4.3",
+  "description": "Asynchronous control-flow with deferred and promises",
+  "keywords": [
+    "async",
+    "asynchronous",
+    "deferred",
+    "flow",
+    "future",
+    "futures",
+    "promise",
+    "promises",
+    "continuations"
+  ],
+  "author": "Mariusz Nowak <medikoo+deferred@medikoo.com> (http://www.medikoo.com/)",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/medikoo/deferred.git"
+  },
+  "bugs": {
+    "email": "medikoo+deferred@medikoo.com",
+    "url": "https://github.com/medikoo/deferred/issues"
+  },
+  "engines": {
+    "node": ">=0.1.103"
+  },
+  "dependencies": {
+    "es5-ext": "0.7.x"
+  },
+  "scripts": {
+    "test": "node ./node_modules/tad/bin/tad lib",
+    "lint": "node ./node_modules/jslint/bin/jslint.js --color --git"
+  },
+  "devDependencies": {
+    "tad": "0.1.x"
+  },
+  "licence": "MIT",
+  "optionalDependencies": {}
 }
