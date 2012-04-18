@@ -1,3 +1,26 @@
+v0.5.0  --  2012.04.18
+* Addons & Improvements
+  * Resigned from dual async/sync: `invoke` extension and `promisify` method.
+    Such abstraction lead to unexpected results in some cases.
+    `invokeSync` became `invoke` (`invokeSync` is no longer available),
+    `promisifyAsync` became `promisify` (`promisifyAsync` is no longer
+    available).
+  * Brought back `cb` extension in slightly different form. It's useful for
+    creating "hybrid" asynchronous functions that both take callback and return
+    promise, it can also be useful if we want to split promise chain, return
+    promise and carry on with other flow.
+  * `get` now accepts more than one argument, this way we can with one call get
+    to nested properties of object
+  * `extend` functions that helps in configuration of promise extensions now
+    accepts array of validation functions that should be called on extension
+    initial call.
+  * Input arguments of promise extensions are now validated on initial call.
+    It is quite important as error now can be easily tracked down, if we
+    propagate our error to some next event loop it's more problematic.
+
+* Fixes
+  * Arguments validation in `extend` function was broken
+
 v0.4.3  --  2012.02.20
 * Improvements:
   * Added support for fourth argument in deffered.map through which we can set
