@@ -19,8 +19,6 @@ module.exports = function (t, a) {
 	});
 	a(invoked, true, "Callback invoked immediately on resolved promise");
 
-	a(p.cb(), p, "No harm when callback is not provided");
-
 	p = t(x = new Error("Error"));
 	invoked = false;
 	p.cb(function (err, o) {
@@ -28,4 +26,19 @@ module.exports = function (t, a) {
 		invoked = true;
 	});
 	a(invoked, true, "Called on erronous");
+
+	invoked = false;
+	p.cb(a.never, function (err) {
+		a(err , x, "Two arguments: error");
+		invoked = true;
+	});
+	a(invoked, true, "Two arguments: Called on erronous");
+
+	invoked = false;
+	p = t(x = {});
+	p.cb(function (arg) {
+		a(arg, x, "Two arguments: success");
+		invoked = true;
+	}, a.never);
+	a(invoked, true, "Two arguments: Called on success");
 };
