@@ -447,28 +447,40 @@ promise.get('foo')(function (value) {
 });
 ```
 
+With single call you can get nested properties as well:
+
+```javascript
+var promise = deferred({ foo: { bar: 317 });
+
+promise(function (obj) {
+	console.log(obj.foo.bar); // 317;
+})
+
+promise.get('foo', 'bar')(function (value) {
+	console.log(value); // 317
+});
+```
+
 <a name="extensions-invoke" />
-### invoke
+### invoke & invokeAsync
 
 Schedule function call on promised object
 
 ```javascript
 var promise = deferred({ foo: function (arg) { return arg*arg; } });
 
-promise.invoke('foo', 3)
-(function (result) {
+promise.invoke('foo', 3)(function (result) {
 	console.log(result); // 9
 });
 
-// It works also with asynchronous functions
+// For asynchronous functions use invokeAsync
 var promise = deferred({ foo: function (arg, callback) {
 	setTimeout(function () {
 		callback(null, arg*arg);
 	}, 100);
 } });
 
-promise.invoke('foo', 3)
-(function (result) {
+promise.invokeAsync('foo', 3)(function (result) {
 	console.log(result); // 9
 });
 ```
