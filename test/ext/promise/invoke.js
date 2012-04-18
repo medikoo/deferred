@@ -1,23 +1,16 @@
 'use strict';
 
-module.exports = function (t) {
-	var x = {};
-	return {
-		"Async": function (a, d) {
-			t({}).invoke(function (y, cb) {
-				setTimeout(function () {
-					cb(null, y);
-				}, 0);
-			}, x)(function (r) {
-				a(r, x);
-			}).end(d);
-		},
-		"Sync": function (a, d) {
-			t({}).invoke(function (y, cb) {
-				return y;
-			}, x)(function (r) {
-				a(r, x);
-			}).end(d);
-		}
+module.exports = function (t, a, d) {
+	var x = {}, fn;
+	fn = function (y, cb) {
+		setTimeout(function () {
+			if (cb) {
+				cb(null, 3);
+			}
+		}, 0);
+		return y;
 	};
+	t({}).invoke(fn, x)(function (r) {
+		a(r, x);
+	}).end(d);
 };
