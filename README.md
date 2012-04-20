@@ -28,7 +28,7 @@ readdir(__dirname, function (err, files) {
 		throw err;
 	}
 
-	// Filter *.js files
+	// Filter *.js files and generated lib.js
 	files = files.filter(function (file) {
 		return (file.slice(-3) === '.js') && (file !== 'lib.js');
 	});
@@ -38,7 +38,7 @@ readdir(__dirname, function (err, files) {
 	result = [];
 	files.forEach(function (file, index) {
 		++waiting;
-		readFile(file, 'utf8', function (err, content) {
+		readFile(file, function (err, content) {
 			if (err) {
 				// We were not able to read file content, throw error
 				throw err;
@@ -75,15 +75,13 @@ writeFile(__dirname + '/lib.js',
 	// Read all filenames in given path
 	readdir(__dirname)
 
-	// Filter *.js files
+	// Filter *.js files and generated lib.js
 	.invoke('filter', function (file) {
 		return (file.slice(-3) === '.js') && (file !== 'lib.js');
 	})
 
 	// Read content of all files
-	.map(function (file) {
-		return readFile(file, 'utf-8');
-	})
+	.map(readFile)
 
 	// Concatenate files content into one string
 	.invoke('join', '\n')
