@@ -63,13 +63,13 @@ readdir(__dirname, function (err, files) {
 Promises approach:
 
 ```javascript
-var deferred = require('deferred')
+var promisify = require('deferred').promisify
   , fs = require('fs')
 
 // We prepare promisified versions of each asynchronous function
-  , readdir = deferred.promisify(fs.readdir)
-  , readFile = deferred.promisify(fs.readFile)
-  , writeFile = deferred.promisify(fs.writeFile);
+  , readdir = promisify(fs.readdir)
+  , readFile = promisify(fs.readFile)
+  , writeFile = promisify(fs.writeFile);
 
 writeFile(__dirname + '/lib.js',
 	// Read all filenames in given path
