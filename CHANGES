@@ -1,3 +1,6 @@
+v0.5.1  --  2012.04.29
+* Fixed error handling in invoke extension for case in which context object is null
+
 v0.5.0  --  2012.04.18
 * Addons & Improvements
   * Resigned from dual async/sync: `invoke` extension and `promisify` method.
