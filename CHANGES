@@ -2,8 +2,8 @@ v0.5.0  --  2012.04.18
 * Addons & Improvements
   * Resigned from dual async/sync: `invoke` extension and `promisify` method.
     Such abstraction lead to unexpected results in some cases.
-    `invokeSync` became `invoke` (`invokeSync` is no longer available),
-    `promisifyAsync` became `promisify` (`promisifyAsync` is no longer
+    `invokeSync` is from now on `invoke` (`invokeSync` is no longer available),
+    `promisifyAsync` is now `promisify` (`promisifyAsync` is no longer
     available).
   * Brought back `cb` extension in slightly different form. It's useful for
     creating "hybrid" asynchronous functions that both take callback and return
@@ -20,6 +20,8 @@ v0.5.0  --  2012.04.18
 
 * Fixes
   * Arguments validation in `extend` function was broken
+  * When run on resolved promises, errors invoked by some extensions where not
+    propagated into promise chain as expected
 
 v0.4.3  --  2012.02.20
 * Improvements:
