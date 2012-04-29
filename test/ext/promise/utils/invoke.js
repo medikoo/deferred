@@ -39,6 +39,11 @@ module.exports = function (t) {
 				a.deep(r, [x, y]);
 			}, a.never).end(d);
 		},
+		"Null input": function (a, d) {
+			deferred(null)['$test-invoke']()(a.never, function (e) {
+				a.ok(e instanceof Error);
+			}).end(d);
+		},
 		"Function name": function (a, d) {
 			x.foo = fn;
 			count = 0;
