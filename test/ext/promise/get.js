@@ -23,5 +23,14 @@ module.exports = {
 		deferred(y).get('foo', 'bar').end(function (r) {
 			a(r, x);
 		}, null);
+	},
+	"Safe for extensions": function (a) {
+		a.throws(function () {
+			var x = deferred();
+			x.promise.get('foo').end(function () {
+				throw new Error('Error');
+			});
+			x.resolve({ foo: 'bar'});
+		});
 	}
 };
