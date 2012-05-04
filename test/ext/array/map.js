@@ -1,6 +1,7 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred')
+var call     = Function.prototype.call
+  , deferred = require('../../../lib/deferred')
   , promise  = require('../../../lib/promise');
 
 module.exports = function (t) {
@@ -174,6 +175,23 @@ module.exports = function (t) {
 				}, x, 3)(function (res) {
 					a.deep(res, [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024], "Result");
 				}).end();
+			},
+			"Mixed (async/sync) queue": function (a) {
+				// Make sure that queued synchronous calls are released properly
+				var tbr = [], invoked = false;
+				t.call(arr, function (item, index) {
+					if (index > 2) {
+						return {};
+					} else {
+						var d = deferred();
+						tbr.push(d.resolve);
+						return d.promise;
+					}
+				}, null, 3).end(function () {
+					invoked = true;
+				});
+				tbr.map(call.bind(call));
+				a(invoked, true);
 			}
 		}
 	};
