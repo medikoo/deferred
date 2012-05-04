@@ -1,3 +1,7 @@
+v0.5.3  --  2012.05.04
+* Fixed resolution of synchrounous calls in a queue of map extension, they were
+  not resolved as expected
+
 v0.5.2  --  2012.05.02
 * Fixed serious issue in `get` extension, which in some scenarios made errors in
   following resolved flow silent
