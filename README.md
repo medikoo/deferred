@@ -440,14 +440,11 @@ var fn = deferred.gate(function async() {
 
 If there's already 10 concurrent task running `async` function invocation will be postponed into the queue and released when some of the running tasks will finish its job.
 
-Additionally we may limit number of postponed calls, so if there's more than _n_ of them rest is discarred, it can be done with third argument. In below example, queue holds maximum 3 postponed calls rest will be discarded.
+Additionally we may limit number of postponed calls, so if there's more than _n_ of them rest is discarred, it can be done with third argument. In below example, queue holds maximum 3 postponed calls, rest will be discarded.
 
 ```javascript
 var fn = deferred.gate(function async() { .. }, 10, 3);
 ```
-
-### map
-
 
 <a name="extensions" />
 ## Promise extensions
