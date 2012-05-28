@@ -1,6 +1,6 @@
 'use strict';
 
-var toArray   = require('es5-ext/lib/Object/to-array')
+var toArray   = require('es5-ext/lib/Array/from')
   , isPromise = require('../lib/is-promise');
 
 module.exports = function (t, a) {
