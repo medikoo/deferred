@@ -105,6 +105,7 @@ writeFile(__dirname + '/lib.js',
 * [Processing collections](#collections)
 	* [Map](#collections-map)
 	* [Reduce](#collections-reduce)
+* [Limitting concurrency](#limitting-concurrency)
 * [Promise extensions](#extensions)
 	* [cb](#extensions-cb)
 	* [get](#extensions-get)
@@ -395,16 +396,7 @@ readdir(__dirname).map(function (filename) {
 });
 ```
 
-There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors. `deferred.map` accepts fourth argument which is maximum number of tasks that should be run at once:
-
-```javascript
-// Open maximum 100 file descriptors at once
-deferred.map(filenames, function (filename) {
-	return readFile(filename, 'utf-8');
-}, null, 100)(function (result) {
-	// result is an array of file's contents
-});
-```
+See [limitting concurrency](#limitting-concurrency) section for info on how to limit maximum number of concurrent calls in `map`
 
 <a name="collections-reduce" />
 ### Reduce
@@ -421,6 +413,41 @@ deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)], function
 ```
 
 As with `map`, `reduce` is also available directly as an extension on promise object.
+
+<a name="limitting-concurrency" />
+## Limitting concurrency
+
+There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors. `deferred.map` accepts fourth argument which is maximum number of tasks that should be run at once:
+
+```javascript
+// Open maximum 100 file descriptors at once
+deferred.map(filenames, function (filename) {
+	return readFile(filename, 'utf-8');
+}, null, 100)(function (result) {
+	// result is an array of file's contents
+});
+```
+
+Aside of `deferred.map` there's more generic `deferred.gate` for limitting concurrent calls of same asynchronouns task:
+
+```javascript
+var fn = deferred.gate(function async() {
+	var defer = defered();
+	// ..
+	return defer.promise;
+}, 10);
+```
+
+If there's already 10 concurrent task running `async` function invocation will be postponed into the queue and released when some of the running tasks will finish its job.
+
+Additionally we may limit number of postponed calls, so if there's more than _n_ of them rest is discarred, it can be done with third argument. In below example, queue holds maximum 3 postponed calls rest will be discarded.
+
+```javascript
+var fn = deferred.gate(function async() { .. }, 10, 3);
+```
+
+### map
+
 
 <a name="extensions" />
 ## Promise extensions
