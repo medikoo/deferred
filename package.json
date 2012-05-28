@@ -24,7 +24,7 @@
     "url": "https://github.com/medikoo/deferred/issues"
   },
   "engines": {
-    "node": ">=0.1.103"
+    "node": ">=0.4"
   },
   "dependencies": {
     "es5-ext": "0.8.x"
