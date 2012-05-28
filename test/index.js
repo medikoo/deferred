@@ -51,7 +51,9 @@ module.exports = {
 	"Promisify": function (t, a, d) {
 		var x = {};
 		t.promisify(function (cb) {
-			setTimeout(cb.bind(null, null, x), 0);
+			setTimeout(function () {
+				cb(null, x);
+			}, 0);
 			return {};
 		})()(function (r) {
 			a(r, x);
