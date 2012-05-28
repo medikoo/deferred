@@ -534,7 +534,7 @@ promise.match(function (a, b) {
 Described under [Processing collections](#collections-reduce) section. Promise aware version of Array's reduce
 
 <a name="tests" />
-## Tests
+## Tests [![Build Status](https://secure.travis-ci.org/medikoo/deferred.png?branch=master)](https://secure.travis-ci.org/medikoo/deferred)
 
 Before running tests make sure you've installed project with dev dependencies
 `npm install --dev`
