@@ -19,7 +19,7 @@ module.exports = {
 		delete o.promise;
 		return o;
 	}), ['delay', 'gate', 'promisify', 'promisifySync', 'map',
-		'reduce']),
+		'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -80,6 +80,16 @@ module.exports = {
 			return t(arg1 * arg2);
 		}, 1)(function (r) {
 			a(r, 6);
+		}, a.never).end(d);
+	},
+	"Some": function (t, a, d) {
+		var count = 0;
+		t.some([t(1), t(2), 3], function (res, index) {
+			++count;
+			return index;
+		})(function (r) {
+			a(r, true);
+			a(count, 2, "Count");
 		}, a.never).end(d);
 	},
 	"Deferred function is main object": function (t, a) {
