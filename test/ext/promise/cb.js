@@ -34,6 +34,8 @@ module.exports = function (t, a) {
 	});
 	a(invoked, true, "Two arguments: Called on erronous");
 
+	p.cb(a.never, null);
+
 	invoked = false;
 	p = t(x = {});
 	p.cb(function (arg) {
@@ -41,4 +43,6 @@ module.exports = function (t, a) {
 		invoked = true;
 	}, a.never);
 	a(invoked, true, "Two arguments: Called on success");
+
+	p.cb(null, a.never);
 };
