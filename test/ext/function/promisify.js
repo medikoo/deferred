@@ -48,6 +48,10 @@ module.exports = function (t) {
 			}, 2).call(u, x, y, {}, {}, {})(function (result) {
 				a(result, z);
 			}, a.never).end(d);
+		},
+		"Do not promisify promisified functions": function (a) {
+			var fn = t.call(function () {});
+			a(fn, t.call(fn));
 		}
 	};
 };
