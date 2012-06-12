@@ -1,15 +1,15 @@
 'use strict';
 
 var slice    = Array.prototype.slice
-  , deferred = require('../../../../lib/deferred');
+  , deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, fn, fn2, count;
-	require('../../../../lib/extend')('$test-invoke', null,
+	require('../../../lib/extend')('$test-invoke', null,
 		function (args, resolve) {
 			var fn = args[0];
 			args = slice.call(args, 1);
-			return t(this, fn, args, require('../../../../lib/ext/utils/apply-async'),
+			return t(this, fn, args, require('../../../lib/ext/_apply-async'),
 				resolve, true);
 		});
 
