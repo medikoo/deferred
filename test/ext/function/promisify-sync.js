@@ -6,49 +6,31 @@ module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
 
 	return {
-		"Success": function (a, d) {
-			t.call(function (arg1, arg2) {
+		"Promise arguments": function (a) {
+			t.call(function (arg1, arg2, callback) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
-			}).call(u, x, y)(function (result) {
+			}, 2).call(u, x, promise(y), z).end(function (result) {
 				a(result, z);
-			}, a.never).end(d);
+			}, null);
 		},
-		"Promise arguments": function (a, d) {
-			t.call(function (arg1, arg2) {
+		"Normal arguments": function (a) {
+			t.call(function (arg1, arg2, callback) {
 				a(this, u, "Context");
-				a.deep([arg1, arg2], [x, y], "Arguments");
+				a.deep([arg1, arg2], [x, undefined], "Arguments");
 				return z;
-			}).call(u, promise(x), y)(function (result) {
+			}, 2).call(u, x).end(function (result) {
 				a(result, z);
-			}, a.never).end(d);
+			}, null);
 		},
-		"Promise argument": function (a, d) {
-			t.call(function (arg1) {
-				a(this, u, "Context");
-				a(arg1, x, "Arguments");
-				return z;
-			}).call(u, promise(x))(function (result) {
-				a(result, z);
-			}, a.never).end(d);
-		},
-		"Length": function (a, d) {
-			t.call(function (arg1, arg2, arg3) {
-				a(this, u, "Context");
-				a.deep([arg1, arg2, arg3], [x, y, undefined], "Arguments");
-				return z;
-			}, 2).call(u, x, y, {}, {}, {})(function (result) {
-				a(result, z);
-			}, a.never).end(d);
-		},
-		"Error": function (a, d) {
+		"Error": function (a) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;
-			})()(a.never, function (result) {
+			})().end(a.never, function (result) {
 				a(result, e);
-			}).end(d);
+			});
 		}
 	};
 };
