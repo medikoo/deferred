@@ -1,3 +1,14 @@
+v0.5.5  --  2012.06.13
+* deferred.some - (array & promise extension). Promise aware Array's some for
+  array-like objects.
+* Fix handling of callbacks in `cb` promise extension. Only success callback
+  mode was not handled correctly.
+* Mark functions that returns promises with 'returnsPromise' flag, and provide
+  awareness of that in `promisify` extensions, so they return same functions
+  back if they're called on such.
+* Files reorganization so internal modules are no longer in utils folder but
+  instead are prefixed with '_' (it's convention we use in other projects)
+
 v0.5.4  --  2012.05.28
 * deferred.gate - (function extension) Handles maximum concurrency number for
   given asynchronous task. Additionally postponed calls queue length can also be
