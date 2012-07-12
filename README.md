@@ -145,13 +145,13 @@ var deferred = require('deferred');
 
 var delay = function (fn, timeout) {
 	return function () {
-		var d = deferred(), self = this, args = arguments;
+		var def = deferred(), self = this, args = arguments;
 
 		setTimeout(function () {
-			d.resolve(fn.apply(self, args));
+			def.resolve(fn.apply(self, args));
 		}, timeout);
 
-		return d.promise;
+		return def.promise;
 	};
 };
 
@@ -211,9 +211,9 @@ It's not just function arguments that promise function can take, it can be other
 Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise is resolved with a real value:
 
 ```javascript
-var d = deferred();
-d.resolve(delayedAdd(2, 3));
-d.promise(function (result) {
+var def = deferred();
+def.resolve(delayedAdd(2, 3));
+def.promise(function (result) {
 	console.log(5); // 5;
 });
 ```
