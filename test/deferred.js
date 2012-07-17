@@ -80,5 +80,15 @@ module.exports = {
 		d2.promise(function (arg) {
 			a(arg, x, "#4");
 		}).end();
+	},
+	"Transfer pending": function (t, a) {
+		var d1 = t(), d2 = t(), x = {}, p;
+		d1.resolve(d2.promise);
+		p = d1.promise(function (arg) {
+			return [arg, 'foo'];
+		});
+		d2.resolve(x);
+		a(p.resolved, true, "Transfered");
+		a.deep(p.value, [x, 'foo'], "Transfered value");
 	}
 };
