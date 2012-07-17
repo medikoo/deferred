@@ -1,8 +1,7 @@
 # Asynchronous JavaScript with deferred and promises
 
-Promises in a simple and powerful way. It was built with the _less is more_ mantra in mind. It's just few functions that should give all you need to easily configure complicated asynchronous control flow.
-
-This work is inspired by other deferred/promise implementations, in particular [Q](https://github.com/kriskowal/q) by [Kris Kowal](https://github.com/kriskowal).
+Promises in a simple and powerful way. Originally inspired by [Q](https://github.com/kriskowal/q), it's fastest and most natural promise implementation in JavaScript.  
+It's build on functional capabilities of JavaScript language and let's you write code that takes out maximum from asynchronicity but remains clean and readable as synchronous. To see it in action check file concatenation example below.
 
 For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: __[Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)__
 
