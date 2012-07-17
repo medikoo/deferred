@@ -1,6 +1,7 @@
 'use strict';
 
-var noop = require('es5-ext/lib/Function/noop')
+var noop     = require('es5-ext/lib/Function/noop')
+  , deferred = require('../lib/deferred')
 
   , x = {}, y = {}, e = new Error("Error");
 
@@ -13,22 +14,23 @@ module.exports = {
 		next = true;
 	},
 	"Call all then callbacks in order": function (t, a, d) {
-		var promise = t(), x = {}, count = 0;
+		var def = deferred(), promise = def.promise, x = {}, count = 0;
 		promise(function (result) {
 			++count;
 		}, a.never).end();
 		promise(function (result) {
 			a(count, 1);
 		}, a.never).end(d);
-		promise._base.resolve(x);
+		def.resolve(x);
 	},
 	"Resolve promise with other promise": function (t, a, d) {
-		var p1 = t(), x = {}, p2 = t();
+		var def1 = deferred(), p1 = def1.promise, x = {}
+		  , def2 = deferred(), p2 = def2.promise;
 		p1(function (result) {
 			a(result, x);
 		}, a.never).end(d);
-		p1._base.resolve(p2);
-		p2._base.resolve(x);
+		def1.resolve(p2);
+		def2.resolve(x);
 	},
 	"Reject": function (t, a, d) {
 		t(e)(a.never, function (res) {
@@ -56,9 +58,9 @@ module.exports = {
 			a(t(x).end(), undefined);
 		},
 		"ValueOf": function (t, a) {
-			var y = t();
+			var def = deferred(), y = def.promise;
 			a(y.valueOf(), y, "Unresolved");
-			y._base.resolve(x);
+			def.resolve(x);
 			a(y.valueOf(), x, "Resolved");
 		}
 	},
