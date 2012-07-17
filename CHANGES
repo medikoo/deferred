@@ -1,3 +1,9 @@
+v0.5.6  --  2012-07.17
+(Maintanance, as v0.6 is nearly ready for rollout).
+Added workaround for for v8 bug (eminent in Node v0.6):
+  Defining property via descriptor on plain function, prevents us from
+  setting same property directly later on different function.
+
 v0.5.5  --  2012.06.13
 * deferred.some - (array & promise extension). Promise aware Array's some for
   array-like objects.
