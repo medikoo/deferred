@@ -57,5 +57,28 @@ module.exports = {
 		defer.resolve(1);
 		defer.resolve(2);
 		a(defer.promise.valueOf(), 1);
+	},
+	"Nested Promises": function (t, a) {
+		var d1 = t(), d2 = t(), d3 = t(), d4 = t(), x = {};
+		d1.resolve(d2.promise);
+		d2.resolve(d3.promise);
+		d3.resolve(d4.promise);
+		d4.resolve(x);
+		a(d1.promise.resolved, true, "#1 resolved");
+		a(d2.promise.resolved, true, "#2 resolved");
+		a(d3.promise.resolved, true, "#3 resolved");
+		a(d4.promise.resolved, true, "#4 resolved");
+		d1.promise(function (arg) {
+			a(arg, x, "#1");
+		}).end();
+		d2.promise(function (arg) {
+			a(arg, x, "#2");
+		}).end();
+		d3.promise(function (arg) {
+			a(arg, x, "#3");
+		}).end();
+		d2.promise(function (arg) {
+			a(arg, x, "#4");
+		}).end();
 	}
 };
