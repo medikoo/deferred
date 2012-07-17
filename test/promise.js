@@ -13,25 +13,6 @@ module.exports = {
 		}, a.never).end();
 		next = true;
 	},
-	"Call all then callbacks in order": function (t, a, d) {
-		var def = deferred(), promise = def.promise, x = {}, count = 0;
-		promise(function (result) {
-			++count;
-		}, a.never).end();
-		promise(function (result) {
-			a(count, 1);
-		}, a.never).end(d);
-		def.resolve(x);
-	},
-	"Resolve promise with other promise": function (t, a, d) {
-		var def1 = deferred(), p1 = def1.promise, x = {}
-		  , def2 = deferred(), p2 = def2.promise;
-		p1(function (result) {
-			a(result, x);
-		}, a.never).end(d);
-		def1.resolve(p2);
-		def2.resolve(x);
-	},
 	"Reject": function (t, a, d) {
 		t(e)(a.never, function (res) {
 			a(res, e);
@@ -53,88 +34,81 @@ module.exports = {
 		var p = t({});
 		a(t(p), p);
 	},
-	"Front": {
-		"End": function (t, a) {
-			a(t(x).end(), undefined);
+	"ValueOf": function (t, a) {
+		var def = deferred(), y = def.promise;
+		a(y.valueOf(), y, "Unresolved");
+		def.resolve(x);
+		a(y.valueOf(), x, "Resolved");
+	},
+	"Then": {
+		"Callback": function (t, a, d) {
+			t(x)(function (result) {
+				a(result, x);
+			}, a.never).end(d);
 		},
-		"ValueOf": function (t, a) {
-			var def = deferred(), y = def.promise;
-			a(y.valueOf(), y, "Unresolved");
-			def.resolve(x);
-			a(y.valueOf(), x, "Resolved");
+		"Null": function (t, a, d) {
+			t(x)(null, a.never)(function (result) {
+				a(result, x);
+			}, a.never).end(d);
+		},
+		"Other value": function (t, a, d) {
+			t(x)(y, a.never)(function (result) {
+				a(result, y);
+			}, a.never).end(d);
+		},
+		"Error": function (t, a, d) {
+			t(e)(a.never, function (result) {
+				a(result, e);
+			}).end(d);
 		}
 	},
-	"Back": {
-		"Then": {
-			"Callback": function (t, a, d) {
-				t(x)(function (result) {
-					a(result, x);
-				}, a.never).end(d);
+	"End": {
+		"No args": {
+			"Success": function (t, a) {
+				a(t(null).end(), undefined);
 			},
-			"Null": function (t, a, d) {
-				t(x)(null, a.never)(function (result) {
-					a(result, x);
-				}, a.never).end(d);
-			},
-			"Other value": function (t, a, d) {
-				t(x)(y, a.never)(function (result) {
-					a(result, y);
-				}, a.never).end(d);
-			},
-			"Error": function (t, a, d) {
-				t(e)(a.never, function (result) {
-					a(result, e);
-				}).end(d);
+			"Error": function (t, a) {
+				a.throws(function () {
+					t(e).end();
+				});
 			}
 		},
-		"End": {
-			"No args": {
-				"Success": function (t, a) {
-					a(t(null).end(), undefined);
-				},
-				"Error": function (t, a) {
-					a.throws(function () {
-						t(e).end();
-					});
-				}
+		"One arg": {
+			"Success": function (t, a) {
+				t(x).end(function (err, res) {
+					a(err, null, "Error");
+					a(res, x, "Result");
+				});
 			},
-			"One arg": {
-				"Success": function (t, a) {
-					t(x).end(function (err, res) {
-						a(err, null, "Error");
-						a(res, x, "Result");
-					});
-				},
-				"Error": function (t, a) {
-					t(e).end(function (err, res) {
-						a(err, e, "Error");
-						a(res, undefined, "Result");
-					});
-				}
+			"Error": function (t, a) {
+				t(e).end(function (err, res) {
+					a(err, e, "Error");
+					a(res, undefined, "Result");
+				});
+			}
+		},
+		"Two args": {
+			"Success": function (t, a) {
+				t(x).end(function (res) {
+					a(res, x, "Result");
+				}, a.never);
 			},
-			"Two args": {
-				"Success": function (t, a) {
-					t(x).end(function (res) {
-						a(res, x, "Result");
-					}, a.never);
-				},
-				"Error": function (t, a) {
-					t(e).end(a.never, function (err) {
-						a(err, e, "Error");
-					});
-				}
+			"Error": function (t, a) {
+				t(e).end(a.never, function (err) {
+					a(err, e, "Error");
+				});
+			}
+		},
+		"Two args, second null": {
+			"Success": function (t, a) {
+				t(x).end(function (res) {
+					a(res, x, "Result");
+				}, null);
 			},
-			"Two args, second null": {
-				"Success": function (t, a) {
-					t(x).end(function (res) {
-						a(res, x, "Result");
-					}, null);
-				},
-				"Error": function (t, a) {
-					a.throws(function () {
-						t(e).end(a.never, null);
-					});
-				}
+			"Error": function (t, a) {
+				a.throws(function () {
+					t(e).end(a.never, null);
+				});
 			}
 		}
 	}

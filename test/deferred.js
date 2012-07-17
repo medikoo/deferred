@@ -90,5 +90,24 @@ module.exports = {
 		d2.resolve(x);
 		a(p.resolved, true, "Transfered");
 		a.deep(p.value, [x, 'foo'], "Transfered value");
+	},
+	"Call all then callbacks in order": function (t, a, d) {
+		var def = t(), promise = def.promise, x = {}, count = 0;
+		promise(function (result) {
+			++count;
+		}, a.never).end();
+		promise(function (result) {
+			a(count, 1);
+		}, a.never).end(d);
+		def.resolve(x);
+	},
+	"Resolve promise with other promise": function (t, a, d) {
+		var def1 = t(), p1 = def1.promise, x = {}
+		  , def2 = t(), p2 = def2.promise;
+		p1(function (result) {
+			a(result, x);
+		}, a.never).end(d);
+		def1.resolve(p2);
+		def2.resolve(x);
 	}
 };
