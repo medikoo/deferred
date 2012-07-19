@@ -1,8 +1,10 @@
 'use strict';
 
+var deferred = require('../../../lib/deferred');
+
 module.exports = function (t, a, d) {
 	var count = 0;
-	t([t(1), t(2), 3]).some(function (res) {
+	deferred([deferred(1), deferred(2), 3]).some(function (res) {
 		++count;
 		if (res > 1) {
 			return true;

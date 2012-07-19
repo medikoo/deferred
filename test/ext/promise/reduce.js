@@ -1,9 +1,11 @@
 'use strict';
 
+var deferred = require('../../../lib/deferred');
+
 module.exports = function (t, a, d) {
-	t([t(2), t(3), 4]).reduce(function (arg1, arg2) {
-		return t(arg1 * arg2);
-	}, t(1))(function (r) {
+	deferred([deferred(2), deferred(3), 4]).reduce(function (arg1, arg2) {
+		return deferred(arg1 * arg2);
+	}, deferred(1))(function (r) {
 		a(r, 24);
 	}, a.never).end(d);
 };

@@ -1,7 +1,9 @@
 'use strict';
 
+var deferred = require('../../../lib/deferred');
+
 module.exports = function (t, a) {
-	var x = {}, d = t(), p = d.promise, invoked = false;
+	var x = {}, d = deferred(), p = d.promise, invoked = false;
 
 	a(p.cb(), p, "Callback is optional");
 	a(p.cb(function (err, o) {
@@ -19,7 +21,7 @@ module.exports = function (t, a) {
 	});
 	a(invoked, true, "Callback invoked immediately on resolved promise");
 
-	p = t(x = new Error("Error"));
+	p = deferred(x = new Error("Error"));
 	invoked = false;
 	p.cb(function (err, o) {
 		a.deep([err, o], [x, undefined], "Erronous: arguments");
@@ -37,7 +39,7 @@ module.exports = function (t, a) {
 	p.cb(a.never, null);
 
 	invoked = false;
-	p = t(x = {});
+	p = deferred(x = {});
 	p.cb(function (arg) {
 		a(arg, x, "Two arguments: success");
 		invoked = true;
