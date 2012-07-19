@@ -13,12 +13,10 @@ var path       = require('path')
 module.exports = {
 	"": indexTest(indexTest.readDir(dir)(function (o) {
 		delete o.deferred;
-		delete o.join;
 		delete o.ext;
-		delete o.extend;
 		delete o.promise;
 		return o;
-	}), ['delay', 'gate', 'promisify', 'promisifySync', 'map',
+	}), ['delay', 'extend', 'gate', 'promisify', 'promisifySync', 'map',
 		'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
