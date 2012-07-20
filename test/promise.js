@@ -60,6 +60,15 @@ module.exports = {
 			t(e)(a.never, function (result) {
 				a(result, e);
 			}).end(d);
+		},
+		"Chain promise & resolve with function": function (t, a) {
+			var d1 = deferred(), fn = function () { return 'bar' };
+			d1.promise(t('foo')).end(function (res) {
+				a(res, 'foo', "Unresolved");
+			}, null);
+			d1.resolve(fn);
+			var p1 = t(2);
+			a(t(1)(p1), p1, "Resolved");
 		}
 	},
 	"End": {
