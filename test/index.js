@@ -15,9 +15,10 @@ module.exports = {
 		delete o.deferred;
 		delete o.ext;
 		delete o.promise;
+		delete o.profiler;
 		return o;
-	}), ['delay', 'extend', 'gate', 'promisify', 'promisifySync', 'map',
-		'reduce', 'some']),
+	}), ['delay', 'extend', 'gate', 'profile', 'profileEnd', 'promisify',
+		'promisifySync', 'map', 'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -45,6 +46,10 @@ module.exports = {
 		ready = true;
 		dx.resolve({});
 		ready = false;
+	},
+	"Profile": function (t, a) {
+		a(typeof t.profile, 'function', "Profile");
+		a(typeof t.profileEnd, 'function', "ProfileEnd");
 	},
 	"Promisify": function (t, a, d) {
 		var x = {};
