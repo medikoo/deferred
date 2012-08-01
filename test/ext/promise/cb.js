@@ -2,49 +2,41 @@
 
 var deferred = require('../../../lib/deferred');
 
-module.exports = function (t, a) {
-	var x = {}, d = deferred(), p = d.promise, invoked = false;
+module.exports = function (t) {
+	return {
+		"Unresolved": function (a, d) {
+			var x = {}, def = deferred(), p = def.promise, invoked = false;
 
-	a(p.cb(), p, "Callback is optional");
-	a(p.cb(function (err, o) {
-		a.deep([err, o], [null, x], "Unresolved: arguments");
-		invoked = true;
-	}), p, "Returns self promise");
-	a(invoked, false, "Callback not invoked on unresolved promise");
-	d.resolve(x);
-	a(invoked, true, "Callback invoked immediately on resolution");
+			a(p.cb(), p, "Callback is optional");
+			a(p.cb(function (err, o) {
+				a.deep([err, o], [null, x], "Unresolved: arguments");
+				invoked = true;
+			}), p, "Returns self promise");
+			a(invoked, false, "Callback not invoked on unresolved promise");
+			invoked = false;
+			def.resolve(x);
+			a(invoked, false, "Callback not invoked in current tick");
 
-	invoked = false;
-	p.cb(function (err, o) {
-		a.deep([err, o], [null, x], "Resolved: arguments");
-		invoked = true;
-	});
-	a(invoked, true, "Callback invoked immediately on resolved promise");
+			invoked = false;
+			p.cb(function (err, o) {
+				a.deep([err, o], [null, x], "Resolved: arguments");
+				invoked = true;
+				d();
+			});
+			a(invoked, false, "Callback not invoked immediatelly on resolved promise");
+		},
+		"Errorneus": function (a, d) {
+			var x = new Error("Error")
+			  , p = deferred(x)
+			  , invoked = false;
 
-	p = deferred(x = new Error("Error"));
-	invoked = false;
-	p.cb(function (err, o) {
-		a.deep([err, o], [x, undefined], "Erronous: arguments");
-		invoked = true;
-	});
-	a(invoked, true, "Called on erronous");
-
-	invoked = false;
-	p.cb(a.never, function (err) {
-		a(err , x, "Two arguments: error");
-		invoked = true;
-	});
-	a(invoked, true, "Two arguments: Called on erronous");
-
-	p.cb(a.never, null);
-
-	invoked = false;
-	p = deferred(x = {});
-	p.cb(function (arg) {
-		a(arg, x, "Two arguments: success");
-		invoked = true;
-	}, a.never);
-	a(invoked, true, "Two arguments: Called on success");
-
-	p.cb(null, a.never);
+			invoked = false;
+			p.cb(function (err, o) {
+				a.deep([err, o], [x, undefined], "Erronous: arguments");
+				invoked = true;
+				d();
+			});
+			a(invoked, false, "Called not invoked immediately");
+		}
+	}
 };
