@@ -7,5 +7,5 @@ module.exports = function (t, a, d) {
 		return deferred(arg1 * arg2);
 	}, deferred(1))(function (r) {
 		a(r, 24);
-	}, a.never).end(d);
+	}, a.never).end(d, d);
 };

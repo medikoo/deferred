@@ -16,19 +16,19 @@ module.exports = {
 	"Reject": function (t, a, d) {
 		t(e)(a.never, function (res) {
 			a(res, e);
-		}).end(d);
+		}).end(d, d);
 	},
 	"Erroneous callback rejects promise": function (t, a, d) {
 		t(1)(function () {
 			throw e;
 		})(a.never, function (res) {
 			a(res, e);
-		}).end(d);
+		}).end(d, d);
 	},
 	"Object promise resolves to same object": function (t, a, d) {
 		t(x)(function (result) {
 			a(result, x);
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 	},
 	"Promise returns promise": function (t, a) {
 		var p = t({});
@@ -44,28 +44,28 @@ module.exports = {
 		"Callback": function (t, a, d) {
 			t(x)(function (result) {
 				a(result, x);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Null": function (t, a, d) {
 			t(x)(null, a.never)(function (result) {
 				a(result, x);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Other value": function (t, a, d) {
 			t(x)(y, a.never)(function (result) {
 				a(result, y);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Error": function (t, a, d) {
 			t(e)(a.never, function (result) {
 				a(result, e);
-			}).end(d);
+			}).end(d, d);
 		},
 		"Chain promise & resolve with function": function (t, a) {
 			var d1 = deferred(), fn = function () { return 'bar' };
 			d1.promise(t('foo')).end(function (res) {
 				a(res, 'foo', "Unresolved");
-			}, null);
+			});
 			d1.resolve(fn);
 			var p1 = t(2);
 			a(t(1)(p1), p1, "Resolved");
@@ -82,21 +82,7 @@ module.exports = {
 				});
 			}
 		},
-		"One arg": {
-			"Success": function (t, a) {
-				t(x).end(function (err, res) {
-					a(err, null, "Error");
-					a(res, x, "Result");
-				});
-			},
-			"Error": function (t, a) {
-				t(e).end(function (err, res) {
-					a(err, e, "Error");
-					a(res, undefined, "Result");
-				});
-			}
-		},
-		"Two args": {
+		"Args": {
 			"Success": function (t, a) {
 				t(x).end(function (res) {
 					a(res, x, "Result");
@@ -106,15 +92,13 @@ module.exports = {
 				t(e).end(a.never, function (err) {
 					a(err, e, "Error");
 				});
-			}
-		},
-		"Two args, second null": {
-			"Success": function (t, a) {
+			},
+			"Success #2": function (t, a) {
 				t(x).end(function (res) {
 					a(res, x, "Result");
 				}, null);
 			},
-			"Error": function (t, a) {
+			"Error: Throw": function (t, a) {
 				a.throws(function () {
 					t(e).end(a.never, null);
 				});

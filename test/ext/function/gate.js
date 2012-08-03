@@ -17,7 +17,7 @@ module.exports = function (t, a) {
 			a(gfn(dy.promise, 'y'), dy.promise, "#2");  // y
 			dz = deferred();
 			a.not(hz = gfn(dz.promise, 'z'), dz.promise, "#3 blocked");
-			hz.end(function (err, r) {
+			hz.end(function (r) {
 				released = true;
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
@@ -37,7 +37,7 @@ module.exports = function (t, a) {
 			a(gfn(dx.promise), dx.promise, "#1");
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#2 blocked");
-			hz.end(function (err, r) {
+			hz.end(function (r) {
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
 			});
@@ -52,13 +52,13 @@ module.exports = function (t, a) {
 			a(gfn(dx.promise), dx.promise, "#1");
 			dy = deferred();
 			a(gfn(dy.promise), dy.promise, "#2");
-			gfn(x).end(function (err) {
+			gfn(x).end(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dy.resolve(y);
 			dz = deferred();
 			a(gfn(dz.promise), dz.promise, "#3");
-			gfn(x).end(function (err) {
+			gfn(x).end(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dx.resolve(x);
@@ -75,11 +75,11 @@ module.exports = function (t, a) {
 			// x, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.end(function (err, r) {
+			hz.end(function (r) {
 				a(r, z, "#3 held");
 			});
 			// x, y, z
-			gfn(x).end(function (err) {
+			gfn(x).end(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dz.resolve(z);
@@ -92,11 +92,11 @@ module.exports = function (t, a) {
 			// x, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.end(function (err, r) {
+			hz.end(function (r) {
 				a(r, z, "#3 held");
 			});
 			// x, y, z
-			gfn(x).end(function (err) {
+			gfn(x).end(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dz.resolve(z);

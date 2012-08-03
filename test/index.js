@@ -29,7 +29,7 @@ module.exports = {
 			return r;
 		}, 5)(x)(function (r) {
 			a(r, x);
-		}).end(d);
+		}).end(d, d);
 	},
 	"Gate": function (t, a) {
 		var fn, dx, dy, ready;
@@ -39,7 +39,7 @@ module.exports = {
 		dx = t();
 		fn(dx.promise);
 		dy = t();
-		fn(dy.promise).end(function (err, r) {
+		fn(dy.promise).end(function (r) {
 			a(ready, true);
 		});
 		dy.resolve({});
@@ -60,14 +60,14 @@ module.exports = {
 			return {};
 		})()(function (r) {
 			a(r, x);
-		}).end(d);
+		}).end(d, d);
 	},
 	"PromisifySync": function (t, a, d) {
 		t.promisifySync(function () {
 			return;
 		})()(function (r) {
 			a(r, undefined);
-		}).end(d);
+		}).end(d, d);
 	},
 	"Map": function (t, a, d) {
 		var x = {};
@@ -75,7 +75,7 @@ module.exports = {
 			return t(res * res);
 		})(function (r) {
 			a.deep(r, [1, 4, 9]);
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 	},
 	"Reduce": function (t, a, d) {
 		var x = {};
@@ -83,7 +83,7 @@ module.exports = {
 			return t(arg1 * arg2);
 		}, 1)(function (r) {
 			a(r, 6);
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 	},
 	"Some": function (t, a, d) {
 		var count = 0;
@@ -93,7 +93,7 @@ module.exports = {
 		})(function (r) {
 			a(r, true);
 			a(count, 2, "Count");
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 	},
 	"Deferred function is main object": function (t, a) {
 		var d = t();

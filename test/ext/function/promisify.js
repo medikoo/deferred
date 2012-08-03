@@ -14,7 +14,7 @@ module.exports = function (t) {
 				}, 0);
 			}, 2).call(u, x, promise(y), z)(function (result) {
 				a(result, z);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Normal arguments": function (a, d) {
 			t.call(function (arg1, arg2, callback) {
@@ -25,7 +25,7 @@ module.exports = function (t) {
 				}, 0);
 			}, 2).call(u, x)(function (result) {
 				a(result, z);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Do not promisify promisified function": function (a) {
 			var fn = t.call(function () { });
@@ -41,7 +41,7 @@ module.exports = function (t) {
 				}, 0);
 			})(x, y)(function (result) {
 				a(result, z, "Result");
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Successful: Many args": function (a, d) {
 			var x = {}, y = {}, z = {};
@@ -52,7 +52,7 @@ module.exports = function (t) {
 				}, 0);
 			})(x, y)(function (result) {
 				a.deep(result, [x, y, z], "Result");
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		},
 		"Erroneous": function (a, d) {
 			var x = new Error('Test');
@@ -62,7 +62,7 @@ module.exports = function (t) {
 				}, 0);
 			}, 0)(y)(a.never, function (e) {
 				a(e, x);
-			}).end(d);
+			}).end(d, d);
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
@@ -80,7 +80,7 @@ module.exports = function (t) {
 				}, 0);
 			})()(function (result) {
 				a(result, false);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		}
 	};
 };

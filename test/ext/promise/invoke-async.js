@@ -15,7 +15,7 @@ module.exports = function () {
 			};
 			deferred(z).invokeAsync('foo', x)(function (r) {
 				a.deep(r, [z, x]);
-			}).end(d);
+			}).end(d, d);
 		},
 		"Method": function (a, d) {
 			var x = {}, fn, z = {};
@@ -28,7 +28,7 @@ module.exports = function () {
 			};
 			deferred(z).invokeAsync(fn, x)(function (r) {
 				a.deep(r, [z, x]);
-			}).end(d);
+			}).end(d, d);
 		},
 		"Fail": function (a) {
 			var e = new Error("Error");
@@ -65,7 +65,7 @@ module.exports = function () {
 			};
 			deferred({}).invokeAsync(fn)(a.never, function (e) {
 				a(e, x);
-			}).end(d);
+			}).end(d, d);
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
@@ -84,7 +84,7 @@ module.exports = function () {
 			};
 			deferred({}).invokeAsync(fn)(function (res) {
 				a(res, false);
-			}, a.never).end(d);
+			}, a.never).end(d, d);
 		}
 	};
 };

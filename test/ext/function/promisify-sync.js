@@ -13,7 +13,7 @@ module.exports = function (t) {
 				return z;
 			}, 2).call(u, x, promise(y), z).end(function (result) {
 				a(result, z);
-			}, null);
+			});
 		},
 		"Normal arguments": function (a) {
 			t.call(function (arg1, arg2, callback) {
@@ -22,7 +22,7 @@ module.exports = function (t) {
 				return z;
 			}, 2).call(u, x).end(function (result) {
 				a(result, z);
-			}, null);
+			});
 		},
 		"Error": function (a) {
 			var e = new Error("Error");

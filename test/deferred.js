@@ -98,7 +98,7 @@ module.exports = {
 		}, a.never).end();
 		promise(function (result) {
 			a(count, 1);
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 		def.resolve(x);
 	},
 	"Resolve promise with other promise": function (t, a, d) {
@@ -106,7 +106,7 @@ module.exports = {
 		  , def2 = t(), p2 = def2.promise;
 		p1(function (result) {
 			a(result, x);
-		}, a.never).end(d);
+		}, a.never).end(d, d);
 		def1.resolve(p2);
 		def2.resolve(x);
 	}

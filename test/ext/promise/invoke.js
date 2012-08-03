@@ -12,7 +12,7 @@ module.exports = function (t, a, d) {
 	};
 	t({}).invoke(fn, x)(function (r) {
 		a(r, x);
-	}).end(d);
+	}).end(d, d);
 };
 
 var deferred = require('../../../lib/deferred')

@@ -20,12 +20,12 @@ module.exports = {
 			a(m, x, "#1");
 			a(n, y, "#2");
 			a(o, w, "#3");
-		}).end(d);
+		}).end(d, d);
 	},
 	"Error": function (a, d) {
 		var e = new Error('E!');
 		deferred(e).match(a.never, function (err) {
 			a(err, e);
-		}).end(d);
+		}).end(d, d);
 	}
 };
