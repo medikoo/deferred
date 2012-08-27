@@ -91,6 +91,22 @@ module.exports = {
 		a(p.resolved, true, "Transfered");
 		a.deep(p.value, [x, 'foo'], "Transfered value");
 	},
+	"Resolve corner case": function (t, a) {
+		var d1 = t(), d2 = t(), d3 = t(), d4 = t(), count = 0;
+
+		d1.promise(function () { ++count; });
+		d2.promise(function () { ++count; });
+		d3.promise(function () { ++count; });
+		d4.promise(function () { ++count; });
+
+		d1.resolve(d2.promise);
+		d2.resolve(d3.promise);
+		d3.resolve(d4.promise);
+		d2.promise(function () { ++count; });
+		d1.promise(function () { ++count; });
+		d4.resolve({});
+		a(count, 6);
+	},
 	"Call all then callbacks in order": function (t, a, d) {
 		var def = t(), promise = def.promise, x = {}, count = 0;
 		promise(function (result) {
