@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "es5-ext": "0.8.x",
-    "event-emitter": "git://github.com/medikoo/event-emitter.git"
+    "event-emitter": "git://github.com/medikoo/event-emitter.git",
+    "next-tick": "0.1.x"
   },
   "scripts": {
     "test": "node ./node_modules/tad/bin/tad lib"
