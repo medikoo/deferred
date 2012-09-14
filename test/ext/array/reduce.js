@@ -158,7 +158,10 @@ module.exports = function (t) {
 						}, a.never).end(d, d);
 					},
 					"Initial Error": function (a, d) {
-						t.call([x], a.never, e)(a.never, function (res) {
+						t.call([x], function (err) {
+							a(err, e, "Call");
+							return e;
+						}, e)(a.never, function (res) {
 							a(res, e);
 						}).end(d, d);
 					},
@@ -199,7 +202,11 @@ module.exports = function (t) {
 		},
 		"Many": {
 			"Initial error": function (a, d) {
-				t.call([x, y, z], a.never, e)(a.never, function (res) {
+				var list = [x, y, z];
+				t.call(list, function (a1, a2, a3, a4) {
+					a.deep([a1, a2, a3, a4], [e, x, 0, list]);
+					return e;
+				}, e)(a.never, function (res) {
 					a(res, e);
 				}).end(d, d);
 			},
