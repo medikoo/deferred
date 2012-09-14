@@ -20,7 +20,7 @@ module.exports = function (t, a) {
 		return true;
 	}, x).valueOf(), true, "One, falsy, cb truthy");
 	a(z, 1, "Callback called");
-	a(t.call([1], function () { return false;}).valueOf(), false,
+	a(t.call([1], function () { return false; }).valueOf(), false,
 		"One, truthy, cb falsy");
 	a(t.call([1, 0], function (x) { ++z; return !x; }).valueOf(), true,
 		"Two, cb, Second truthy");

@@ -7,7 +7,7 @@ module.exports = function (t) {
 
 	return {
 		"Promise arguments": function (a) {
-			t.call(function (arg1, arg2, callback) {
+			t.call(function (arg1, arg2) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
@@ -16,7 +16,7 @@ module.exports = function (t) {
 			});
 		},
 		"Normal arguments": function (a) {
-			t.call(function (arg1, arg2, callback) {
+			t.call(function (arg1, arg2) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, undefined], "Arguments");
 				return z;

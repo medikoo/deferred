@@ -1,14 +1,13 @@
 'use strict';
 
-var noop     = require('es5-ext/lib/Function/noop')
-  , deferred = require('../lib/deferred')
+var deferred = require('../lib/deferred')
 
   , x = {}, y = {}, e = new Error("Error");
 
 module.exports = {
 	"Then callback run in current tick": function (t, a) {
 		var next = false;
-		t(null)(function (result) {
+		t(null)(function () {
 			a(next, false);
 		}, a.never).end();
 		next = true;
@@ -62,12 +61,14 @@ module.exports = {
 			}).end(d, d);
 		},
 		"Chain promise & resolve with function": function (t, a) {
-			var d1 = deferred(), fn = function () { return 'bar' };
+			var d1, fn, p1;
+			d1 = deferred();
+			fn = function () { return 'bar'; };
 			d1.promise(t('foo')).end(function (res) {
 				a(res, 'foo', "Unresolved");
 			});
 			d1.resolve(fn);
-			var p1 = t(2);
+			p1 = t(2);
 			a(t(1)(p1), p1, "Resolved");
 		}
 	},

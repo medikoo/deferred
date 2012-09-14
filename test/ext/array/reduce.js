@@ -1,7 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred')
-  , promise  = require('../../../lib/promise');
+var promise  = require('../../../lib/promise');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error"), e2 = new Error("Error2");
@@ -67,14 +66,14 @@ module.exports = function (t) {
 							}, a.never).end(d, d);
 						},
 						"Throw Error": function (a, d) {
-							t.call([x], function (acc, arg) {
+							t.call([x], function () {
 								throw e;
 							}, null)(a.never, function (res) {
 								a(res, e);
 							}).end(d, d);
 						},
 						"Return Error": function (a, d) {
-							t.call([promise(e)], function (acc, arg) {
+							t.call([promise(e)], function () {
 								return e;
 							}, null)(a.never, function (res) {
 								a(res, e);
@@ -239,7 +238,7 @@ module.exports = function (t) {
 			},
 			"Callback": {
 				"Error": function (a, d) {
-					t.call([x, e, e2], function (acc, res) {
+					t.call([x, e, e2], function () {
 						return z;
 					})(function (res) {
 						a(res, z);

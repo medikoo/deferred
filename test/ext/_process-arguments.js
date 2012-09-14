@@ -1,12 +1,11 @@
 'use strict';
 
-var toArray   = require('es5-ext/lib/Array/from')
-  , isPromise = require('../../lib/is-promise')
+var isPromise = require('../../lib/is-promise')
   , promise   = require('../../lib/promise')
-  , deferred  = require('../../lib/deferred')
+  , deferred  = require('../../lib/deferred');
 
 module.exports = function (t) {
-	var u = {}, x = {}, y = {}, z = {}, fn1 = function () {}, e = new Error();
+	var x = {}, y = {}, e = new Error();
 	return {
 		"Limit": function (a) {
 			a.deep(t([x, 34, 'raz'], 2), [x, 34]);

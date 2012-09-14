@@ -8,7 +8,7 @@ module.exports = function (t, a) {
 	deferred(1);
 
 	t.profile();
-	deferred(2)
+	deferred(2);
 	deferred({});
 	deferred('raz');
 	d1 = deferred();

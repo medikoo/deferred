@@ -15,12 +15,12 @@ module.exports = function (t, a, d) {
 	}).end(d, d);
 };
 
-var deferred = require('../../../lib/deferred')
+var deferred = require('../../../lib/deferred');
 
 module.exports = function () {
 	return {
 		"Function": function (a, d) {
-			var x = {}, fn, z = {};
+			var x = {}, z = {};
 			z.foo = function (y, cb) {
 				var self = this;
 				setTimeout(function () {
@@ -68,7 +68,7 @@ module.exports = function () {
 			}).end();
 		},
 		"Promise arguments": function (a) {
-			var y = {}, z = {}, x = { foo: function (w, u, cb) {
+			var y = {}, z = {}, x = { foo: function (w, u) {
 				a(this, x, "Context");
 				a.deep([w, u], [y, z], "Arguments");
 				return 'foo';
@@ -78,8 +78,9 @@ module.exports = function () {
 			}, a.never).end();
 		},
 		"Erroneous": function (a) {
-			var x = new Error('Test');
-			var fn = function (callback) {
+			var x, fn;
+			x = new Error('Test');
+			fn = function () {
 				return x;
 			};
 			deferred({}).invoke(fn)(a.never, function (e) {
@@ -88,7 +89,7 @@ module.exports = function () {
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
-			fn = function (callback) {
+			fn = function () {
 				throw x;
 			};
 			deferred({}).invoke(fn)(a.never, function (e) {

@@ -28,8 +28,9 @@ module.exports = function (t) {
 			}, a.never).end(d, d);
 		},
 		"Do not promisify promisified function": function (a) {
-			var fn = t.call(function () { });
-			var fn1 = t.call(fn);
+			var fn, fn1;
+			fn = t.call(function () { });
+			fn1 = t.call(fn);
 			a(fn, fn1);
 		},
 		"Successful": function (a, d) {
@@ -66,7 +67,7 @@ module.exports = function (t) {
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
-			fn = t.call(function (callback) {
+			fn = t.call(function () {
 				throw x;
 			});
 			a.throws(function () {

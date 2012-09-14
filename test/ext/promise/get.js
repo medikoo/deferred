@@ -30,7 +30,7 @@ module.exports = {
 			x.promise.get('foo').end(function () {
 				throw new Error('Error');
 			});
-			x.resolve({ foo: 'bar'});
+			x.resolve({ foo: 'bar' });
 		});
 	}
 };

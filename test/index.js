@@ -1,11 +1,9 @@
 'use strict';
 
-var path       = require('path')
-  , readdir    = require('fs').readdir
-  , isFunction = require('es5-ext/lib/Function/is-function')
-  , not        = require('es5-ext/lib/Function/prototype/not')
-  , contains   = require('es5-ext/lib/Array/prototype/contains')
+var isFunction = require('es5-ext/lib/Function/is-function')
   , convert    = require('es5-ext/lib/String/prototype/hyphen-to-camel')
+  , path       = require('path')
+  , readdir    = require('fs').readdir
   , indexTest  = require('tad/lib/utils/index-test')
 
   , dir = path.dirname(__dirname) + '/lib';
@@ -35,11 +33,11 @@ module.exports = {
 		var fn, dx, dy, ready;
 		fn = t.gate(function (p) {
 			return p;
-		}, 1)
+		}, 1);
 		dx = t();
 		fn(dx.promise);
 		dy = t();
-		fn(dy.promise).end(function (r) {
+		fn(dy.promise).end(function () {
 			a(ready, true);
 		});
 		dy.resolve({});
@@ -70,7 +68,6 @@ module.exports = {
 		}).end(d, d);
 	},
 	"Map": function (t, a, d) {
-		var x = {};
 		t.map([t(1), t(2), 3], function (res) {
 			return t(res * res);
 		})(function (r) {
@@ -78,7 +75,6 @@ module.exports = {
 		}, a.never).end(d, d);
 	},
 	"Reduce": function (t, a, d) {
-		var x = {};
 		t.reduce([t(1), t(2), 3], function (arg1, arg2) {
 			return t(arg1 * arg2);
 		}, 1)(function (r) {

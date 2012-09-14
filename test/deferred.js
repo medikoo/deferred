@@ -1,7 +1,6 @@
 'use strict';
 
-var noop      = require('es5-ext/lib/Function/noop')
-  , isPromise = require('../lib/is-promise')
+var isPromise = require('../lib/is-promise')
 
   , x = {};
 
@@ -22,7 +21,7 @@ module.exports = {
 			d();
 		});
 	},
-	"More than one argument": function (t, a) {
+	"More than one argument": function (t) {
 		var x = {}, y = {};
 		return {
 			"Success": function (a, d) {
@@ -109,10 +108,10 @@ module.exports = {
 	},
 	"Call all then callbacks in order": function (t, a, d) {
 		var def = t(), promise = def.promise, x = {}, count = 0;
-		promise(function (result) {
+		promise(function () {
 			++count;
 		}, a.never).end();
-		promise(function (result) {
+		promise(function () {
 			a(count, 1);
 		}, a.never).end(d, d);
 		def.resolve(x);

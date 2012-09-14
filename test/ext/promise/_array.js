@@ -30,5 +30,5 @@ module.exports = function (t) {
 				a(isError(err), true, "Error");
 			}).end();
 		}
-	}
+	};
 };

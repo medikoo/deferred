@@ -1,12 +1,10 @@
 'use strict';
 
-var call     = Function.prototype.call
-  , deferred = require('../../../lib/deferred')
+var deferred = require('../../../lib/deferred')
   , promise  = require('../../../lib/promise');
 
 module.exports = function (t) {
-	var x = {}, y = {}, z = {}, e = new Error("Error")
-	  , arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	var x = {}, y = {}, z = {}, e = new Error("Error");
 
 	return {
 		"Empty": {
@@ -89,8 +87,7 @@ module.exports = function (t) {
 					}).end(d, d);
 				},
 				"Error via input": function (a, d) {
-					var count = 0;
-					t.call([x, y, promise(e), z], function (res) {
+					t.call([x, y, promise(e), z], function () {
 						return x;
 					})(a.never, function (res) {
 						a(res, e);

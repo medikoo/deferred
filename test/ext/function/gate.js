@@ -3,11 +3,13 @@
 var toArray  = require('es5-ext/lib/Array/from')
   , deferred = require('../../../lib/deferred');
 
-module.exports = function (t, a) {
+module.exports = function (t) {
 	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved, released;
 
-	fn = function (p) { // console.log("ARGS", arguments);
-		 args = toArray(arguments); return p; };
+	fn = function (p) {
+		args = toArray(arguments);
+		return p;
+	};
 	return {
 		"Limit": function (a) {
 			gfn = t.call(fn, 2);

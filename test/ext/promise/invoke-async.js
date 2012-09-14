@@ -1,11 +1,11 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred')
+var deferred = require('../../../lib/deferred');
 
 module.exports = function () {
 	return {
 		"Function": function (a, d) {
-			var x = {}, fn, z = {};
+			var x = {}, z = {};
 			z.foo = function (y, cb) {
 				var self = this;
 				setTimeout(function () {
@@ -57,8 +57,9 @@ module.exports = function () {
 			}, a.never).end();
 		},
 		"Erroneous": function (a, d) {
-			var x = new Error('Test');
-			var fn = function (callback) {
+			var x, fn;
+			x = new Error('Test');
+			fn = function (callback) {
 				setTimeout(function () {
 					callback(x);
 				}, 0);
@@ -69,7 +70,7 @@ module.exports = function () {
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
-			fn = function (callback) {
+			fn = function () {
 				throw x;
 			};
 			deferred({}).invokeAsync(fn)(a.never, function (e) {
