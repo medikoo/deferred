@@ -20,7 +20,8 @@ var forEach    = require('es5-ext/lib/Object/for-each')
 
   , self, time, count = 10000, data = {}, next, tests, def = deferred();
 
-console.log("Promise overhead (calling one after another)", "x" + count + ":\n");
+console.log("Promise overhead (calling one after another)",
+	"x" + count + ":\n");
 
 tests = [function () {
 	var i = count;
@@ -83,7 +84,11 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = Q.defer();
 		lstat(path, function (err, stats) {
-			err ? def.reject(err) : def.resolve(stats);
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
 		});
 		return def.promise;
 	};
@@ -121,7 +126,11 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = jqDeferred();
 		lstat(path, function (err, stats) {
-			err ? def.reject(err) : def.resolve(stats);
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
 		});
 		return def;
 	};

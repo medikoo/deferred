@@ -15,7 +15,8 @@ module.exports = function (t) {
 		"Promise arguments": {
 			"Resolved": {
 				"": function (a) {
-					a.deep(t([x, deferred(y), 'dwa', deferred(null)]), [x, y, 'dwa', null]);
+					a.deep(t([x, deferred(y), 'dwa', deferred(null)]),
+						[x, y, 'dwa', null]);
 				},
 				"Error": function (a) {
 					var p = deferred(e);

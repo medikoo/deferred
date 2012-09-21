@@ -31,7 +31,11 @@ jshint.smarttabs
 jshint.eqnull
 jshint.expr
 
-./benchmark/promisify.js
+./benchmark/concurrent.js
+jslint_medikoo.predef+ console, __filename
+jshint.global+ console, __filename
+
+./benchmark/one-after-another.js
 jslint_medikoo.predef+ console, __filename
 jshint.global+ console, __filename
 

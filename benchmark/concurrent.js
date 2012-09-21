@@ -21,13 +21,14 @@ var generate   = require('es5-ext/lib/Array/generate')
   , self, time, count = 10000, data = {}, next, tests, def = deferred()
   , files = generate(count, __filename);
 
-
 console.log("Promise overhead (concurrent calls)", "x" + count + ":\n");
 
 tests = [function () {
 	var i = count, j = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
+			var x;
+			x = stats;
 			if (err) {
 				throw err;
 			}
@@ -52,7 +53,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).end(function () {
 			if (!--i) {
 				data["Deferred: Dedicated wrapper"] = now() - time;
 				next();
@@ -67,7 +68,7 @@ tests = [function () {
 	var i = count, j = count, dlstat = promisify(lstat);
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).end(function () {
 			if (!--i) {
 				data["Deferred: Promisify (generic wrapper)"] = now() - time;
 				next();
@@ -94,13 +95,17 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = Q.defer();
 		lstat(path, function (err, stats) {
-			err ? def.reject(err) : def.resolve(stats);
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
 		});
 		return def.promise;
 	};
 
 	self = function () {
-		dlstat(__filename).then(function (stats) {
+		dlstat(__filename).then(function () {
 			if (!--i) {
 				data["Q: Dedicated wrapper"] = now() - time;
 				next();
@@ -115,7 +120,7 @@ tests = [function () {
 	var i = count, j = count;
 
 	self = function () {
-		Q.ncall(lstat, null, __filename).then(function (stats) {
+		Q.ncall(lstat, null, __filename).then(function () {
 			if (!--i) {
 				data["Q: ncall (generic wrapper)"] = now() - time;
 				next();
@@ -132,13 +137,17 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = jqDeferred();
 		lstat(path, function (err, stats) {
-			err ? def.reject(err) : def.resolve(stats);
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
 		});
 		return def;
 	};
 
 	self = function () {
-		dlstat(__filename).done(function (stats) {
+		dlstat(__filename).done(function () {
 			if (!--i) {
 				data["jQuery.Deferred: Dedicated wrapper"] = now() - time;
 				next();
