@@ -20,7 +20,7 @@ var forEach    = require('es5-ext/lib/Object/for-each')
 
   , self, time, count = 10000, data = {}, next, tests, def = deferred();
 
-console.log("Promises overhead (one after another)", "x" + count + ":\n");
+console.log("Promise overhead (calling one after another)", "x" + count + ":\n");
 
 tests = [function () {
 	var i = count;
@@ -32,7 +32,7 @@ tests = [function () {
 			if (--i) {
 				self(stats);
 			} else {
-				data["Base (node.js style callback)"] = now() - time;
+				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
 			}
 		});

@@ -22,7 +22,7 @@ var generate   = require('es5-ext/lib/Array/generate')
   , files = generate(count, __filename);
 
 
-console.log("Promises overhead (concurrent)", "x" + count + ":\n");
+console.log("Promise overhead (concurrent calls)", "x" + count + ":\n");
 
 tests = [function () {
 	var i = count, j = count;
@@ -32,7 +32,7 @@ tests = [function () {
 				throw err;
 			}
 			if (!--i) {
-				data["Base (node.js style callback)"] = now() - time;
+				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
 			}
 		});
