@@ -6,6 +6,7 @@ es5
 
 jslint_medikoo.tabs
 jslint_medikoo.module
+jslint_medikoo.nomen
 jslint_medikoo.plusplus
 
 jshint.laxcomma
@@ -30,9 +31,13 @@ jshint.smarttabs
 jshint.eqnull
 jshint.expr
 
+./benchmark/promisify.js
+jslint_medikoo.predef+ console, __filename
+jshint.global+ console, __filename
+
 ./lib/deferred.js
-jslint_medikoo.predef+ clearTimeout
-jshint.global+ clearTimeout
+jslint_medikoo.predef+ setTimeout, clearTimeout
+jshint.global+ setTimeout, clearTimeout
 jslint_medikoo.nomen
 jshint.proto
 !jshint.camelcase

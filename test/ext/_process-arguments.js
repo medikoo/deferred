@@ -1,7 +1,6 @@
 'use strict';
 
 var isPromise = require('../../lib/is-promise')
-  , promise   = require('../../lib/promise')
   , deferred  = require('../../lib/deferred');
 
 module.exports = function (t) {
@@ -16,11 +15,11 @@ module.exports = function (t) {
 		"Promise arguments": {
 			"Resolved": {
 				"": function (a) {
-					a.deep(t([x, promise(y), 'dwa', promise(null)]), [x, y, 'dwa', null]);
+					a.deep(t([x, deferred(y), 'dwa', deferred(null)]), [x, y, 'dwa', null]);
 				},
 				"Error": function (a) {
-					var p = promise(e);
-					a(t([x, p, 'dwa', promise(null)]), p);
+					var p = deferred(e);
+					a(t([x, p, 'dwa', deferred(null)]), p);
 				}
 			},
 			"Unresolved": {

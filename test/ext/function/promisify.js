@@ -1,6 +1,6 @@
 'use strict';
 
-var promise = require('../../../lib/promise');
+var deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -12,7 +12,7 @@ module.exports = function (t) {
 				setTimeout(function () {
 					callback(null, z);
 				}, 0);
-			}, 2).call(u, x, promise(y), z)(function (result) {
+			}, 2).call(u, x, deferred(y), z)(function (result) {
 				a(result, z);
 			}, a.never).end(d, d);
 		},

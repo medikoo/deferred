@@ -1,7 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred')
-  , promise  = require('../../../lib/promise');
+var deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
@@ -41,12 +40,12 @@ module.exports = function (t) {
 			},
 			"Promise": {
 				"": function (a, d) {
-					t.call([promise(x)])(function (result) {
+					t.call([deferred(x)])(function (result) {
 						a.deep(result, [x]);
 					}, a.never).end(d, d);
 				},
 				"Callback": function (a, d) {
-					t.call([promise(x)], function (arg) {
+					t.call([deferred(x)], function (arg) {
 						a(arg, x, "Argument");
 						return y;
 					})(function (result) {
@@ -58,18 +57,18 @@ module.exports = function (t) {
 		"Many": {
 			"No callback": {
 				"Error": function (a, d) {
-					t.call([x, y, promise(x), e, z])(a.never, function (res) {
+					t.call([x, y, deferred(x), e, z])(a.never, function (res) {
 						a(res, e);
 						d();
 					});
 				},
 				"Values & Promises": function (a, d) {
-					t.call([x, y, promise(x), z, promise(y)])(function (res) {
+					t.call([x, y, deferred(x), z, deferred(y)])(function (res) {
 						a.deep(res, [x, y, x, z, y]);
 					}, a.never).end(d, d);
 				},
 				"Error promise": function (a, d) {
-					t.call([x, y, promise(e), z, promise(y)])(a.never, function (res) {
+					t.call([x, y, deferred(e), z, deferred(y)])(a.never, function (res) {
 						a(res, e);
 					}, a.never).end(d, d);
 				}
@@ -77,7 +76,7 @@ module.exports = function (t) {
 			"Callback": {
 				"Error": function (a, d) {
 					var count = 0;
-					t.call([x, y, promise(x), z], function () {
+					t.call([x, y, deferred(x), z], function () {
 						if (count++) {
 							a.never();
 						}
@@ -87,22 +86,22 @@ module.exports = function (t) {
 					}).end(d, d);
 				},
 				"Error via input": function (a, d) {
-					t.call([x, y, promise(e), z], function () {
+					t.call([x, y, deferred(e), z], function () {
 						return x;
 					})(a.never, function (res) {
 						a(res, e);
 					}).end(d, d);
 				},
 				"Values & Promises": function (a, d) {
-					t.call([1, promise(2), 3, promise(4), 5], function (val) {
+					t.call([1, deferred(2), 3, deferred(4), 5], function (val) {
 						return val * val;
 					})(function (res) {
 						a.deep(res, [1, 4, 9, 16, 25]);
 					}, a.never).end(d, d);
 				},
 				"Values & Promises, through promise": function (a, d) {
-					t.call([1, promise(2), 3, promise(4), 5], function (val) {
-						return promise(val * val);
+					t.call([1, deferred(2), 3, deferred(4), 5], function (val) {
+						return deferred(val * val);
 					})(function (res) {
 						a.deep(res, [1, 4, 9, 16, 25]);
 					}, a.never).end(d, d);

@@ -1,16 +1,15 @@
 'use strict';
 
 var isError  = require('es5-ext/lib/Error/is-error')
-  , deferred = require('../../../lib/deferred')
-  , promise  = require('../../../lib/promise');
+  , deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	t('map', require('../../../lib/ext/array/map'));
 
 	return {
 		"Direct": function (a) {
-			promise([promise(1), promise(2), 3]).map(function (res) {
-				return promise(res * res);
+			deferred([deferred(1), deferred(2), 3]).map(function (res) {
+				return deferred(res * res);
 			})(function (r) {
 				a.deep(r, [1, 4, 9]);
 			}, a.never).end();
@@ -18,11 +17,11 @@ module.exports = function (t) {
 		"Delayed": function (a) {
 			var def = deferred();
 			def.promise.map(function (res) {
-				return promise(res * res);
+				return deferred(res * res);
 			})(function (r) {
 				a.deep(r, [1, 4, 9]);
 			}, a.never).end();
-			def.resolve([promise(1), promise(2), 3]);
+			def.resolve([deferred(1), deferred(2), 3]);
 		},
 		"Error": function (a) {
 			t('reduce', require('../../../lib/ext/array/reduce'));

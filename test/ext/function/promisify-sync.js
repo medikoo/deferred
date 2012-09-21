@@ -1,6 +1,6 @@
 'use strict';
 
-var promise = require('../../../lib/promise');
+var deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -11,7 +11,7 @@ module.exports = function (t) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
-			}, 2).call(u, x, promise(y), z).end(function (result) {
+			}, 2).call(u, x, deferred(y), z).end(function (result) {
 				a(result, z);
 			});
 		},

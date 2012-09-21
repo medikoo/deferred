@@ -15,8 +15,8 @@ module.exports = {
 		delete o.promise;
 		delete o.profiler;
 		return o;
-	}), ['delay', 'extend', 'gate', 'profile', 'profileEnd', 'promisify',
-		'promisifySync', 'map', 'reduce', 'some']),
+	}), ['Deferred', 'delay', 'extend', 'gate', 'profile', 'profileEnd',
+		'promisify', 'promisifySync', 'map', 'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);

@@ -1,6 +1,6 @@
 'use strict';
 
-var promise  = require('../../../lib/promise');
+var deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error"), e2 = new Error("Error2");
@@ -34,7 +34,7 @@ module.exports = function (t) {
 					}, a.never).end(d, d);
 				},
 				"Promise": function (a, d) {
-					t.call([], a.never, promise(y))(function (res) {
+					t.call([], a.never, deferred(y))(function (res) {
 						a(res, y);
 					}, a.never).end(d, d);
 				},
@@ -73,7 +73,7 @@ module.exports = function (t) {
 							}).end(d, d);
 						},
 						"Return Error": function (a, d) {
-							t.call([promise(e)], function () {
+							t.call([deferred(e)], function () {
 								return e;
 							}, null)(a.never, function (res) {
 								a(res, e);
@@ -83,12 +83,12 @@ module.exports = function (t) {
 				},
 				"Promise": {
 					"": function (a, d) {
-						t.call([promise(x)])(function (res) {
+						t.call([deferred(x)])(function (res) {
 							a(res, x);
 						}, a.never).end(d, d);
 					},
 					"Callback": function (a, d) {
-						t.call([promise(x)], function (acc, arg) {
+						t.call([deferred(x)], function (acc, arg) {
 							a(acc, null, "Accumulator");
 							a(arg, x, "Argument");
 							return y;
@@ -109,7 +109,7 @@ module.exports = function (t) {
 						}, a.never).end(d, d);
 					},
 					"Promise": function (a, d) {
-						t.call([promise(e)])(a.never, function (res) {
+						t.call([deferred(e)])(a.never, function (res) {
 							a(res, e);
 						}, a.never).end(d, d);
 					},
@@ -124,7 +124,7 @@ module.exports = function (t) {
 							}, a.never).end(d, d);
 						},
 						"Promise": function (a, d) {
-							t.call([promise(e)], a.never)(a.never, function (res) {
+							t.call([deferred(e)], a.never)(a.never, function (res) {
 								a(res, e);
 							}).end(d, d);
 						},
@@ -178,16 +178,16 @@ module.exports = function (t) {
 				},
 				"Promise": {
 					"": function (a, d) {
-						t.call([promise(x)], null, promise(y))(function (res) {
+						t.call([deferred(x)], null, deferred(y))(function (res) {
 							a(res, x);
 						}, a.never).end(d, d);
 					},
 					"Callback": function (a, d) {
-						t.call([promise(x)], function (acc, arg) {
+						t.call([deferred(x)], function (acc, arg) {
 							a(acc, z, "Accumulator");
 							a(arg, x, "Argument");
-							return promise(y);
-						}, promise(z))(function (res) {
+							return deferred(y);
+						}, deferred(z))(function (res) {
 							a(res, y);
 						}, a.never).end(d, d);
 					}
@@ -216,7 +216,7 @@ module.exports = function (t) {
 					}).end(d, d);
 				},
 				"Error promise": function (a, d) {
-					t.call([x, promise(e), e2])(a.never, function (res) {
+					t.call([x, deferred(e), e2])(a.never, function (res) {
 						a(res, e);
 					}).end(d, d);
 				},
@@ -226,12 +226,12 @@ module.exports = function (t) {
 					}, a.never).end(d, d);
 				},
 				"Values & Promises": function (a, d) {
-					t.call([x, promise(y), z])(function (res) {
+					t.call([x, deferred(y), z])(function (res) {
 						a(res, z);
 					}, a.never).end(d, d);
 				},
 				"Values & Promises & Initial": function (a, d) {
-					t.call([x, promise(y), z], null, {})(function (res) {
+					t.call([x, deferred(y), z], null, {})(function (res) {
 						a(res, z);
 					}, a.never).end(d, d);
 				}
@@ -245,7 +245,7 @@ module.exports = function (t) {
 					}, a.never).end(d, d);
 				},
 				"Error promise": function (a, d) {
-					t.call([x, promise(e), e2], function () {
+					t.call([x, deferred(e), e2], function () {
 						return z;
 					})(a.never, function (res) {
 						a(res, e);
@@ -259,9 +259,9 @@ module.exports = function (t) {
 					}, a.never).end(d, d);
 				},
 				"Values & Promises": function (a, d) {
-					t.call([1, promise(2), 3], function (acc, res) {
-						return promise(acc * res);
-					}, promise(1))(function (res) {
+					t.call([1, deferred(2), 3], function (acc, res) {
+						return deferred(acc * res);
+					}, deferred(1))(function (res) {
 						a(res, 6);
 					}, a.never).end(d, d);
 				}
