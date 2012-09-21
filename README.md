@@ -398,7 +398,7 @@ When preparing client-side file (with help of e.g. [modules-webmake](https://git
 
 ### aside
 
-Third brother of `then` and `end`. Has same signature but neither extends chain nor ends it, instead splits it by returning promise on which it was invoked. Useful when we want to return promise, but on a side do (in parallel) something else with obtained value:
+Third brother of `then` and `end`. Has same signature but neither extends chain nor ends it, instead splits it by returning promise on which it was invoked. Useful when we want to return promise, but on a side (in parallel) do something else with obtained value:
 
 ```javascript
 var x = deferred({ foo: 'bar' });
@@ -498,6 +498,79 @@ See [promise aware version of Array's reduce](#reduce)
 ### some
 
 See [promise aware version of Array's some](#some)
+
+## Debugging
+
+### Monitoring unresolved promises
+
+In properly constructed flow, there should be no promises that are never resolved.
+If you want to be sure that it's not the case, or you suspect there are such issues, check whether deferred's monitor has something to say
+
+```javascript
+deferred.monitor();
+```
+
+By default monitor will log error for every promise that was not resolved in 5 seconds.
+You can customise that timeout, and handle errors with your own listener:
+
+```javascript
+deferred.monitor(10000, function (err) {
+  // Called for each promise not resolved in 10 seconds time
+});
+```
+
+This extension affects performance and it's best not to use it in production environment
+
+### Usage statistics
+
+Being able to see how many promises were initialized (and where) in our flow can be helpful to track application issues, it's also good way to confirm that constructed flow works as intended.
+
+```javascript
+var profiler = deferred.profiler();
+profiler.profile(); // Start collecting statistics
+
+//...
+
+var stats = profiler.profileEnd(); // End profiling
+console.log(stats.log); // See readable output
+```
+
+Example log output:
+
+```
+------------------------------------------------------------
+Deferred/Promise usage statistics:
+
+104540 Total promises initialized
+104540 Initialized as Unresolved
+     0 Initialized as Resolved
+
+Unresolved promises were initialized at:
+ 22590 at Object.module.exports.factory (/Users/medikoo/Projects/_packages/next/lib/fs/_memoize-watcher.js:21:10)
+ 11553 at Object.IsIgnored.init (/Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:140:18)
+ 11553 at module.exports.factory (/Users/medikoo/Projects/_packages/next/lib/fs/_memoize-watcher.js:21:10)
+  7854 at Object.Readdir.filterIgnored (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:434:23)
+  4619 at Object.module.exports.factory (/Users/medikoo/Projects/_packages/next/lib/fs/_memoize-watcher.js:21:10)
+  3927 at Object.Readdir.filterByType (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:222:15)
+  3927 at Object.Readdir.filterByType (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:236:15)
+  3927 at Object.self (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:164:12)
+  3927 at Object.Readdir.readdir (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:540:9)
+  3927 at Object.self (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:164:21)
+  3729 at directory (/Users/medikoo/Projects/_packages/next/lib/fs/_watch-alt.js:95:2)
+  2820 at Readdir.filterIgnored.promise.root (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:517:9)
+  2163 at basic (/Users/medikoo/Projects/_packages/next/lib/fs/is-gitrepo-root.js:14:8)
+  2159 at buildMap (/Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:117:22)
+  2159 at Object.FindRoot (/Users/medikoo/Projects/_packages/next/lib/fs/find-root.js:18:15)
+  1107 at Readdir.filterIgnored.promise.root (/Users/medikoo/Projects/_packages/next/lib/fs/readdir.js:527:11)
+   697 at Object.Map.addPaths (/Users/medikoo/Projects/_packages/next/lib/fs/_get-conf-file-map.js:107:19)
+   697 at readFile (/Users/medikoo/Projects/_packages/next/lib/fs/read-file.js:18:8)
+   697 at Object.readRulesWatch (/Users/medikoo/Projects/_packages/next/lib/fs/_get-conf-file-map.js:45:12)
+   247 at module.exports (/Users/medikoo/Projects/_packages/next/lib/fs/_watch.js:90:2)
+   247 at module.exports (/Users/medikoo/Projects/_packages/next/lib/fs/_watch.js:90:13)
+     1 at Object.Readdir.init (/Users/medikoo/Projects/_packa
+```
+
+__Using profiler significantly affects performance don't  use it in production environment.__
 
 ## Performance
 
