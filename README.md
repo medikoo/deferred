@@ -362,7 +362,7 @@ This function is available also as an extension on promise object.
 
 There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors.
 
-There's generic `deferred.gate`:
+Handle that with `deferred.gate`:
 
 ```javascript
 var fn = deferred.gate(function async() {
