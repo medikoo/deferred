@@ -119,7 +119,7 @@ tests = [function () {
 		self();
 	}
 }, function () {
-	var i = count, j = count, dlstat = Q.nbind(lstat, null)
+	var i = count, j = count, dlstat = Q.nbind(lstat, null);
 
 	self = function () {
 		dlstat(__filename).then(function () {

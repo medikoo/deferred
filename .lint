@@ -32,12 +32,12 @@ jshint.eqnull
 jshint.expr
 
 ./benchmark/concurrent.js
-jslint_medikoo.predef+ console, __filename
-jshint.global+ console, __filename
+jslint_medikoo.predef+ console, __filename, process
+jshint.global+ console, __filename, process
 
 ./benchmark/one-after-another.js
-jslint_medikoo.predef+ console, __filename
-jshint.global+ console, __filename
+jslint_medikoo.predef+ console, __filename, process
+jshint.global+ console, __filename, process
 
 ./lib/deferred.js
 jslint_medikoo.predef+ setTimeout, clearTimeout
