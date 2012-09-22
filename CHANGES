@@ -1,3 +1,18 @@
+v0.6.0  --  2012.09.22
+Major refactor, with focus on performance and better modularization.
+* New Deferred is about x3 faster than v0.5 version
+* Promise is now also an event emitter
+* Better extensions system (deferred.extend)
+* `aside` extension (derived from `cb`), that allows to split promise chain
+* New `cb` extension with different semantics, allows escaping promise chain with typical asynchronous function callback
+* Refactored Array#map, it doesn't support any more limit argument (it should be now achieved with help of deferred.gate)
+* Refactored Array#reduce, added support for sparse arrays
+* Array#some - added support for sparse arrays
+* Changed signature of `end` it's now on pair with `then` and newly introduced `aside` extension
+* Profiler - gather promise initialization statistics
+* Removed promise.js module, some of it's logic is left as internal _ext.js module and other part was merged into deferred.js
+* Benchmarks
+
 v0.5.6  --  2012-07.17
 (Maintanance, as v0.6 is nearly ready for rollout).
 Added workaround for for v8 bug (eminent in Node v0.6):
