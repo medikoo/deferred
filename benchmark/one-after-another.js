@@ -15,8 +15,8 @@ var forEach    = require('es5-ext/lib/Object/for-each')
   , deferred   = require('../lib')
 
   , now = Date.now
-  , Deferred = deferred.Deferred
-  , promisify = deferred.promisify
+  , Deferred = deferred.Deferred, promisify = deferred.promisify
+  , nextTick = process.nextTick
 
   , self, time, count = 10000, data = {}, next, tests, def = deferred();
 
@@ -99,24 +99,26 @@ tests = [function () {
 				self(stats);
 			} else {
 				data["Q: Dedicated wrapper"] = now() - time;
-				next();
+				// Get out of try/catch clause
+				nextTick(next);
 			}
-		});
+		}).end();
 	};
 	time = now();
 	self();
 }, function () {
-	var i = count;
+	var i = count, dlstat = Q.nbind(lstat, null);
 
 	self = function () {
-		Q.ncall(lstat, null, __filename).then(function (stats) {
+		dlstat(__filename).then(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
-				data["Q: ncall (generic wrapper)"] = now() - time;
-				next();
+				data["Q: nbind (generic wrapper)"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
 			}
-		});
+		}).end();
 	};
 	time = now();
 	self();
@@ -143,6 +145,8 @@ tests = [function () {
 				data["jQuery.Deferred: Dedicated wrapper"] = now() - time;
 				next();
 			}
+		}).fail(function (e) {
+			throw e;
 		});
 	};
 	time = now();

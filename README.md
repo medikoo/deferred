@@ -578,27 +578,27 @@ Promises just by being rich objects introduce some overhead over regular callbac
 
 _benchmark_ folder contains few plain test cases that compares Deferred to other popular promise implementations. Base of test is plain [lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback) call to self file.
 
-_Example output taken under Node v0.8.9 on 2008 MBP Pro._
+_Example output taken under Node v0.8.9 on 2008 MBP._
 
 ```
 Promise overhead (calling one after another) x10000:
 
 1:   461ms  Base (plain Node.js lstat call)
-2:   629ms  Deferred: Dedicated wrapper
-3:   708ms  Deferred: Promisify (generic wrapper)
-4:  1276ms  jQuery.Deferred: Dedicated wrapper
-5:  2729ms  Q: Dedicated wrapper
-6:  5213ms  Q: ncall (generic wrapper)
+2:   636ms  Deferred: Dedicated wrapper
+3:   714ms  Deferred: Promisify (generic wrapper)
+4:   995ms  jQuery.Deferred: Dedicated wrapper
+5:  3312ms  Q: Dedicated wrapper
+6:  7035ms  Q: nbind (generic wrapper)
 
 Promise overhead (concurrent calls) x10000:
 
-1:   292ms  Base (plain Node.js lstat call)
-2:   495ms  Deferred: Dedicated wrapper
-3:   643ms  Deferred: Promisify (generic wrapper)
-4:   664ms  Deferred: Map + Promisify
-5:  1279ms  jQuery.Deferred: Dedicated wrapper
-6:  2621ms  Q: Dedicated wrapper
-7:  4787ms  Q: ncall (generic wrapper)
+1:   300ms  Base (plain Node.js lstat call)
+2:   535ms  Deferred: Dedicated wrapper
+3:   622ms  Deferred: Promisify (generic wrapper)
+4:   672ms  Deferred: Map + Promisify
+5:  1022ms  jQuery.Deferred: Dedicated wrapper
+6:  2911ms  Q: Dedicated wrapper
+7:  5317ms  Q: nbind (generic wrapper)
 ```
 
 ## Tests [![Build Status](https://secure.travis-ci.org/medikoo/deferred.png?branch=master)](https://secure.travis-ci.org/medikoo/deferred)
