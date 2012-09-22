@@ -2,13 +2,15 @@
 
 _Promises in a simple and powerful way. Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is complete, natural and __[fastest](#performance)__ promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
+Deferred is complete, __[fastest](#performance)__ and most natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
-Additionally you can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
+With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
 
 In the end you may debug your flow by __[tracking unresolved promises](#monitoring-unresolved-promises)__ or gathering __[usage statistics](#usage-statistics)__.
 
 _For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)_
+
+__If you need help with deferred, just ask on our open mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
 
 ## Example
 
