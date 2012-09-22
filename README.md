@@ -2,15 +2,19 @@
 
 _Promises in a simple and powerful way. Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is __[fastest](#performance)__ and most natural promise implementation in JavaScript, with Deferred you can write clear maintainable code that takes out maximum from asynchronicity, see file concatenation [example](#example) below.
+Deferred is complete, natural and __[fastest](#performance)__ promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
-__For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)__
+Additionally you can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
+
+In the end you may debug your flow by __[tracking unresolved promises](#monitoring-unresolved-promises)__ or gathering __[usage statistics](#usage-statistics)__.
+
+_For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)_
 
 ## Example
 
 Concat all JavaScript files in a given directory and save it to lib.js.
 
-Plain Node.js:
+### Plain Node.js:
 
 ```javascript
 var fs = require('fs');
@@ -59,7 +63,7 @@ readdir(__dirname, function (err, files) {
 });
 ```
 
-Promises approach:
+### Promises approach:
 
 ```javascript
 var promisify = require('deferred').promisify;
@@ -295,7 +299,7 @@ deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function (result)
 
 It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject the promise and resolve it with same error.
 
-In following example we take conent of each file found in an array:
+In following example we take content of each file found in an array:
 
 ```javascript
 var readFile = deferred.promisify(fs.readFile);
@@ -388,6 +392,52 @@ deferred.map(filenames, deferred.gate(function (filename) {
 	return readFile(filename, 'utf-8');
 }, 100))(function (result) {
 	// result is an array of file's contents
+});
+```
+
+## Progress and other events
+
+__Promise objects are also an event emitters__. Deferred implementation is backed by cross-environment [event-emitter solution](https://github.com/medikoo/event-emitter)
+
+Simple Ajax file uploader example:
+
+```javascript
+var ajaxFileUploader = function (url, data) {
+  var def = deferred();
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('POST', url, true);
+  xhr.onload = def.resolve;
+	xhr.onerror = function () {
+		def.resolve(new Error("Could not upload files"));
+	};
+	xhr.upload.onprogress = function (e) {
+	  def.promise.emit('progress', e);
+	};
+	xhr.send(data);
+	return def.promise;
+};
+
+var upload = ajaxFileUploader(formData);
+upload.on('progress', function () {
+  // process progress events
+});
+upload.end(function (e) {
+  // All files uploaded!
+});
+```
+### Streaming data partially
+
+Another use case would be to provide obtained data partially on the go (stream like).
+Imagine recursive directory reader that scans whole file system and provides filenames as it approaches them:
+
+```javascript
+var reader = readdirDeep(rootPath); // reader promise is returned
+reader.on('data', function (someFilenames) {
+	// Called many times during scan with obtained names
+});
+reader.end(function (allFilenames) {
+	// File-system scan finished!
 });
 ```
 
@@ -511,7 +561,7 @@ deferred.monitor();
 ```
 
 By default monitor will log error for every promise that was not resolved in 5 seconds.
-You can customise that timeout, and handle errors with your own listener:
+You can customize that timeout, and handle errors with your own listener:
 
 ```javascript
 deferred.monitor(10000, function (err) {
@@ -574,7 +624,7 @@ __Using profiler significantly affects performance don't  use it in production e
 
 ## Performance
 
-Promises just by being rich objects introduce some overhead over regular callbacks. If we do a lot asynchronous operations that are fast, performance of promise implementation that we rely on becomes a significant factor.
+Promises just by being rich objects introduce overhead over regular callbacks. If we do a lot asynchronous operations that are fast, performance of promise implementation that we rely on becomes a significant factor.
 
 _benchmark_ folder contains few plain test cases that compares Deferred to other popular promise implementations. Base of test is plain [lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback) call to self file.
 
