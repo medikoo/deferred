@@ -3,7 +3,7 @@
 // Benchmark comparing performance of promise setups (concurrent)
 // To run it, do following in package path:
 //
-// $ npm install Q jquery
+// $ npm install Q jquery when
 // $ node benchmark/concurrent.js
 
 var generate   = require('es5-ext/lib/Array/generate')
@@ -12,6 +12,7 @@ var generate   = require('es5-ext/lib/Array/generate')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
   , jqDeferred = require('jquery').Deferred
+  , when       = require('when')
   , deferred   = require('../lib')
 
   , now = Date.now
@@ -159,6 +160,38 @@ tests = [function () {
 			throw e;
 		});
 	};
+	time = now();
+	while (j--) {
+		self();
+	}
+}, function () {
+	var i = count, j = count, dlstat;
+
+	dlstat = function (path) {
+		var def = when.defer();
+		lstat(path, function (err, stats) {
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
+		});
+		return def;
+	};
+
+	self = function () {
+		dlstat(__filename).then(function () {
+			if (!--i) {
+				data["When: Dedicated wrapper"] = now() - time;
+				nextTick(next);
+			}
+		}, function (e) {
+			nextTick(function () {
+				throw e;
+			});
+		});
+	};
+
 	time = now();
 	while (j--) {
 		self();
