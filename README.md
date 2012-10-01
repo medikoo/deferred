@@ -650,7 +650,7 @@ Promise overhead (concurrent calls) x10000:
 3:   607ms  Deferred: Promisify (generic wrapper)
 4:   712ms  Deferred: Map + Promisify
 5:  1074ms  jQuery.Deferred: Dedicated wrapper
-6:  1616ms  when: Dedicated wrapper
+6:  1616ms  When: Dedicated wrapper
 7:  2994ms  Q: Dedicated wrapper
 8:  5214ms  Q: nbind (generic wrapper)
 ```
