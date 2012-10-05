@@ -1,3 +1,8 @@
+v0.6.1  --  2012.10.05
+* Fix profiler paths detection to work on Windows systems
+* Fix monitor test so it's not dependent on order in which is run
+* Added When implementation to benchmarks
+
 v0.6.0  --  2012.09.22
 Major refactor, with focus on performance and better modularization.
 * New Deferred is about x3 faster than v0.5 version
@@ -14,7 +19,7 @@ Major refactor, with focus on performance and better modularization.
 * Benchmarks
 
 v0.5.6  --  2012-07.17
-(Maintanance, as v0.6 is nearly ready for rollout).
+(Maintenance, as v0.6 is nearly ready for rollout).
 Added workaround for for v8 bug (eminent in Node v0.6):
   Defining property via descriptor on plain function, prevents us from
   setting same property directly later on different function.
@@ -33,11 +38,11 @@ v0.5.5  --  2012.06.13
 v0.5.4  --  2012.05.28
 * deferred.gate - (function extension) Handles maximum concurrency number for
   given asynchronous task. Additionally postponed calls queue length can also be
-  limitted to chosen number
+  limited to chosen number
 * Modify code so we can use es5-ext at it's latest version
 
 v0.5.3  --  2012.05.04
-* Fixed resolution of synchrounous calls in a queue of map extension, they were
+* Fixed resolution of synchronous calls in a queue of map extension, they were
   not resolved as expected
 
 v0.5.2  --  2012.05.02
@@ -75,10 +80,10 @@ v0.5.0  --  2012.04.18
 
 v0.4.3  --  2012.02.20
 * Improvements:
-  * Added support for fourth argument in deffered.map through which we can set
-    maximum number of tasks that should be run simultaneusly
+  * Added support for fourth argument in deferred.map through which we can set
+    maximum number of tasks that should be run simultaneously
   * Exposed `promisifyAsync` and `promisifySync` on deferred, and exposed by
-    defult `invokeSync` and `invokeAsync` promise extensions
+    default `invokeSync` and `invokeAsync` promise extensions
   * Added possibility to add just onsuccess callback to `end`
   * Optimize internal logic by reducing number of created unresolved promises
   * Code validation with JSLint
@@ -93,7 +98,7 @@ v0.4.2  --  2012.01.26
 v0.4.1  --  2012.01.26
 * Fixed logic error for multi argument `deferred` call. It was same case as with
   `map` fixed with v0.4.0: In specific cases resolve was called in callback
-  passed to promise, cause of that any errors that occured in same event loop
+  passed to promise, cause of that any errors that occurred in same event loop
   were silent.
 
 v0.4.0  --  2012.01.19
@@ -109,7 +114,7 @@ v0.4.0  --  2012.01.19
 	* It no longer returns its promise
 * Fixed `map` extension. There was logic error: in specific cases resolve of map
   was called in callback passed to promise, cause of that any errors that
-  occured in same event loop were silent.
+  occurred in same event loop were silent.
 * Removed `cb` extension as now `end` has same functionality
 
 v0.3.1  --  2012.01.13
@@ -129,13 +134,13 @@ Major update:
   * cb - end promise chain with regular asynchronous callback
   * get - get property of resolved object
   * invoke - invoke function on resolved object (supports both synchronous and
-    asynchrouns functions)
+    asynchronous functions)
   * map - promise aware version of Array's map
   * match - match result array to function arguments
   * reduce promise aware version of Array's reduce
 * Replaced asyncToPromise (used as a2p or ba2p) and syncToPromise (used as s2p
   or bs2p) with 'promisify', it works as 'bind' version for both asynchronous
-  and synchrounous functions and is available on deferred as deferred.promisify.
+  and synchronous functions and is available on deferred as deferred.promisify.
   It has also been improved to support asynchronous functions that return more
   than one value.
 * Rewritten internal logic. Currently promises are backed with _base object
