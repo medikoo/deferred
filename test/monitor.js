@@ -13,7 +13,7 @@ module.exports = function (t, a, d) {
 	df = deferred();
 	setTimeout(function () {
 		a(invoked, true, "Invoked");
-		t(cachet, cachec);
+		t(cachet == null ? false : cachet, cachec);
 		df.resolve();
 		d();
 	}, 150);
