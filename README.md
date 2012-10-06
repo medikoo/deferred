@@ -104,7 +104,30 @@ In your project path:
 
 ### Browser
 
-You can easily create browser bundle with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Mind that it relies on some EcmaScript5 features, so for older browsers you need as well [es5-shim](https://github.com/kriskowal/es5-shim)
+Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
+
+```
+$ npm install -g webmake
+$ git clone git://github.com/medikoo/deferred.git
+$ cd deferred
+$ npm install
+$ cd ..
+$ webmake --name=deferred deferred/lib/index.js deferred.js
+```
+
+Last command bundles deferred with all it's functionalities, but you may need just a subset, you can have that by addressing specific modules directly, e.g. with following you will build just core functionality with map extension:
+
+```
+$ webmake --name=deferred --include=deferred/lib/ext/promise/map.js deferred/lib/deferred.js deferred.js
+```
+
+If you work with AMD modules, add _amd_ option, so generated bundle is one:
+
+```
+$ webmake --name=deferred --amd deferred/lib/index.js deferred.js
+```
+
+_Mind that deferred relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
 ## Deferred/Promise concept
 
