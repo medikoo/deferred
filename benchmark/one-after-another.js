@@ -153,7 +153,7 @@ tests = [function () {
 	time = now();
 	self();
 }, function () {
-	var i = count, j = count, dlstat;
+	var i = count, dlstat;
 
 	dlstat = function (path) {
 		var def = when.defer();
