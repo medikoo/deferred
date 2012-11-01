@@ -2,7 +2,7 @@
 
 _Promises in a simple and powerful way. Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is complete, __[fastest](#performance)__ and most natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
+Deferred is complete, __[one of the fastest](#performance)__ and most natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
 With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
 
@@ -659,21 +659,21 @@ _Example output taken under Node v0.8.9 on 2008 MBP._
 Promise overhead (calling one after another) x10000:
 
 1:   460ms  Base (plain Node.js lstat call)
+5:   504ms  When: Dedicated wrapper
 2:   644ms  Deferred: Dedicated wrapper
 3:   719ms  Deferred: Promisify (generic wrapper)
 4:   991ms  jQuery.Deferred: Dedicated wrapper
-5:  1171ms  When: Dedicated wrapper
 6:  3344ms  Q: Dedicated wrapper
 7:  7027ms  Q: nbind (generic wrapper)
 
 Promise overhead (concurrent calls) x10000:
 
 1:   303ms  Base (plain Node.js lstat call)
+6:   498ms  When: Dedicated wrapper
 2:   533ms  Deferred: Dedicated wrapper
 3:   607ms  Deferred: Promisify (generic wrapper)
 4:   712ms  Deferred: Map + Promisify
 5:  1074ms  jQuery.Deferred: Dedicated wrapper
-6:  1616ms  When: Dedicated wrapper
 7:  2994ms  Q: Dedicated wrapper
 8:  5214ms  Q: nbind (generic wrapper)
 ```
