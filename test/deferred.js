@@ -124,5 +124,12 @@ module.exports = {
 		}, a.never).end(d, d);
 		def1.resolve(p2);
 		def2.resolve(x);
+	},
+	"Reject": function (t, a) {
+		var e = new Error("Error!");
+		a.throws(function () {
+			t.reject("Error!");
+		}, "Throw on non error reject");
+		t().reject(e).end(a.never, function (result) { a(result, e); });
 	}
 };
