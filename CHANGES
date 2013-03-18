@@ -1,3 +1,7 @@
+v0.6.2  --  2013.03.18
+* Provide deferred.reject to allow configuration of v0.7 safe working flows
+* Do not require whole event-emitter but just needed modules
+
 v0.6.1  --  2012.10.05
 * Fix profiler paths detection to work on Windows systems
 * Fix monitor test so it's not dependent on order in which is run
