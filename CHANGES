@@ -1,3 +1,6 @@
+v0.6.3  --  2013.03.21
+* promise.finally extension
+
 v0.6.2  --  2013.03.18
 * Provide deferred.reject to allow configuration of v0.7 safe working flows
 * Do not require whole event-emitter but just needed modules
