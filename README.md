@@ -71,7 +71,7 @@ readdir(__dirname, function (err, files) {
 var promisify = require('deferred').promisify;
 var fs = require('fs');
 
-  // We prepare promisified versions of each asynchronous function
+// Convert node.js async functions, into ones that return a promise
 var readdir = promisify(fs.readdir);
 var readFile = promisify(fs.readFile, 1);
 var writeFile = promisify(fs.writeFile);
