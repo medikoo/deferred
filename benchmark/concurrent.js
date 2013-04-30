@@ -176,7 +176,7 @@ tests = [function () {
 				def.resolve(stats);
 			}
 		});
-		return def;
+		return def.promise;
 	};
 
 	self = function () {
