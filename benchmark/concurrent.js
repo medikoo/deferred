@@ -107,13 +107,13 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).then(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) {
 				data["Q: Dedicated wrapper"] = now() - time;
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}).end();
+		});
 	};
 	time = now();
 	while (j--) {
@@ -123,13 +123,13 @@ tests = [function () {
 	var i = count, j = count, dlstat = Q.nbind(lstat, null);
 
 	self = function () {
-		dlstat(__filename).then(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) {
 				data["Q: nbind (generic wrapper)"] = now() - time;
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}).end();
+		});
 	};
 	time = now();
 	while (j--) {

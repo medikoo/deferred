@@ -95,7 +95,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).then(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
@@ -103,7 +103,7 @@ tests = [function () {
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}).end();
+		});
 	};
 	time = now();
 	self();
@@ -111,7 +111,7 @@ tests = [function () {
 	var i = count, dlstat = Q.nbind(lstat, null);
 
 	self = function () {
-		dlstat(__filename).then(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
@@ -119,7 +119,7 @@ tests = [function () {
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}).end();
+		});
 	};
 	time = now();
 	self();
