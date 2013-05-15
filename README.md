@@ -91,7 +91,7 @@ writeFile(__dirname + '/lib.js',
 	// Concatenate files content into one string
 	.invoke('join', '\n')
 
-).end(); // If there was any error on the way throw it
+).done(); // If there was any error on the way throw it
 ```
 
 ## Installation
@@ -233,7 +233,7 @@ delayedAdd(2, 3)(function (result) {
 
 #### Ending chain
 
-To expose the errors that are not handled, end promise chain with `.end()`, then error that broke the chain will be thrown:
+To expose the errors that are not handled, end promise chain with `.done()`, then error that broke the chain will be thrown:
 
 ```javascript
 delayedAdd(2, 3)
@@ -242,17 +242,19 @@ delayedAdd(2, 3)
 })(function (result) {
 	// never executed
 })
-.end(); // throws error!
+.done(); // throws error!
 ```
 
-__It's important to end your promise chains with `end` otherwise eventual ignored errors will not be exposed__.  
+__It's important to end your promise chains with `done` otherwise eventual ignored errors will not be exposed__.  
 
-Signature of `end` function is same as for `then` (or promise itself)
+Signature of `done` function is same as for `then` (or promise itself)
+
+`done` is aliased with `end` function, however `end` will be removed with introduction of v0.7 release.
 
 ```javascript
 promise(function (value) {
 	// process
-}).end(function (result) {
+}).done(function (result) {
 	// process result
 }, function (err) {
 	// handle error
@@ -447,7 +449,7 @@ var upload = ajaxFileUploader(formData);
 upload.on('progress', function () {
   // process progress events
 });
-upload.end(function (e) {
+upload.done(function (e) {
   // All files uploaded!
 });
 ```
@@ -461,7 +463,7 @@ var reader = readdirDeep(rootPath); // reader promise is returned
 reader.on('data', function (someFilenames) {
 	// Called many times during scan with obtained names
 });
-reader.end(function (allFilenames) {
+reader.done(function (allFilenames) {
 	// File-system scan finished!
 });
 ```
@@ -473,7 +475,7 @@ When preparing client-side file (with help of e.g. [modules-webmake](https://git
 
 ### aside
 
-Third brother of `then` and `end`. Has same signature but neither extends chain nor ends it, instead splits it by returning promise on which it was invoked. Useful when we want to return promise, but on a side (in parallel) do something else with obtained value:
+Third brother of `then` and `done`. Has same signature but neither extends chain nor ends it, instead splits it by returning promise on which it was invoked. Useful when we want to return promise, but on a side (in parallel) do something else with obtained value:
 
 ```javascript
 var x = deferred({ foo: 'bar' });

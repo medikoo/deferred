@@ -72,6 +72,40 @@ module.exports = {
 			a(deferred(1)(p1), p1, "Resolved");
 		}
 	},
+	"Done": {
+		"No args": {
+			"Success": function (a) {
+				a(deferred(null).done(), undefined);
+			},
+			"Error": function (a) {
+				a.throws(function () {
+					deferred(e).done();
+				});
+			}
+		},
+		"Args": {
+			"Success": function (a) {
+				deferred(x).done(function (res) {
+					a(res, x, "Result");
+				}, a.never);
+			},
+			"Error": function (a) {
+				deferred(e).done(a.never, function (err) {
+					a(err, e, "Error");
+				});
+			},
+			"Success #2": function (a) {
+				deferred(x).done(function (res) {
+					a(res, x, "Result");
+				}, null);
+			},
+			"Error: Throw": function (a) {
+				a.throws(function () {
+					deferred(e).done(a.never, null);
+				});
+			}
+		}
+	},
 	"End": {
 		"No args": {
 			"Success": function (a) {
