@@ -1,3 +1,7 @@
+v0.6.4  --  2013.05.15
+* Rename `done` to `end` and leave `end` as an alias for `done`.
+  With v0.7 release `end` alias will be removed.
+
 v0.6.3  --  2013.03.21
 * promise.finally extension
 
