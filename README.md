@@ -1,6 +1,6 @@
 # Deferred – Modular and fast Promises implementation for JavaScript
 
-_Promises in a simple and powerful way. Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
+_Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
 Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
