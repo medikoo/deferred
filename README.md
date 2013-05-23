@@ -1,8 +1,8 @@
-# Deferred – Asynchronous JavaScript with Promises
+# Deferred – Modular and fast Promises implementation for JavaScript
 
 _Promises in a simple and powerful way. Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is complete, __[one of the fastest](#performance)__ and most natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
+Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
 With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
 
