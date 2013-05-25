@@ -607,7 +607,7 @@ deferred.profile(); // Start collecting statistics
 
 //...
 
-var stats = profiler.profileEnd(); // End profiling
+var stats = deferred.profileEnd(); // End profiling
 console.log(stats.log); // See readable output
 ```
 
