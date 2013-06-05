@@ -499,6 +499,20 @@ var asyncFunction = function (x, y, callback)  {
 });
 ```
 
+### finally
+
+Invoked given callback when promise is either fulfilled or rejected
+
+```javascript
+
+var prepare = function () { ... }
+  , cleanup = function () { ... }
+
+prepare();
+promise = asyncFn();
+promise.finally(cleanup);
+```
+
 ### get
 
 To directly get to object property use `get`
