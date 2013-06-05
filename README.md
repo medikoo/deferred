@@ -636,12 +636,11 @@ This extension affects performance and it's best not to use it in production env
 Being able to see how many promises were initialized (and where) in our flow can be helpful to track application issues, it's also good way to confirm that constructed flow works as intended.
 
 ```javascript
-var profiler = deferred.profiler();
-profiler.profile(); // Start collecting statistics
+deferred.profile(); // Start collecting statistics
 
 //...
 
-var stats = profiler.profileEnd(); // End profiling
+var stats = deferred.profileEnd(); // End profiling
 console.log(stats.log); // See readable output
 ```
 
