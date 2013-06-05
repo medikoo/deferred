@@ -487,6 +487,25 @@ var y = promise.aside(function (value) {
 console.log(y === promise); // true
 ```
 
+### catch
+
+Same as `then` but accepts only `onFail` callback.
+
+```javascript
+
+var def = deferred(), promise2;
+
+promise2 = def.promise.catch(function () {
+  return 'Never mind';
+});
+
+def.reject(new Error("Error"));
+
+promise2.done(function (value) {
+  console.log(value); // Prints "Never mind"
+});
+```
+
 ### cb
 
 Convert back to callback style. Useful if you want to process regular callback at the end of promise chain. Simple use case would be regular asynchronous function built internally with promises. `cb` also makes sure that your callback is not called immediately but in next tick earliest.
