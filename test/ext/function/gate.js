@@ -12,6 +12,7 @@ module.exports = function (t) {
 	};
 	return {
 		"Limit": function (a) {
+			var invoked, x = {};
 			gfn = t.call(fn, 2);
 			dx = deferred();
 			a(gfn(dx.promise, 'x'), dx.promise, "#1");  // x
@@ -19,6 +20,7 @@ module.exports = function (t) {
 			a(gfn(dy.promise, 'y'), dy.promise, "#2");  // y
 			dz = deferred();
 			a.not(hz = gfn(dz.promise, 'z'), dz.promise, "#3 blocked");
+			hz.on('test', function (arg) { invoked = arg; });
 			hz.end(function (r) {
 				released = true;
 				a(r, z, "Held resolution");
@@ -28,6 +30,8 @@ module.exports = function (t) {
 			dz.resolve(z);
 			resolved = true;
 			dy.resolve(y); // z, 4
+			dz.promise.emit('test', x);
+			a(invoked, x, "Events unified");
 			a(released, true, "Released");
 			resolved = false;
 			dx.resolve(x);
@@ -77,9 +81,7 @@ module.exports = function (t) {
 			// x, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.end(function (r) {
-				a(r, z, "#3 held");
-			});
+			hz.end(function (r) { a(r, z, "#3 held"); });
 			// x, y, z
 			gfn(x).end(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
