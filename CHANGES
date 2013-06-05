@@ -1,3 +1,8 @@
+v0.6.5  --  2013.06.05
+* `catch` extension
+* Unify listeners handling in promises handled by gate
+* Improved documentation
+
 v0.6.4  --  2013.05.15
 * Rename `done` to `end` and leave `end` as an alias for `done`.
   With v0.7 release `end` alias will be removed.
