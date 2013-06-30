@@ -435,14 +435,14 @@ var ajaxFileUploader = function (url, data) {
 
   xhr.open('POST', url, true);
   xhr.onload = def.resolve;
-	xhr.onerror = function () {
-		def.resolve(new Error("Could not upload files"));
-	};
-	xhr.upload.onprogress = function (e) {
-	  def.promise.emit('progress', e);
-	};
-	xhr.send(data);
-	return def.promise;
+  xhr.onerror = function () {
+    def.resolve(new Error("Could not upload files"));
+  };
+  xhr.upload.onprogress = function (e) {
+    def.promise.emit('progress', e);
+  };
+  xhr.send(data);
+  return def.promise;
 };
 
 var upload = ajaxFileUploader(formData);
