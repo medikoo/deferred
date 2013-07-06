@@ -12,11 +12,15 @@ _For good insight into promise/deferred concept and in general asynchronous prog
 
 __If you need help with deferred, just ask on our open mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
 
-## Example
+## Examples
 
-Concat all JavaScript files in a given directory and save it to lib.js.
+There are examples in the dedicated [example folder](example).
 
-### Plain Node.js:
+And here is below an example demonstrating the difference of the callback and
+promise approaches (Note: to run the example, simply concat all JavaScript files
+in a given directory and save it to lib.js).
+
+### Implementation using the classical Node.js approach with callbacks:
 
 ```javascript
 var fs = require('fs');
@@ -65,7 +69,7 @@ readdir(__dirname, function (err, files) {
 });
 ```
 
-### Promises approach:
+### Implementation using promises approach:
 
 ```javascript
 var promisify = require('deferred').promisify;
