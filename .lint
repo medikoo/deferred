@@ -38,6 +38,10 @@ jshint.global+ console, __filename, process
 jslint_medikoo.predef+ console, __filename, process
 jshint.global+ console, __filename, process
 
+./examples/test-with-mocha-and-should.js
+jslint_medikoo.predef+ describe, it, console, setTimeout
+jshint.global+ describe, it, console, setTimeout
+
 ./lib/deferred.js
 jslint_medikoo.predef+ setTimeout, clearTimeout
 jshint.global+ setTimeout, clearTimeout

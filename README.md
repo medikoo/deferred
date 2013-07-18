@@ -16,7 +16,7 @@ __If you need help with deferred, just ask on our open mailing list: [deferred-j
 
 Let's take an example script that concatenates all JavaScript files in a given directory and saves it to lib.js.
 
-### Callbacks approach (plain Node.js):
+### Plain Node.js, callbacks approach
 
 ```javascript
 var fs = require('fs');
@@ -65,7 +65,7 @@ readdir(__dirname, function (err, files) {
 });
 ```
 
-### Implementation using promises approach:
+### Implementation with promises:
 
 ```javascript
 var promisify = require('deferred').promisify;
