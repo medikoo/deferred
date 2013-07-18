@@ -1,4 +1,4 @@
-# Deferred – Modular and fast Promises implementation for JavaScript
+# Deferred – Modular and fast Promises implementation for JavaScript [![Build Status](https://secure.travis-ci.org/medikoo/deferred.png?branch=master)](https://secure.travis-ci.org/medikoo/deferred)
 
 _Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
