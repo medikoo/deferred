@@ -1,7 +1,5 @@
 'use strict';
 
-// Demonstration of asynchrouus while loop constructed with promises
-//
 // Let's say we're after content that is paginated over many pages on some
 // website (like search results). We don't know how many pages it spans.
 // We only know by reading page n whether page n + 1 exists.
