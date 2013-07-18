@@ -65,7 +65,7 @@ readdir(__dirname, function (err, files) {
 });
 ```
 
-### Promises approach:
+### Implementation using promises approach:
 
 ```javascript
 var promisify = require('deferred').promisify;
