@@ -1,4 +1,5 @@
-# Deferred – Modular and fast Promises implementation for JavaScript
+# Deferred
+## Modular and fast Promises implementation for JavaScript
 
 _Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
@@ -10,7 +11,7 @@ In the end you may debug your flow by __[tracking unresolved promises](#monitori
 
 _For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)_
 
-__If you need help with deferred, just ask on our open mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
+__If you need help with deferred, please ask on dedicated mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
 
 ## Comparision with callback style
 
@@ -716,7 +717,7 @@ Promise overhead (concurrent calls) x10000:
 8: 17868ms  Q: nbind (generic wrapper)
 ```
 
-## Tests [![Build Status](https://secure.travis-ci.org/medikoo/deferred.png?branch=master)](https://secure.travis-ci.org/medikoo/deferred)
+## Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
 
 __Covered by over 300 hundred unit tests__
 
