@@ -2,7 +2,7 @@
 
 _Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises (__[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
+Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises ( __[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
 With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
 
@@ -12,15 +12,11 @@ _For good insight into promise/deferred concept and in general asynchronous prog
 
 __If you need help with deferred, just ask on our open mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
 
-## Examples
+## Comparision with callback style
 
-There are examples in the dedicated [example folder](example).
+Let's take an example script that concatenates all JavaScript files in a given directory and saves it to lib.js.
 
-And here is below an example demonstrating the difference of the callback and
-promise approaches (Note: to run the example, simply concat all JavaScript files
-in a given directory and save it to lib.js).
-
-### Implementation using the classical Node.js approach with callbacks:
+### Callbacks approach (plain Node.js):
 
 ```javascript
 var fs = require('fs');
@@ -97,6 +93,10 @@ writeFile(__dirname + '/lib.js',
 
 ).done(); // If there was any error on the way throw it
 ```
+
+## Examples
+
+See [examples folder](examples) for a demonstration of promises usage in some other real world cases.
 
 ## Installation
 
