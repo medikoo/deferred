@@ -126,13 +126,21 @@ Last command bundles deferred with all it's functionalities, but you may need ju
 $ webmake --name=deferred --include=deferred/lib/ext/promise/map.js deferred/lib/deferred.js deferred.js
 ```
 
-If you work with AMD modules, add _amd_ option, so generated bundle is one:
+If you work with AMD modules, use _amd_ option, so generated bundle is one:
+
+```
+$ webmake --amd deferred/lib/index.js deferred.js
+```
+
+To explicitly name AMD module pass _name_ option:
 
 ```
 $ webmake --name=deferred --amd deferred/lib/index.js deferred.js
 ```
 
-_Mind that deferred relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
+
+
+_Mind that deferred relies on some ECMAScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
 ## Deferred/Promise concept
 
