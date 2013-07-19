@@ -1,48 +1,24 @@
 'use strict';
 
-// Demonstration of asynchrouus while loop constructed with promises
-//
-// Let's say we're after content that is paginated over many pages on some
-// website (like search results). We don't know how many pages it spans.
-// We only know by reading page n whether page n + 1 exists.
-
-// 1. Define simple download function, it downloads page at given path from
-//    predefinied domain and returns promise:
+// While loops are usually constructruted as recurrent asynchronous functions:
 
 var deferred = require('deferred');
-var http = require('http');
 
-var getPage = function (path) {
+var count = 0, limit = 10, get;
+
+get = function self() {
 	var d = deferred();
-
-	http.get({
-		host: 'www.example.com',
-		path: path
-	}, function (res) {
-		res.setEncoding('utf-8');
-		var content = "";
-		res.on('data', function (data) {
-			content += data;
-		});
-		res.on('end', function () {
-			d.resolve(content);
-		});
-	}).on('error', d.reject);
-
+	setTimeout(function () {
+		d.resolve(++count);
+	}, 500);
 	return d.promise;
 };
 
-// 2. Invoke promise loop
-
-var n = n, result;
-getPage('/page/' + n)(function process(content) {
-	var isNextPage;
-	// ...populate result...
-
-	// ...decide whether we need to download next page
-
-	if (isNextPage) return getPage('/page/' + (++n))(process);
-	return result;
-}).done(function (result) {
-	// process final result
+// Invoke while loop:
+get().then(function self(value) {
+	console.log(value);
+	if (value < limit) return get().then(self);
+	return value;
+}).done(function () {
+	console.log("Done!");
 });
