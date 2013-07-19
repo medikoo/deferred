@@ -9,6 +9,8 @@ var deferred = require('deferred');
 // Convert Node.js async functions, into ones that return a promise
 var promisify = require('deferred').promisify;
 var readdir = promisify(fs.readdir);
+var stat = promisify(fs.stat);
+var readFile = deferred.promisify(fs.readFile);
 
 // Put some HTML files in this folder
 var DOC_FOLDER_PATH = '/tmp/test';
@@ -51,14 +53,15 @@ function addModifiedForFiles(doc_metadata) {
         def.resolve(null);
     }
 
-    fs.stat(doc_metadata.path, function(err, stats) {
+    stat(doc_metadata.path).done(function(stats) {
         // Directories are unwanted
         if (!stats.isFile()) {
             def.resolve(null);
-            return;
         }
         doc_metadata.modified = stats.mtime;
         def.resolve(doc_metadata);
+    }, function(err) {
+        def.resolve(new Error(err));
     });
 
     return def.promise;
@@ -67,9 +70,11 @@ function addModifiedForFiles(doc_metadata) {
 function addContent(doc_metadata) {
     var def = deferred();
 
-    fs.readFile(doc_metadata.path, function(err, data) {
+    readFile(doc_metadata.path).done(function(data) {
         doc_metadata.html = data;
         def.resolve(doc_metadata);
+    }, function(err) {
+        def.resolve(new Error(err));
     });
 
     return def.promise;
