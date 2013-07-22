@@ -21,19 +21,12 @@ var DOC_FOLDER_PATH = '/tmp/test';
 function listDocs() {
     readdir(DOC_FOLDER_PATH)
         .invoke('filter', function(file_name) {
-            // Unix "hidden" files (such as .DS_Store, etc.) are unwanted
+            // Unix hidden files (such as .DS_Store, etc.) are unwanted
             return file_name.indexOf('.') !== 0;
-        })
-        .map(function(file_name) {
-            var file_path = path.join(DOC_FOLDER_PATH, file_name);
-            var doc_metadata = {
-                path: file_path
-            };
-            return doc_metadata;
         })
         .map(addModifiedForFiles)
         .invoke('filter', function(doc_metadata) {
-            // Filtering out the directories
+            // Filtering out directories
             return !!doc_metadata;
         })
         .map(addContent)
@@ -45,11 +38,16 @@ function listDocs() {
         });
 }
 
-function addModifiedForFiles(doc_metadata) {
+function addModifiedForFiles(file_name) {
     var def = deferred();
 
+    var file_path = path.join(DOC_FOLDER_PATH, file_name);
+    var doc_metadata = {
+        path: file_path
+    };
+
     stat(doc_metadata.path).done(function(stats) {
-        // Directories are unwanted, for them null is returned
+        // Directories are unwanted, null is to filter them out later on
         if (!stats.isFile()) {
             def.resolve(null);
         }
