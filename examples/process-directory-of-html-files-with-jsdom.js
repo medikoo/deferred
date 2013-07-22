@@ -10,7 +10,7 @@ var deferred = require('deferred');
 var promisify = require('deferred').promisify;
 var readdir = promisify(fs.readdir);
 var stat = promisify(fs.stat);
-var readFile = deferred.promisify(fs.readFile);
+var readFile = promisify(fs.readFile);
 
 // Put some HTML files in this folder
 var DOC_FOLDER_PATH = '/tmp/test';
@@ -20,11 +20,11 @@ var DOC_FOLDER_PATH = '/tmp/test';
  */
 function listDocs() {
     readdir(DOC_FOLDER_PATH)
-        .map(function(file_name) {
+        .invoke('filter', function(file_name) {
             // Unix "hidden" files (such as .DS_Store, etc.) are unwanted
-            if (file_name.indexOf('.') === 0) {
-                return null;
-            }
+            return file_name.indexOf('.') !== 0;
+        })
+        .map(function(file_name) {
             var file_path = path.join(DOC_FOLDER_PATH, file_name);
             var doc_metadata = {
                 path: file_path
@@ -33,8 +33,7 @@ function listDocs() {
         })
         .map(addModifiedForFiles)
         .invoke('filter', function(doc_metadata) {
-            // Filtering to keep only the wanted files (not hidden, not
-            // directories).
+            // Filtering out the directories
             return !!doc_metadata;
         })
         .map(addContent)
@@ -49,12 +48,8 @@ function listDocs() {
 function addModifiedForFiles(doc_metadata) {
     var def = deferred();
 
-    if (!doc_metadata) {
-        def.resolve(null);
-    }
-
     stat(doc_metadata.path).done(function(stats) {
-        // Directories are unwanted
+        // Directories are unwanted, for them null is returned
         if (!stats.isFile()) {
             def.resolve(null);
         }
