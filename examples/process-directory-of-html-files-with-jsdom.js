@@ -29,8 +29,9 @@ function listDocs() {
             // Filtering out directories
             return !!doc_metadata;
         })
-        .map(addContent)
-        .map(addTitleAndDescription)
+        .map(function(doc_metadata) {
+            return addContent(doc_metadata).then(addTitleAndDescription);
+        })
         .done(function(result) {
             logger.info("result:", result);
         }, function(err) {
