@@ -39,25 +39,19 @@ function listDocs() {
 }
 
 function addModifiedForFiles(file_name) {
-    var def = deferred();
-
     var file_path = path.join(DOC_FOLDER_PATH, file_name);
-    var doc_metadata = {
-        path: file_path
-    };
+    return stat(file_path).then(function(stats) {
+        var doc_metadata = {
+            path: file_path,
+            modified: stats.mtime
+        };
 
-    stat(doc_metadata.path).done(function(stats) {
         // Directories are unwanted, null is to filter them out later on
         if (!stats.isFile()) {
-            def.resolve(null);
+            return null;
         }
-        doc_metadata.modified = stats.mtime;
-        def.resolve(doc_metadata);
-    }, function(err) {
-        def.resolve(new Error(err));
+        return doc_metadata;
     });
-
-    return def.promise;
 }
 
 function addContent(doc_metadata) {
