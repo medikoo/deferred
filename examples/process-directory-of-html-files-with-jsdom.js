@@ -1,105 +1,67 @@
 'use strict';
 
-// Lists the content of the DOC_FOLDER_PATH, only at first level, ie not
-// recursively.
+// Read meta data out of each html file in given directory.
+// Requires jsdom package installed, and some html files
 
-var logger = console;
-var path = require('path');
 var fs = require('fs');
+var path = require('path');
 var jsdom = require('jsdom');
-
 var deferred = require('deferred');
 
 // Convert Node.js async functions, into ones that return a promise
 var promisify = require('deferred').promisify;
 var readdir = promisify(fs.readdir);
-var stat = promisify(fs.stat);
 var readFile = promisify(fs.readFile);
 
 // Put some HTML files in this folder
-var DOC_FOLDER_PATH = '/tmp/test';
+var root = '/replace/with/valid/path';
 
-readdir(DOC_FOLDER_PATH)
-    .invoke('filter', function(fileName) {
-        // Unix hidden files (such as .DS_Store, etc.) are unwanted
-        return fileName.indexOf('.') !== 0;
-    })
-    .map(addModifiedForFiles)
-    .invoke('filter', function(docMetadata) {
-        // Filtering out directories
-        return !!docMetadata;
-    })
-    .map(function(docMetadata) {
-        return addContent(docMetadata).then(addTitleAndDescription);
-    })
-    .done(function(result) {
-        logger.info("result:", result);
-    }, function(err) {
-        logger.error(err);
-    });
+var process, result = {};
 
-function addModifiedForFiles(fileName) {
-    var filePath = path.join(DOC_FOLDER_PATH, fileName);
-    return stat(filePath).then(function(stats) {
-        var docMetadata = {
-            path: filePath,
-            modified: stats.mtime
-        };
+process = function (html) {
+	var def = deferred();
 
-        // Directories are unwanted, null is to filter them out later on
-        if (!stats.isFile()) {
-            return null;
-        }
-        return docMetadata;
-    });
-}
+	// In the metadata we are interested in the file relative path and not the
+	// file absolute path (this is just a choice for this example not related
+	// with promises or deferred).
+	jsdom.env({
+		html: String(html),
+		done: function (errors, window) {
+			var data, elems;
+			if (errors) {
+				def.reject(new Error(errors));
+				return;
+			}
 
-function addContent(docMetadata) {
-    return readFile(docMetadata.path).then(function(data) {
-        docMetadata.html = data;
-        return docMetadata;
-    });
-}
+			data = {};
+			// The title is the content of the 1st "h1" element
+			elems = window.document.getElementsByTagName('h1');
+			if (elems.length) data.title = elems[0].textContent;
 
-function addTitleAndDescription(docMetadata) {
-    var def = deferred();
+			// The description is the content of the 1st "p" element
+			elems = window.document.getElementsByTagName('p');
+			if (elems.length) data.description = elems[0].textContent;
+			def.resolve(data);
+		}
+	});
 
-    // In the metadata we are interested in the file relative path and not the
-    // file absolute path (this is just a choice for this example not related
-    // with promises or deferred).
-    var rpath = path.relative(DOC_FOLDER_PATH, docMetadata.path);
-    docMetadata.path = rpath;
+	return def.promise;
+};
 
-    jsdom.env({
-        html: docMetadata.html,
-        done: function (errors, window) {
-            if (errors) {
-                logger.error(errors);
-                def.resolve(new Error(errors));
-            }
+// Read folder
+readdir(root).map(function (fileName) {
+	// Process only HTML files
+	if (path.extname(fileName) !== '.html') return;
 
-            // Deleting the HTML content that is not needed anymore
-            delete docMetadata.html;
-
-            var elems;
-            // Default the title to the file relative path
-            var title = rpath;
-            // The title is the content of the 1st "h1" element
-            elems = window.document.getElementsByTagName('h1');
-            if (elems.length) {
-                title = elems[0].textContent;
-            }
-            docMetadata.title = title;
-            var description = "";
-            // The description is the content of the 1st "p" element
-            elems = window.document.getElementsByTagName('p');
-            if (elems.length) {
-                description = elems[0].textContent;
-            }
-            docMetadata.description = description;
-            def.resolve(docMetadata);
-        }
-    });
-
-    return def.promise;
-}
+	// Read file content
+	return readFile(path.resolve(root, fileName))
+		// Read meta data out of it
+		.then(process)
+		// Assign to result
+		.aside(function (data) {
+			result[fileName] = data;
+		});
+}).done(function () {
+	// Print final result
+	console.info("Result:", result);
+});
