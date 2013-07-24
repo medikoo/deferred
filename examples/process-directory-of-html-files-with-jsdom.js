@@ -20,17 +20,17 @@ var DOC_FOLDER_PATH = '/tmp/test';
  */
 function listDocs() {
     readdir(DOC_FOLDER_PATH)
-        .invoke('filter', function(file_name) {
+        .invoke('filter', function(fileName) {
             // Unix hidden files (such as .DS_Store, etc.) are unwanted
-            return file_name.indexOf('.') !== 0;
+            return fileName.indexOf('.') !== 0;
         })
         .map(addModifiedForFiles)
-        .invoke('filter', function(doc_metadata) {
+        .invoke('filter', function(docMetadata) {
             // Filtering out directories
-            return !!doc_metadata;
+            return !!docMetadata;
         })
-        .map(function(doc_metadata) {
-            return addContent(doc_metadata).then(addTitleAndDescription);
+        .map(function(docMetadata) {
+            return addContent(docMetadata).then(addTitleAndDescription);
         })
         .done(function(result) {
             logger.info("result:", result);
@@ -39,11 +39,11 @@ function listDocs() {
         });
 }
 
-function addModifiedForFiles(file_name) {
-    var file_path = path.join(DOC_FOLDER_PATH, file_name);
-    return stat(file_path).then(function(stats) {
-        var doc_metadata = {
-            path: file_path,
+function addModifiedForFiles(fileName) {
+    var filePath = path.join(DOC_FOLDER_PATH, fileName);
+    return stat(filePath).then(function(stats) {
+        var docMetadata = {
+            path: filePath,
             modified: stats.mtime
         };
 
@@ -51,16 +51,16 @@ function addModifiedForFiles(file_name) {
         if (!stats.isFile()) {
             return null;
         }
-        return doc_metadata;
+        return docMetadata;
     });
 }
 
-function addContent(doc_metadata) {
+function addContent(docMetadata) {
     var def = deferred();
 
-    readFile(doc_metadata.path).done(function(data) {
-        doc_metadata.html = data;
-        def.resolve(doc_metadata);
+    readFile(docMetadata.path).done(function(data) {
+        docMetadata.html = data;
+        def.resolve(docMetadata);
     }, function(err) {
         def.resolve(new Error(err));
     });
@@ -68,17 +68,17 @@ function addContent(doc_metadata) {
     return def.promise;
 }
 
-function addTitleAndDescription(doc_metadata) {
+function addTitleAndDescription(docMetadata) {
     var def = deferred();
 
     // In the metadata we are interested in the file relative path and not the
     // file absolute path (this is just a choice for this example not related
     // with promises or deferred).
-    var rpath = path.relative(DOC_FOLDER_PATH, doc_metadata.path);
-    doc_metadata.path = rpath;
+    var rpath = path.relative(DOC_FOLDER_PATH, docMetadata.path);
+    docMetadata.path = rpath;
 
     jsdom.env({
-        html: doc_metadata.html,
+        html: docMetadata.html,
         done: function (errors, window) {
             if (errors) {
                 logger.error(errors);
@@ -86,7 +86,7 @@ function addTitleAndDescription(doc_metadata) {
             }
 
             // Deleting the HTML content that is not needed anymore
-            delete doc_metadata.html;
+            delete docMetadata.html;
 
             var elems;
             // Default the title to the file relative path
@@ -96,15 +96,15 @@ function addTitleAndDescription(doc_metadata) {
             if (elems.length) {
                 title = elems[0].textContent;
             }
-            doc_metadata.title = title;
+            docMetadata.title = title;
             var description = "";
             // The description is the content of the 1st "p" element
             elems = window.document.getElementsByTagName('p');
             if (elems.length) {
                 description = elems[0].textContent;
             }
-            doc_metadata.description = description;
-            def.resolve(doc_metadata);
+            docMetadata.description = description;
+            def.resolve(docMetadata);
         }
     });
 
