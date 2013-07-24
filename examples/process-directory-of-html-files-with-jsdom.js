@@ -56,16 +56,10 @@ function addModifiedForFiles(fileName) {
 }
 
 function addContent(docMetadata) {
-    var def = deferred();
-
-    readFile(docMetadata.path).done(function(data) {
+    return readFile(docMetadata.path).then(function(data) {
         docMetadata.html = data;
-        def.resolve(docMetadata);
-    }, function(err) {
-        def.resolve(new Error(err));
+        return docMetadata;
     });
-
-    return def.promise;
 }
 
 function addTitleAndDescription(docMetadata) {
