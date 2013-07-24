@@ -13,7 +13,7 @@ var promisify = require('deferred').promisify;
 var readdir = promisify(fs.readdir);
 var readFile = promisify(fs.readFile);
 
-// Put some HTML files in this folder
+// Provide path that contains some HTML files
 var root = '/replace/with/valid/path';
 
 var process, result = {};
@@ -21,9 +21,7 @@ var process, result = {};
 process = function (html) {
 	var def = deferred();
 
-	// In the metadata we are interested in the file relative path and not the
-	// file absolute path (this is just a choice for this example not related
-	// with promises or deferred).
+	// Process HTML with jsdom parser
 	jsdom.env({
 		html: String(html),
 		done: function (errors, window) {
