@@ -1,3 +1,7 @@
+'use strict';
+
+// Lists the content of the DOC_FOLDER_PATH, only at first level, ie not
+// recursively.
 
 var logger = console;
 var path = require('path');
@@ -15,29 +19,24 @@ var readFile = promisify(fs.readFile);
 // Put some HTML files in this folder
 var DOC_FOLDER_PATH = '/tmp/test';
 
-/**
- * Lists the content of the DOC_FOLDER_PATH, only at first level, ie not recursively.
- */
-function listDocs() {
-    readdir(DOC_FOLDER_PATH)
-        .invoke('filter', function(fileName) {
-            // Unix hidden files (such as .DS_Store, etc.) are unwanted
-            return fileName.indexOf('.') !== 0;
-        })
-        .map(addModifiedForFiles)
-        .invoke('filter', function(docMetadata) {
-            // Filtering out directories
-            return !!docMetadata;
-        })
-        .map(function(docMetadata) {
-            return addContent(docMetadata).then(addTitleAndDescription);
-        })
-        .done(function(result) {
-            logger.info("result:", result);
-        }, function(err) {
-            logger.error(err);
-        });
-}
+readdir(DOC_FOLDER_PATH)
+    .invoke('filter', function(fileName) {
+        // Unix hidden files (such as .DS_Store, etc.) are unwanted
+        return fileName.indexOf('.') !== 0;
+    })
+    .map(addModifiedForFiles)
+    .invoke('filter', function(docMetadata) {
+        // Filtering out directories
+        return !!docMetadata;
+    })
+    .map(function(docMetadata) {
+        return addContent(docMetadata).then(addTitleAndDescription);
+    })
+    .done(function(result) {
+        logger.info("result:", result);
+    }, function(err) {
+        logger.error(err);
+    });
 
 function addModifiedForFiles(fileName) {
     var filePath = path.join(DOC_FOLDER_PATH, fileName);
@@ -104,5 +103,3 @@ function addTitleAndDescription(docMetadata) {
 
     return def.promise;
 }
-
-listDocs();
