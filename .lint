@@ -1,118 +1,48 @@
 @root
 
-jslint_medikoo.indent 2
-jslint_medikoo.maxlen 80
+module
 es5
 
-jslint_medikoo.tabs
-jslint_medikoo.module
-jslint_medikoo.nomen
-jslint_medikoo.plusplus
+indent 2
+maxlen 80
+tabs
 
-jshint.laxcomma
-jshint.camelcase
-jshint.eqeqeq
-jshint.forin
-jshint.immed
-jshint.latedef
-jshint.newcap
-jshint.noarg
-jshint.noempty
-jshint.nonew
-jshint.regexp
-jshint.undef
-jshint.unused
-jshint.strict
-jshint.trailing
-jshint.globalstrict
-jshint.global module, require, exports
-jshint.smarttabs
-jshint.eqnull
-jshint.expr
+ass
+nomen
+plusplus
+stupid
 
-./benchmark/concurrent.js
-jslint_medikoo.predef+ console, __filename, process
-jshint.global+ console, __filename, process
+predef+ setTimeout, clearTimeout
 
-./benchmark/one-after-another.js
-jslint_medikoo.predef+ console, __filename, process
-jshint.global+ console, __filename, process
+./benchmark
+predef+ console, __filename, process
 
 ./examples
-jslint_medikoo.predef+ console, setTimeout
-jshint.global+ console, setTimeout
+predef+ console
 
 ./examples/test-with-mocha-and-should.js
-jslint_medikoo.predef+ describe, it
-jshint.global+ describe, it
-
-./lib/deferred.js
-jslint_medikoo.predef+ setTimeout, clearTimeout
-jshint.global+ setTimeout, clearTimeout
-jslint_medikoo.nomen
-jshint.proto
-!jshint.camelcase
+predef+ describe, it
 
 ./lib/ext/array/map.js
-jslint_medikoo.bitwise
+bitwise
 
 ./lib/ext/array/reduce.js
-jslint_medikoo.bitwise
+bitwise
 
 ./lib/ext/array/some.js
-jslint_medikoo.bitwise
-
-./lib/ext/function/delay.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
+bitwise
 
 ./lib/ext/function/promisify-sync.js
-jslint_medikoo.bitwise
+bitwise
 
 ./lib/ext/function/promisify.js
-jslint_medikoo.bitwise
+bitwise
 
 ./lib/monitor.js
-jslint_medikoo.predef+ console, setTimeout
-jshint.global+ console, setTimeout
+predef+ console
 
 ./lib/profiler.js
-jslint_medikoo.predef+ console
-jslint_medikoo.nomen
-jshint.global+ console
-
-./lib/promise.js
-jslint_medikoo.nomen
-jslint_medikoo.predef+ setTimeout
-jshint.proto
-!jshint.camelcase
-jshint.global+ setTimeout
-
-./test/deferred.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
-
-./test/ext/function/delay.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
-
-./test/ext/function/promisify.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
-
-./test/ext/promise/invoke-async.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
-
-./test/ext/promise/invoke.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
+predef+ console
 
 ./test/index.js
-jslint_medikoo.nomen
-jslint_medikoo.predef+ setTimeout, __dirname
-jshint.global+ setTimeout
-
-./test/monitor.js
-jslint_medikoo.predef+ setTimeout
-jshint.global+ setTimeout
+predef+ __dirname

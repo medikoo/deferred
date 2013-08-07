@@ -32,9 +32,9 @@ var getPage = function (path) {
 
 // 2. Invoke promise loop
 
-var n = n, result;
+var n = 1, result;
 getPage('/page/' + n)(function process(content) {
-	var isNextPage;
+	var isNextPage = false;
 	// ...populate result...
 
 	// ...decide whether we need to download next page

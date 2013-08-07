@@ -29,8 +29,6 @@ tests = [function () {
 	var i = count, j = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
-			var x;
-			x = stats;
 			if (err) {
 				throw err;
 			}
