@@ -7,10 +7,12 @@
 // 1. Define simple download function, it downloads page at given path from
 //    predefinied domain and returns promise:
 
-var deferred = require('deferred');
-var http = require('http');
+var deferred = require('deferred')
+  , http = require('http')
 
-var getPage = function (path) {
+  , getPage, n, result = {};
+
+getPage = function (path) {
 	var d = deferred();
 
 	http.get({
@@ -32,7 +34,7 @@ var getPage = function (path) {
 
 // 2. Invoke promise loop
 
-var n = 1, result;
+n = 1;
 getPage('/page/' + n)(function process(content) {
 	var isNextPage = false;
 	// ...populate result...

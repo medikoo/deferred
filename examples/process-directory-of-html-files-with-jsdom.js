@@ -3,20 +3,20 @@
 // Read meta data out of each html file in given directory.
 // Requires jsdom package installed, and some html files
 
-var fs = require('fs');
-var path = require('path');
-var jsdom = require('jsdom');
-var deferred = require('deferred');
+var fs = require('fs')
+  , path = require('path')
+  , jsdom = require('jsdom')
+  , deferred = require('deferred')
 
 // Convert Node.js async functions, into ones that return a promise
-var promisify = require('deferred').promisify;
-var readdir = promisify(fs.readdir);
-var readFile = promisify(fs.readFile);
+  , promisify = require('deferred').promisify
+  , readdir = promisify(fs.readdir)
+  , readFile = promisify(fs.readFile)
 
 // Provide path that contains some HTML files
-var root = '/replace/with/valid/path';
+  , root = '/replace/with/valid/path'
 
-var process, result = {};
+  , process, result = {};
 
 process = function (html) {
 	var def = deferred();

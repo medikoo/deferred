@@ -2,9 +2,9 @@
 
 // While loops are usually constructruted as recurrent asynchronous functions:
 
-var deferred = require('deferred');
+var deferred = require('deferred')
 
-var count = 0, limit = 10, get;
+  , count = 0, limit = 10, get;
 
 get = function self() {
 	var d = deferred();

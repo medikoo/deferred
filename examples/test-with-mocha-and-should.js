@@ -6,8 +6,8 @@
 // Usage:
 // $ mocha test/deferred_with_mocha_and_should.test.js
 
-var should = require('should');
-var deferred = require('deferred');
+var should = require('should')
+  , deferred = require('deferred');
 
 describe("Async functions with promises", function () {
 
