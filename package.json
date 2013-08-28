@@ -35,7 +35,7 @@
     "test": "node ./node_modules/tad/bin/tad lib"
   },
   "devDependencies": {
-    "tad": "~0.1.16"
+    "tad": "~0.1.18"
   },
   "licence": "MIT",
   "optionalDependencies": {}
