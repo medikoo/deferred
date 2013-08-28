@@ -1,6 +1,6 @@
 'use strict';
 
-var toArray  = require('es5-ext/lib/Array/from')
+var toArray  = require('es5-ext/array/from')
   , deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {

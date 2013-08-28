@@ -1,7 +1,7 @@
 'use strict';
 
-var isFunction = require('es5-ext/lib/Function/is-function')
-  , convert    = require('es5-ext/lib/String/prototype/hyphen-to-camel')
+var isFunction = require('es5-ext/function/is-function')
+  , convert    = require('es5-ext/string/#/hyphen-to-camel')
   , path       = require('path')
   , readdir    = require('fs').readdir
   , indexTest  = require('tad/lib/utils/index-test')

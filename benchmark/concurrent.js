@@ -6,9 +6,9 @@
 // $ npm install Q jquery when
 // $ node benchmark/concurrent.js
 
-var generate   = require('es5-ext/lib/Array/generate')
-  , forEach    = require('es5-ext/lib/Object/for-each')
-  , pad        = require('es5-ext/lib/String/prototype/pad')
+var generate   = require('es5-ext/array/generate')
+  , forEach    = require('es5-ext/object/for-each')
+  , pad        = require('es5-ext/string/#/pad')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
   , jqDeferred = require('jquery').Deferred
