@@ -11,6 +11,7 @@ var forEach    = require('es5-ext/lib/Object/for-each')
   , pad        = require('es5-ext/lib/String/prototype/pad')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
+  , kew        = require('kew')
   , jqDeferred = require('jquery').Deferred
   , when       = require('when')
   , deferred   = require('../lib')
@@ -85,6 +86,34 @@ tests = [function () {
 			} else {
 				data["Deferred: Promisify (generic wrapper)"] = now() - time;
 				next();
+			}
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		var def = kew.defer();
+		lstat(path, function (err, stats) {
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
+		});
+		return def;
+	};
+
+	self = function () {
+		dlstat(__filename).fin(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["kew: Dedicated wrapper"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
 			}
 		});
 	};
