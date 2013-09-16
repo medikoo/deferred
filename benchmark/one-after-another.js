@@ -107,7 +107,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).fin(function (stats) {
+		dlstat(__filename).then(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
