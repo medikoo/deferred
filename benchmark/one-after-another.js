@@ -108,7 +108,7 @@ tests = [function () {
 			if (--i) {
 				self(stats);
 			} else {
-				data["kew: Dedicated wrapper"] = now() - time;
+				data["Kew: Dedicated wrapper"] = now() - time;
 				// Get out of try/catch clause
 				nextTick(next);
 			}
