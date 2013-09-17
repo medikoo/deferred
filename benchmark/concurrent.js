@@ -11,6 +11,7 @@ var generate   = require('es5-ext/array/generate')
   , pad        = require('es5-ext/string/#/pad')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
+  , kew        = require('kew')
   , jqDeferred = require('jquery').Deferred
   , when       = require('when')
   , deferred   = require('../lib')
@@ -92,6 +93,34 @@ tests = [function () {
 		data["Deferred: Map + Promisify"] = now() - time;
 		next();
 	});
+}, function () {
+	var i = count, j = count, dlstat;
+
+	dlstat = function (path) {
+		var def = kew.defer();
+		lstat(path, function (err, stats) {
+			if (err) {
+				def.reject(err);
+			} else {
+				def.resolve(stats);
+			}
+		});
+		return def;
+	};
+
+	self = function () {
+		dlstat(__filename).then(function () {
+			if (!--i) {
+				data["kew: Dedicated wrapper"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
+			}
+		});
+	};
+	time = now();
+	while (j--) {
+		self();
+	}
 }, function () {
 	var i = count, j = count, dlstat;
 
