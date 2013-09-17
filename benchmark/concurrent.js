@@ -108,7 +108,7 @@ tests = [function () {
 	self = function () {
 		dlstat(__filename).then(function () {
 			if (!--i) {
-				data["kew: Dedicated wrapper"] = now() - time;
+				data["Kew: Dedicated wrapper"] = now() - time;
 				// Get out of try/catch clause
 				nextTick(next);
 			}
