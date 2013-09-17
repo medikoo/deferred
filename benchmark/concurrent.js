@@ -29,9 +29,7 @@ tests = [function () {
 	var i = count, j = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
-			if (err) {
-				throw err;
-			}
+			if (err) throw err;
 			if (!--i) {
 				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
@@ -39,16 +37,12 @@ tests = [function () {
 		});
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var i = count, j = count, dlstat;
 	dlstat = function (path) {
 		var def = new Deferred();
-		lstat(path, function (err, stats) {
-			def.resolve(err || stats);
-		});
+		lstat(path, function (err, stats) { def.resolve(err || stats); });
 		return def.promise;
 	};
 
@@ -61,9 +55,7 @@ tests = [function () {
 		});
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var i = count, j = count, dlstat = promisify(lstat);
 
@@ -76,9 +68,7 @@ tests = [function () {
 		});
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var dlstat = promisify(lstat);
 
@@ -95,11 +85,8 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = Q.defer();
 		lstat(path, function (err, stats) {
-			if (err) {
-				def.reject(err);
-			} else {
-				def.resolve(stats);
-			}
+			if (err) def.reject(err);
+			else def.resolve(stats);
 		});
 		return def.promise;
 	};
@@ -114,9 +101,7 @@ tests = [function () {
 		});
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var i = count, j = count, dlstat = Q.nbind(lstat, null);
 
@@ -130,20 +115,15 @@ tests = [function () {
 		});
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var i = count, j = count, dlstat;
 
 	dlstat = function (path) {
 		var def = jqDeferred();
 		lstat(path, function (err, stats) {
-			if (err) {
-				def.reject(err);
-			} else {
-				def.resolve(stats);
-			}
+			if (err) def.reject(err);
+			else def.resolve(stats);
 		});
 		return def;
 	};
@@ -154,25 +134,18 @@ tests = [function () {
 				data["jQuery.Deferred: Dedicated wrapper"] = now() - time;
 				next();
 			}
-		}).fail(function (e) {
-			throw e;
-		});
+		}).fail(function (e) { throw e; });
 	};
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }, function () {
 	var i = count, j = count, dlstat;
 
 	dlstat = function (path) {
 		var def = when.defer();
 		lstat(path, function (err, stats) {
-			if (err) {
-				def.reject(err);
-			} else {
-				def.resolve(stats);
-			}
+			if (err) def.reject(err);
+			else def.resolve(stats);
 		});
 		return def.promise;
 	};
@@ -184,16 +157,12 @@ tests = [function () {
 				nextTick(next);
 			}
 		}, function (e) {
-			nextTick(function () {
-				throw e;
-			});
+			nextTick(function () { throw e; });
 		});
 	};
 
 	time = now();
-	while (j--) {
-		self();
-	}
+	while (j--) self();
 }];
 
 next = function () {
@@ -203,9 +172,7 @@ next = function () {
 		def.resolve();
 		forEach(data, function (value, name, obj, index) {
 			console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
-		}, null, function (a, b) {
-			return this[a] - this[b];
-		});
+		}, null, function (a, b) { return this[a] - this[b]; });
 	}
 };
 
