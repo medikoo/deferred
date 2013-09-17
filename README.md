@@ -705,24 +705,26 @@ _Example output taken under Node v0.8.9 on 2008 MBP._
 ```
 Promise overhead (calling one after another) x10000:
 
-1:   515ms  Base (plain Node.js lstat call)
-2:   691ms  Deferred: Dedicated wrapper
-3:   724ms  When: Dedicated wrapper
-4:   770ms  Deferred: Promisify (generic wrapper)
-5:   835ms  jQuery.Deferred: Dedicated wrapper
-6: 10272ms  Q: Dedicated wrapper
-7: 17088ms  Q: nbind (generic wrapper)
+1:   464ms  Base (plain Node.js lstat call)
+2:   493ms  Kew: Dedicated wrapper
+3:   655ms  Deferred: Dedicated wrapper
+4:   721ms  When: Dedicated wrapper
+5:   733ms  Deferred: Promisify (generic wrapper)
+6:   833ms  jQuery.Deferred: Dedicated wrapper
+7:  9221ms  Q: Dedicated wrapper
+8: 14987ms  Q: nbind (generic wrapper)
 
 Promise overhead (concurrent calls) x10000:
 
-1:   333ms  Base (plain Node.js lstat call)
-2:   582ms  Deferred: Dedicated wrapper
-3:   598ms  Deferred: Promisify (generic wrapper)
-4:   694ms  Deferred: Map + Promisify
-5:  1627ms  When: Dedicated wrapper
-6:  2596ms  jQuery.Deferred: Dedicated wrapper
-7:  8129ms  Q: Dedicated wrapper
-8: 17868ms  Q: nbind (generic wrapper)
+1:   289ms  Base (plain Node.js lstat call)
+2:   374ms  kew: Dedicated wrapper
+3:   551ms  Deferred: Dedicated wrapper
+4:   647ms  Deferred: Promisify (generic wrapper)
+5:   668ms  Deferred: Map + Promisify
+6:   679ms  When: Dedicated wrapper
+7:  1765ms  jQuery.Deferred: Dedicated wrapper
+8:  6757ms  Q: Dedicated wrapper
+9: 11447ms  Q: nbind (generic wrapper)
 ```
 
 ## Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
