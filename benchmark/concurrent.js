@@ -31,6 +31,19 @@ tests = [function () {
 		lstat(__filename, function (err, stats) {
 			if (err) throw err;
 			if (!--i) {
+				// Ignore first one
+				next();
+			}
+		});
+	};
+	time = now();
+	while (j--) self();
+}, function () {
+	var i = count, j = count;
+	self = function () {
+		lstat(__filename, function (err, stats) {
+			if (err) throw err;
+			if (!--i) {
 				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
 			}

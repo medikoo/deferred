@@ -32,6 +32,21 @@ tests = [function () {
 			if (--i) {
 				self(stats);
 			} else {
+				// Ignroe first one
+				next();
+			}
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count;
+	self = function () {
+		lstat(__filename, function (err, stats) {
+			if (err) throw err;
+			if (--i) {
+				self(stats);
+			} else {
 				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
 			}
