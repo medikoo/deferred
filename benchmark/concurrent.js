@@ -3,7 +3,7 @@
 // Benchmark comparing performance of promise setups (concurrent)
 // To run it, do following in package path:
 //
-// $ npm install Q jquery when
+// $ npm install Q jquery when kew
 // $ node benchmark/concurrent.js
 
 var generate   = require('es5-ext/array/generate')
