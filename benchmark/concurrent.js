@@ -99,11 +99,8 @@ tests = [function () {
 	dlstat = function (path) {
 		var def = kew.defer();
 		lstat(path, function (err, stats) {
-			if (err) {
-				def.reject(err);
-			} else {
-				def.resolve(stats);
-			}
+			if (err) def.reject(err);
+			else def.resolve(stats);
 		});
 		return def;
 	};
