@@ -717,7 +717,7 @@ Promise overhead (calling one after another) x10000:
 Promise overhead (concurrent calls) x10000:
 
 1:   289ms  Base (plain Node.js lstat call)
-2:   374ms  kew: Dedicated wrapper
+2:   374ms  Kew: Dedicated wrapper
 3:   551ms  Deferred: Dedicated wrapper
 4:   647ms  Deferred: Promisify (generic wrapper)
 5:   668ms  Deferred: Map + Promisify
