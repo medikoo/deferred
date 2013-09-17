@@ -4,7 +4,7 @@
 // (one by after another)
 // To run it, do following in package path:
 //
-// $ npm install Q jquery when
+// $ npm install Q jquery when kew
 // $ node benchmark/one-after-another.js
 
 var forEach    = require('es5-ext/lib/Object/for-each')
