@@ -184,14 +184,16 @@ tests = [function () {
 }];
 
 next = function () {
-	if (tests.length) {
-		tests.shift()();
-	} else {
-		def.resolve();
-		forEach(data, function (value, name, obj, index) {
-			console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
-		}, null, function (a, b) { return this[a] - this[b]; });
-	}
+	setTimeout(function () {
+		if (tests.length) {
+			tests.shift()();
+		} else {
+			def.resolve();
+			forEach(data, function (value, name, obj, index) {
+				console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
+			}, null, function (a, b) { return this[a] - this[b]; });
+		}
+	}, 100);
 };
 
 next();
