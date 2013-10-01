@@ -1,13 +1,13 @@
 'use strict';
 
-var toArray  = require('es5-ext/array/from')
+var aFrom    = require('es5-ext/array/from')
   , deferred = require('../../../lib/deferred');
 
 module.exports = function (t) {
 	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved, released;
 
 	fn = function (p) {
-		args = toArray(arguments);
+		args = aFrom(arguments);
 		return p;
 	};
 	return {
