@@ -12,6 +12,7 @@ var forEach    = require('es5-ext/object/for-each')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
   , kew        = require('kew')
+  , bluebird   = require('bluebird')
   , jqDeferred = require('jquery').Deferred
   , when       = require('when')
   , deferred   = require('../lib')
@@ -86,6 +87,50 @@ tests = [function () {
 			} else {
 				data["Deferred: Promisify (generic wrapper)"] = now() - time;
 				next();
+			}
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat = bluebird.promisify(lstat);
+
+	self = function () {
+		dlstat(__filename).then(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["Bluebird: Promisify (generic wrapper)"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
+			}
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+	  return new bluebird(function(resolve, reject) {
+      lstat(path, function (err, stats) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(stats);
+        }
+      });
+    });
+	};
+
+	self = function () {
+		dlstat(__filename).then(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["Bluebird: Dedicated wrapper"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
 			}
 		});
 	};
