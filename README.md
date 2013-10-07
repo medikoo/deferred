@@ -700,31 +700,33 @@ Promises just by being rich objects introduce overhead over regular callbacks. I
 
 _benchmark_ folder contains few plain test cases that compares Deferred to other popular promise implementations. Base of test is plain [lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback) call to self file.
 
-_Example output taken under Node v0.8.9 on 2008 MBP._
+_Example output taken under Node v0.10.20 on 2008 MBP._
 
 ```
 Promise overhead (calling one after another) x10000:
 
-1:   464ms  Base (plain Node.js lstat call)
-2:   493ms  Kew: Dedicated wrapper
-3:   655ms  Deferred: Dedicated wrapper
-4:   721ms  When: Dedicated wrapper
-5:   733ms  Deferred: Promisify (generic wrapper)
-6:   833ms  jQuery.Deferred: Dedicated wrapper
-7:  9221ms  Q: Dedicated wrapper
-8: 14987ms  Q: nbind (generic wrapper)
+ 1:   439ms  Base (plain Node.js lstat call)
+ 2:   461ms  Kew: Dedicated wrapper
+ 3:   609ms  Bluebird: Dedicated wrapper
+ 4:   614ms  Bluebird: Promisify (generic wrapper)
+ 5:   642ms  Deferred: Dedicated wrapper
+ 6:   720ms  Deferred: Promisify (generic wrapper)
+ 7:   792ms  When: Dedicated wrapper
+ 8:  1068ms  Q: Dedicated wrapper
+ 9:  1611ms  Q: nbind (generic wrapper)
 
 Promise overhead (concurrent calls) x10000:
 
-1:   289ms  Base (plain Node.js lstat call)
-2:   374ms  Kew: Dedicated wrapper
-3:   551ms  Deferred: Dedicated wrapper
-4:   647ms  Deferred: Promisify (generic wrapper)
-5:   668ms  Deferred: Map + Promisify
-6:   679ms  When: Dedicated wrapper
-7:  1765ms  jQuery.Deferred: Dedicated wrapper
-8:  6757ms  Q: Dedicated wrapper
-9: 11447ms  Q: nbind (generic wrapper)
+ 1:   279ms  Base (plain Node.js lstat call)
+ 2:   293ms  Bluebird: Promisify (generic wrapper) 2
+ 3:   294ms  Bluebird: Dedicated wrapper
+ 4:   329ms  Kew: Dedicated wrapper
+ 5:   406ms  When: Dedicated wrapper
+ 6:   430ms  Deferred: Dedicated wrapper
+ 7:   598ms  Deferred: Promisify (generic wrapper)
+ 8:   683ms  Deferred: Map + Promisify
+ 9:  1610ms  Q: Dedicated wrapper
+10:  3645ms  Q: nbind (generic wrapper)
 ```
 
 ## Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)

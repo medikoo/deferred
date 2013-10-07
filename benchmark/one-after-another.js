@@ -4,15 +4,15 @@
 // (one by after another)
 // To run it, do following in package path:
 //
-// $ npm install Q jquery when kew
+// $ npm install Q when kew bluebird
 // $ node benchmark/one-after-another.js
 
 var forEach    = require('es5-ext/lib/Object/for-each')
   , pad        = require('es5-ext/lib/String/prototype/pad')
   , lstat      = require('fs').lstat
   , Q          = require('Q')
+  , Bluebird   = require('bluebird')
   , kew        = require('kew')
-  , jqDeferred = require('jquery').Deferred
   , when       = require('when')
   , deferred   = require('../lib')
 
@@ -25,17 +25,14 @@ var forEach    = require('es5-ext/lib/Object/for-each')
 console.log("Promise overhead (calling one after another)",
 	"x" + count + ":\n");
 
+// Base
 tests = [function () {
 	var i = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
 			if (err) throw err;
-			if (--i) {
-				self(stats);
-			} else {
-				// Ignroe first one
-				next();
-			}
+			if (--i) self(stats);
+			else next(); // Ignore first one
 		});
 	};
 	time = now();
@@ -51,6 +48,146 @@ tests = [function () {
 				data["Base (plain Node.js lstat call)"] = now() - time;
 				next();
 			}
+		});
+	};
+	time = now();
+	self();
+
+// Bluebird
+}, function () {
+	var i = count, dlstat = Bluebird.promisify(lstat);
+
+	self = function () {
+		dlstat(__filename).done(function (stats) {
+			if (--i) self(stats);
+			else next();
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat = Bluebird.promisify(lstat);
+
+	self = function () {
+		dlstat(__filename).done(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["Bluebird: Promisify (generic wrapper)"] = now() - time;
+				// Get out of try/catch clause
+				next();
+			}
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		return new Bluebird(function (resolve, reject) {
+			lstat(path, function (err, stats) {
+				if (err) reject(err);
+				else resolve(stats);
+			});
+		});
+	};
+
+	self = function () {
+		dlstat(__filename).done(function (stats) {
+			if (--i) self(stats);
+			else next();
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		return new Bluebird(function (resolve, reject) {
+			lstat(path, function (err, stats) {
+				if (err) reject(err);
+				else resolve(stats);
+			});
+		});
+	};
+
+	self = function () {
+		dlstat(__filename).done(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["Bluebird: Dedicated wrapper"] = now() - time;
+				// Get out of try/catch clause
+				next();
+			}
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+
+// Kew
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		var def = kew.defer();
+		lstat(path, function (err, stats) {
+			if (err) def.reject(err);
+			else def.resolve(stats);
+		});
+		return def;
+	};
+
+	self = function () {
+		dlstat(__filename).then(function (stats) {
+			if (--i) self(stats);
+			else nextTick(next);
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		var def = kew.defer();
+		lstat(path, function (err, stats) {
+			if (err) def.reject(err);
+			else def.resolve(stats);
+		});
+		return def;
+	};
+
+	self = function () {
+		dlstat(__filename).then(function (stats) {
+			if (--i) {
+				self(stats);
+			} else {
+				data["Kew: Dedicated wrapper"] = now() - time;
+				// Get out of try/catch clause
+				nextTick(next);
+			}
+		}, function (err) { nextTick(function () { throw err; }); });
+	};
+	time = now();
+	self();
+
+// Deferred
+}, function () {
+	var i = count, dlstat;
+
+	dlstat = function (path) {
+		var def = new Deferred();
+		lstat(path, function (err, stats) { def.resolve(err || stats); });
+		return def.promise;
+	};
+
+	self = function () {
+		dlstat(__filename).end(function (stats) {
+			if (--i) self(stats);
+			else next(); // Ignore first one
 		});
 	};
 	time = now();
@@ -81,6 +218,17 @@ tests = [function () {
 
 	self = function () {
 		dlstat(__filename).end(function (stats) {
+			if (--i) self(stats);
+			else next(); // Ignore first one
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat = promisify(lstat);
+
+	self = function () {
+		dlstat(__filename).end(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
@@ -91,27 +239,24 @@ tests = [function () {
 	};
 	time = now();
 	self();
+
+// Q
 }, function () {
 	var i = count, dlstat;
 
 	dlstat = function (path) {
-		var def = kew.defer();
+		var def = Q.defer();
 		lstat(path, function (err, stats) {
 			if (err) def.reject(err);
 			else def.resolve(stats);
 		});
-		return def;
+		return def.promise;
 	};
 
 	self = function () {
-		dlstat(__filename).then(function (stats) {
-			if (--i) {
-				self(stats);
-			} else {
-				data["Kew: Dedicated wrapper"] = now() - time;
-				// Get out of try/catch clause
-				nextTick(next);
-			}
+		dlstat(__filename).done(function (stats) {
+			if (--i) self(stats);
+			else next();
 		});
 	};
 	time = now();
@@ -135,8 +280,19 @@ tests = [function () {
 			} else {
 				data["Q: Dedicated wrapper"] = now() - time;
 				// Get out of try/catch clause
-				nextTick(next);
+				next();
 			}
+		});
+	};
+	time = now();
+	self();
+}, function () {
+	var i = count, dlstat = Q.nbind(lstat, null);
+
+	self = function () {
+		dlstat(__filename).done(function (stats) {
+			if (--i) self(stats);
+			else next();
 		});
 	};
 	time = now();
@@ -150,34 +306,31 @@ tests = [function () {
 				self(stats);
 			} else {
 				data["Q: nbind (generic wrapper)"] = now() - time;
-				// Get out of try/catch clause
-				nextTick(next);
+				next();
 			}
 		});
 	};
 	time = now();
 	self();
+
+// When
 }, function () {
 	var i = count, dlstat;
 
 	dlstat = function (path) {
-		var def = jqDeferred();
+		var def = when.defer();
 		lstat(path, function (err, stats) {
 			if (err) def.reject(err);
 			else def.resolve(stats);
 		});
-		return def;
+		return def.promise;
 	};
 
 	self = function () {
-		dlstat(__filename).done(function (stats) {
-			if (--i) {
-				self(stats);
-			} else {
-				data["jQuery.Deferred: Dedicated wrapper"] = now() - time;
-				next();
-			}
-		}).fail(function (e) { throw e; });
+		dlstat(__filename).then(function (stats) {
+			if (--i) self(stats);
+			else nextTick(next);
+		}, function (e) { nextTick(function () { throw e; }); });
 	};
 	time = now();
 	self();
@@ -201,9 +354,7 @@ tests = [function () {
 				data["When: Dedicated wrapper"] = now() - time;
 				nextTick(next);
 			}
-		}, function (e) {
-			nextTick(function () { throw e; });
-		});
+		}, function (e) { nextTick(function () { throw e; }); });
 	};
 	time = now();
 	self();
@@ -216,7 +367,8 @@ next = function () {
 		} else {
 			def.resolve();
 			forEach(data, function (value, name, obj, index) {
-				console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
+				console.log(pad.call(index + 1 + ":", " ", 3),
+					pad.call(value, " ", 5) + "ms ", name);
 			}, null, function (a, b) { return this[a] - this[b]; });
 		}
 	}, 100);
