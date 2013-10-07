@@ -74,7 +74,7 @@ var fs = require('fs');
 
 // Convert node.js async functions, into ones that return a promise
 var readdir = promisify(fs.readdir);
-var readFile = promisify(fs.readFile, 1);
+var readFile = promisify(fs.readFile, 1); // Restrict arity to 1 + callback
 var writeFile = promisify(fs.writeFile);
 
 writeFile(__dirname + '/lib.js',
