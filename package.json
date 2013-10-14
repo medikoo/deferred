@@ -1,6 +1,6 @@
 {
   "name": "deferred",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Modular and fast Promises implementation",
   "keywords": [
     "async",
@@ -36,7 +36,7 @@
     "test": "node ./node_modules/tad/bin/tad lib"
   },
   "devDependencies": {
-    "tad": "~0.1.18"
+    "tad": "~0.1.19"
   },
   "licence": "MIT",
   "optionalDependencies": {}
