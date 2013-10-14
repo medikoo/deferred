@@ -1,7 +1,6 @@
 @root
 
 module
-es5
 
 indent 2
 maxlen 80
