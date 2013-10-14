@@ -1,3 +1,12 @@
+v0.6.6  --  2013.10.14
+* Fix stack overflow vulnerability in `reduce` implementation, as diagnosed
+  here: https://github.com/cujojs/promise-perf-tests/blob
+  /e58b90c2660914411c96efe854446444160b592a/lib/tests/reduce-large.js#L25
+* Introduce `examples` directory. First examples introduced by
+  Marc-Aurèle DARCHE (@madarche). Thanks!
+* Improve benchmarks, and add kew and bluebird to them (and remove jQuery)
+* Documentation: Fix profiler example and general improvements
+
 v0.6.5  --  2013.06.05
 * `catch` extension
 * Unify listeners handling in promises handled by gate
