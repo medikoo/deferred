@@ -132,14 +132,6 @@ If you work with AMD modules, use _amd_ option, so generated bundle is one:
 $ webmake --amd deferred/lib/index.js deferred.js
 ```
 
-To explicitly name AMD module pass _name_ option:
-
-```
-$ webmake --name=deferred --amd deferred/lib/index.js deferred.js
-```
-
-
-
 _Mind that deferred relies on some ECMAScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
 ## Deferred/Promise concept
