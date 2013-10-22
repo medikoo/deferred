@@ -6,7 +6,7 @@ var deferred = require('deferred')
 
   , count = 0, limit = 10, get;
 
-get = function self() {
+get = function () {
 	var d = deferred();
 	setTimeout(function () {
 		d.resolve(++count);
