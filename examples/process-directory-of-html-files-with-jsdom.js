@@ -16,9 +16,9 @@ var fs = require('fs')
 // Provide path that contains some HTML files
   , root = '/replace/with/valid/path'
 
-  , process, result = {};
+  , extract, result = {};
 
-process = function (html) {
+extract = function (html) {
 	var def = deferred();
 
 	// Process HTML with jsdom parser
@@ -54,7 +54,7 @@ readdir(root).map(function (fileName) {
 	// Read file content
 	return readFile(path.resolve(root, fileName))
 		// Read meta data out of it
-		.then(process)
+		.then(extract)
 		// Assign to result
 		.aside(function (data) {
 			result[fileName] = data;
