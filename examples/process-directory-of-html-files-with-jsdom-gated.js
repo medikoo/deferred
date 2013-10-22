@@ -74,31 +74,29 @@ indexDocs = function () {
                 type: {file: true},
                 pattern: /.*\.html$/
             })
-        .then(function(paths) {
-            console.log("paths:", paths);
-            deferred.map(paths, deferred.gate(function (file_path) {
-                file_path = path.join(root, file_path);
-                return stat(file_path).then(function(stat) {
-                    var doc_metadata = {
-                        path: file_path,
-                        modified: stat.mtime,
-                        size: stat.size
-                    };
-                    result[file_path] = doc_metadata;
-                    return readFile(file_path);
-                }).then(extract).aside(function (data) {
-                    result[file_path].title = data.title;
-                    result[file_path].description = data.description;
-                    console.log("result items:",
-                                Object.getOwnPropertyNames(result).length,
-                                ", last item:", result[file_path]);
-                });
-            }, CONCURRENT_TASKS_RUNNING_LIMIT))
-                .done(function (data) {
-                    def.resolve(result);
-                },function (err) {
-                    def.resolve(err);
-                });
+        .map(deferred.gate(function (file_path) {
+            console.log("file_path:", file_path);
+            file_path = path.join(root, file_path);
+            return stat(file_path).then(function(stat) {
+                var doc_metadata = {
+                    path: file_path,
+                    modified: stat.mtime,
+                    size: stat.size
+                };
+                result[file_path] = doc_metadata;
+                return readFile(file_path);
+            }).then(extract).aside(function (data) {
+                result[file_path].title = data.title;
+                result[file_path].description = data.description;
+                console.log("result items:",
+                            Object.getOwnPropertyNames(result).length,
+                            ", last item:", result[file_path]);
+            });
+        }), CONCURRENT_TASKS_RUNNING_LIMIT)
+        .done(function (data) {
+            def.resolve(result);
+        },function (err) {
+            def.resolve(err);
         });
 
     return def.promise;
