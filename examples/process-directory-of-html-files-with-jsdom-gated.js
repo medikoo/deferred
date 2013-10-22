@@ -71,7 +71,7 @@ indexDocs = function () {
     readdir(root,
             {
                 depth: Infinity,
-                file: true,
+                type: {file: true},
                 pattern: /.*\.html$/
             })
         .then(function(paths) {
@@ -89,7 +89,9 @@ indexDocs = function () {
                 }).then(extract).aside(function (data) {
                     result[file_path].title = data.title;
                     result[file_path].description = data.description;
-                    console.log("result in progress:", result);
+                    console.log("result items:",
+                                Object.getOwnPropertyNames(result).length,
+                                ", last item:", result[file_path]);
                 });
             }, CONCURRENT_TASKS_RUNNING_LIMIT))
                 .done(function (data) {
