@@ -101,7 +101,8 @@ module.exports = function (root) {
 		fileName = path.resolve(root, fileName);
 
 		// Read file stats
-		return stat(fileName).then(function (data) {
+		return stat(fileName).then(function (stats) {
+			var data = { stats: stats, fileName: fileName };
 			result[fileName] = data;
 			return readFile(fileName).then(extract.bind(data));
 		});
