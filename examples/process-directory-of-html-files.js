@@ -23,23 +23,23 @@ var fs = require('fs')
   , promisify = require('deferred').promisify
   , readdir = promisify(fs.readdir)
   , readFile = promisify(fs.readFile)
+  , stat = promisify(fs.stat)
 
   , extract;
 
 extract = function (html) {
-	var def = deferred();
+	var def = deferred(), data = this;
 
 	// Process HTML with jsdom parser
 	jsdom.env({
 		html: String(html),
 		done: function (errors, window) {
-			var data, elems;
+			var elems;
 			if (errors) {
 				def.reject(new Error(errors));
 				return;
 			}
 
-			data = {};
 			// The title is the content of the 1st "h1" element
 			elems = window.document.getElementsByTagName('h1');
 			if (elems.length) data.title = elems[0].textContent;
@@ -61,13 +61,29 @@ module.exports = function (root) {
 		// Process only HTML files
 		if (path.extname(fileName) !== '.html') return;
 
-		// Read file content
-		return readFile(path.resolve(root, fileName))
-		// Read meta data out of it
-			.then(extract)
-		// Assign to result
-			.aside(function (data) {
-				result[fileName] = data;
-			});
+		// Note: You  may also use `readdir` from `fs2` package (needs to be
+		// installed aside), then you can configure `readdir` so it results only
+		// with expected set of filenames and additionally you can recurse into sub
+		// directories:
+		//
+		// var readdir = require('fs2/lib/readdir');
+		//
+		// readdir(root, {
+		//   depth: Infinity      // Recurse into subdirectories
+		//   type: { file: true } // Only files (no directories, symlinks etc)
+		//   pattern: /.*\.html$/ // Only files with .html extension
+		// }).map(function (fileName) {
+		//
+		// `readdir` from fs2 returns promise by itself, so it doesn't have to be
+		// promisified
+
+		// Resolve full path to file
+		fileName = path.resolve(root, fileName);
+
+		// Read file stats
+		return stat(fileName).then(function (data) {
+			result[fileName] = data;
+			return readFile(fileName).then(extract.bind(data));
+		});
 	})(result);
 };
