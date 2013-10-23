@@ -1,7 +1,18 @@
 'use strict';
 
 // Read meta data out of each html file in given directory.
-// Requires jsdom package installed, and some html files
+// Requires jsdom package installed:
+//
+// $ npm install jsdom
+//
+// and folder with some html files
+//
+// Usage:
+//
+// var extract = require('deferred/examples/process-directory-of-html-files');
+// extract('/some/path/to/html/files').done(function (result) {
+//   console.log("Result:", result);
+// });
 
 var fs = require('fs')
   , path = require('path')
@@ -13,10 +24,7 @@ var fs = require('fs')
   , readdir = promisify(fs.readdir)
   , readFile = promisify(fs.readFile)
 
-// Provide path that contains some HTML files
-  , root = '/replace/with/valid/path'
-
-  , extract, result = {};
+  , extract;
 
 extract = function (html) {
 	var def = deferred();
@@ -46,20 +54,20 @@ extract = function (html) {
 	return def.promise;
 };
 
-// Read folder
-readdir(root).map(function (fileName) {
-	// Process only HTML files
-	if (path.extname(fileName) !== '.html') return;
+module.exports = function (root) {
+	var result = {};
+	// Read folder
+	return readdir(root).map(function (fileName) {
+		// Process only HTML files
+		if (path.extname(fileName) !== '.html') return;
 
-	// Read file content
-	return readFile(path.resolve(root, fileName))
+		// Read file content
+		return readFile(path.resolve(root, fileName))
 		// Read meta data out of it
-		.then(extract)
+			.then(extract)
 		// Assign to result
-		.aside(function (data) {
-			result[fileName] = data;
-		});
-}).done(function () {
-	// Print final result
-	console.info("Result:", result);
-});
+			.aside(function (data) {
+				result[fileName] = data;
+			});
+	})(result);
+};
