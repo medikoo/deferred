@@ -398,7 +398,7 @@ This function is available also as an extension on promise object.
 
 There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors.
 
-Handle that with `deferred.gate`:
+Handle that with `deferred.gate`, it wraps functions that return promises. It doesn't do anything to promise objects, it just limits creation of them by blocking calls to function it wraps.
 
 ```javascript
 var fn = deferred.gate(function async() {
