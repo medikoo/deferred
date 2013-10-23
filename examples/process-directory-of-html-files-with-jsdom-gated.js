@@ -20,6 +20,8 @@ var fs = require('fs')
   , promisify = require('deferred').promisify
   , readFile = promisify(fs.readFile)
   , stat = promisify(fs.stat)
+  , open = promisify(fs.open, 2)
+  , close = promisify(fs.close)
 
 // Provide path containing some HTML files (replace with a valid path for you)
   , root = '/var/tmp/test/developer.mozilla.org'
@@ -27,8 +29,15 @@ var fs = require('fs')
 // On a Unix `ulimit -n` usually returns 1024
   , CONCURRENT_TASKS_RUNNING_LIMIT = 500
 
+// The farest end where to look for the title and description
+  , CONTENT_INSPECTION_FIRST_BYTES_COUNT = 11784
+
   , extract, indexDocs, result = {};
 
+/**
+ * @param {string} html
+ * @returns {Function} a promise
+ */
 extract = function (html) {
     var def = deferred();
 
@@ -61,6 +70,9 @@ extract = function (html) {
     return def.promise;
 };
 
+/**
+ * @returns {Function} a promise
+ */
 indexDocs = function () {
     // WARNING:
     // Functions promisified in fs2 don't auto-resolve input arguments
@@ -82,7 +94,11 @@ indexDocs = function () {
                     size: stat.size
                 };
                 result[file_path] = doc_metadata;
-                return readFile(file_path);
+
+                // Reading the whole file
+                // return readFile(file_path);
+                // Optimization: reading just the first N bytes of the file
+                return readFirstBytes(file_path, CONTENT_INSPECTION_FIRST_BYTES_COUNT);
             }).then(extract).aside(function (data) {
                 result[file_path].title = data.title;
                 result[file_path].description = data.description;
@@ -92,6 +108,36 @@ indexDocs = function () {
             });
         }), CONCURRENT_TASKS_RUNNING_LIMIT);
 };
+
+/**
+ * @param {string} file_path
+ * @param {number} byte_count
+ * @returns {Function} a promise
+ */
+function readFirstBytes(file_path, byte_count) {
+    return open(file_path, 'r')
+        .then(function(fd) {
+            var def = deferred();
+
+            var buffer = new Buffer(byte_count);
+            fs.read(fd, buffer, 0, buffer.length, null,
+                    function(err, bytes_read, buffer) {
+                        if (err) {
+                            console.error(err);
+                            def.resolve(err);
+                        }
+                        var data = buffer.toString('utf8', 0, bytes_read);
+
+                        // Closing file in the background
+                        // TODO: Improve this
+                        fs.close(fd);
+
+                        def.resolve(data);
+                    });
+
+            return def.promise;
+        });
+}
 
 indexDocs().done(function (result) {
     console.log("result:", result);
