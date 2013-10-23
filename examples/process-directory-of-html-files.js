@@ -20,7 +20,7 @@ var fs = require('fs')
   , deferred = require('deferred')
 
 // Convert Node.js async functions, into ones that return a promise
-  , promisify = require('deferred').promisify
+  , promisify = deferred.promisify
   , readdir = promisify(fs.readdir)
   , readFile = promisify(fs.readFile)
   , stat = promisify(fs.stat)
@@ -56,8 +56,28 @@ extract = function (html) {
 
 module.exports = function (root) {
 	var result = {};
+
 	// Read folder
+	//
+	// Note: If you are about to process large numbers of files, on some systems
+	// you may approach EMFILE error, which means that your process tried to open
+	// more file descriptors than it's allowed to. You can workaround it in two
+	// ways:
+	// 1. Load `descriptorsHandler` from fs2 package
+	//    (see https://github.com/medikoo/fs2#descriptorshandler ),
+	//    note it must not be loaded from generic package, but only at the top of
+	//    your start program.
+	//
+	// 2. Limit initialization of concurrent asynchronous operations with
+	//    `deferred.gate`:
+	//
+	//    readdir(root).map(deferred.gate(function (fileName) { ... }, 100);
+	//
+	//    Above will invoke no more than 100 concurrent async calls of `readFile`
+	//    as they're called in function passed to `gate`
+
 	return readdir(root).map(function (fileName) {
+
 		// Process only HTML files
 		if (path.extname(fileName) !== '.html') return;
 
