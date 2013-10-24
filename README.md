@@ -714,7 +714,7 @@ Promise overhead (calling one after another) x10000:
 Promise overhead (concurrent calls) x10000:
 
  1:   279ms  Base (plain Node.js lstat call)
- 2:   293ms  Bluebird: Promisify (generic wrapper) 2
+ 2:   293ms  Bluebird: Promisify (generic wrapper)
  3:   294ms  Bluebird: Dedicated wrapper
  4:   329ms  Kew: Dedicated wrapper
  5:   406ms  When: Dedicated wrapper
