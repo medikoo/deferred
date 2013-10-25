@@ -58,16 +58,16 @@ extract = function (html) {
 };
 
 readFirstBytes = function (filePath, byteCount) {
-    return open(filePath, 'r').then(function (fd) {
-        var buffer = new Buffer(byteCount);
-        return read(fd, buffer, 0, buffer.length, null).then(
-            // The callback of fs.read has 2 args: bytesRead, buffer
-            function (args) {
-                close(fd);
-                return String(args[1]);
-            }
-        );
-    });
+	return open(filePath, 'r').then(function (fd) {
+		var buffer = new Buffer(byteCount);
+		return read(fd, buffer, 0, buffer.length, null).then(
+			// The callback of fs.read has 2 args: bytesRead, buffer
+			function (args) {
+				close(fd);
+				return String(args[1]);
+			}
+		);
+	});
 };
 
 module.exports = function (root) {
