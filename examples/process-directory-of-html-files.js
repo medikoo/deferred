@@ -116,9 +116,9 @@ module.exports = function (root) {
 	})(result);
 };
 
-readFirstBytes = function (file_path, byte_count) {
-    return open(file_path, 'r').then(function (fd) {
-        var buffer = new Buffer(byte_count);
+readFirstBytes = function (filePath, byteCount) {
+    return open(filePath, 'r').then(function (fd) {
+        var buffer = new Buffer(byteCount);
         return read(fd, buffer, 0, buffer.length, null).then(
             // The callback of fs.read has 2 args: bytesRead, buffer
             function (args) {
