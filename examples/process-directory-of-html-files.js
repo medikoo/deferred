@@ -23,9 +23,12 @@ var fs = require('fs')
   , promisify = deferred.promisify
   , readdir = promisify(fs.readdir)
   , readFile = promisify(fs.readFile)
+  , open = promisify(fs.open, 2)
+  , read = promisify(fs.read)
+  , close = promisify(fs.close)
   , stat = promisify(fs.stat)
 
-  , extract;
+  , extract, readFirstBytes;
 
 extract = function (html) {
 	var def = deferred(), data = this;
@@ -52,6 +55,19 @@ extract = function (html) {
 	});
 
 	return def.promise;
+};
+
+readFirstBytes = function (filePath, byteCount) {
+    return open(filePath, 'r').then(function (fd) {
+        var buffer = new Buffer(byteCount);
+        return read(fd, buffer, 0, buffer.length, null).then(
+            // The callback of fs.read has 2 args: bytesRead, buffer
+            function (args) {
+                close(fd);
+                return String(args[1]);
+            }
+        );
+    });
 };
 
 module.exports = function (root) {
@@ -104,7 +120,11 @@ module.exports = function (root) {
 		return stat(fileName).then(function (stats) {
 			var data = { stats: stats, fileName: fileName };
 			result[fileName] = data;
-			return readFile(fileName).then(extract.bind(data));
+			// Reading the whole file
+			//return readFile(fileName)
+			// Optimization: reading just the first N bytes
+			return readFirstBytes(fileName, 12000)
+				.then(extract.bind(data));
 		});
 	})(result);
 };
