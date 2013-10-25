@@ -17,7 +17,7 @@ predef+ setTimeout, clearTimeout
 predef+ console, __filename, process
 
 ./examples
-predef+ console
+predef+ console, Buffer
 
 ./examples/test-with-mocha-and-should.js
 predef+ describe, it
