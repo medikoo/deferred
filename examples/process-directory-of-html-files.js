@@ -107,11 +107,11 @@ module.exports = function (root) {
 		return stat(fileName).then(function (stats) {
 			var data = { stats: stats, fileName: fileName };
 			result[fileName] = data;
-                        // Reading the whole file
+			// Reading the whole file
 			//return readFile(fileName)
-                        // Optimization: reading just the first N bytes
+			// Optimization: reading just the first N bytes
 			return readFirstBytes(fileName, 12000)
-                            .then(extract.bind(data));
+				.then(extract.bind(data));
 		});
 	})(result);
 };
