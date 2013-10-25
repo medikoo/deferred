@@ -22,8 +22,7 @@ var fs = require('fs')
 // Convert Node.js async functions, into ones that return a promise
   , promisify = deferred.promisify
   , readdir = promisify(fs.readdir)
-  , readFile = promisify(fs.readFile)
-  , open = promisify(fs.open, 2)
+  , open = promisify(fs.open)
   , read = promisify(fs.read)
   , close = promisify(fs.close)
   , stat = promisify(fs.stat)
@@ -120,11 +119,14 @@ module.exports = function (root) {
 		return stat(fileName).then(function (stats) {
 			var data = { stats: stats, fileName: fileName };
 			result[fileName] = data;
-			// Reading the whole file
-			//return readFile(fileName)
-			// Optimization: reading just the first N bytes
-			return readFirstBytes(fileName, 12000)
-				.then(extract.bind(data));
+
+			// We read just first 12k bytes, but you can also parse whole HTML
+			// document with following:
+			//
+			// var readFile = promisify(fs.readFile);
+			// return readFile(fileName);
+
+			return readFirstBytes(fileName, 12000).then(extract.bind(data));
 		});
 	})(result);
 };
