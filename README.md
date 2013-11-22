@@ -519,7 +519,7 @@ With cb we may build hybrid functions that do both, handle asynchronous callback
 
 ```javascript
 var asyncFunction = function (x, y, callback)  {
-	deferred({ foo: x, bar: y }).cb(callback);
+	return someAsyncProcessingThatReturnsPromise(x, y).cb(callback);
 });
 ```
 
