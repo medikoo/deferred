@@ -3,11 +3,11 @@
 
 _Implementation originally inspired by Kris Kowal's [Q](https://github.com/kriskowal/q)_
 
-Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises ( __[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
+Deferred is complete, [one of the fastest](#performance) and natural promise implementation in JavaScript, with Deferred you can write [clear maintainable code](#promises-approach) that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises ([chaining](#chaining) and [nesting](#nesting)) you're forced to program declaratively.  
 
-With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
+With Deferred you also can: [Process collections](#processing-collections) of deferred calls. [Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs). [Limit concurrency](#limiting-concurrency) of scheduled tasks. [Emit progress events](#progress-and-other-events) or [stream results partially](#streaming-data-partially) on the go.  
 
-In the end you may debug your flow by __[tracking unresolved promises](#monitoring-unresolved-promises)__ or gathering __[usage statistics](#usage-statistics)__.
+In the end you may debug your flow by [tracking unresolved promises](#monitoring-unresolved-promises) or gathering [usage statistics](#usage-statistics).
 
 _For good insight into promise/deferred concept and in general asynchronous programming see also slides from meetjs summit presentation: [Asynchronous JavaScript](http://www.medikoo.com/asynchronous-javascript/)_
 
@@ -15,7 +15,7 @@ __If you need help with deferred, please ask on dedicated mailing list: [deferre
 
 ## Comparision with callback style
 
-Let's take an example script that concatenates all JavaScript files in a given directory and saves it to lib.js.
+Example of JavaScript files concatenation:
 
 ### Plain Node.js, callbacks approach
 
