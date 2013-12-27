@@ -340,7 +340,7 @@ callAsync(someAsyncFn, context, arg1, arg2).done(function (result) {
 });
 ```
 
-#### invokeAsync(obj, fnName|fn, ...args)
+#### invokeAsync(obj, fnName | fn, ...args)
 
 If you need to turn asynchronous methods to ones that return promises, and you prefer not to augment its class prototypes, `invokeAsync` addresses that use case.
 
