@@ -324,8 +324,7 @@ If for some reason you need to turn asynchronous functions into ones that return
 Still mind that `promisify` is much better (cleaner) choice if it's possible to prepare reusable wrapper upfront.
 
 ```javascript
-var callAsync = require('deferred').callAsync
-var invokeAsync = require('deferred').invokeAsync
+var callAsync = require('deferred').callAsync;
 
 callAsync(someAsyncFn, context, arg1, arg2).done(function (result) {
   // process result
