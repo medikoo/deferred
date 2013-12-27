@@ -5,7 +5,7 @@ _Implementation originally inspired by Kris Kowal's [Q](https://github.com/krisk
 
 Deferred is complete, [one of the fastest](#performance) and natural promise implementation in JavaScript, with Deferred you can write [clear maintainable code](#promises-approach) that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises ([chaining](#chaining) and [nesting](#nesting)) you're forced to program declaratively.  
 
-With Deferred you also can: [Process collections](#processing-collections) of deferred calls. [Handle Node.js asynchronous functions](#working-with-asynchronous-functions-as-we-know-them-from-nodejs). [Limit concurrency](#limiting-concurrency) of scheduled tasks. [Emit progress events](#progress-and-other-events) or [stream results partially](#streaming-data-partially) on the go.  
+With Deferred you also can: [Process collections](#processing-collections) of deferred calls. [Handle Node.js asynchronous functions](#working-with-asynchronous-functions). [Limit concurrency](#limiting-concurrency) of scheduled tasks. [Emit progress events](#progress-and-other-events) or [stream results partially](#streaming-data-partially) on the go.  
 
 In the end you may debug your flow by [tracking unresolved promises](#monitoring-unresolved-promises) or gathering [usage statistics](#usage-statistics).
 
@@ -280,7 +280,7 @@ promise(function (result) {
 });
 ```
 
-### Working with asynchronous functions as we know them from Node.js
+### Working with asynchronous functions
 
 #### promisify(fn[, length])
 
@@ -319,16 +319,32 @@ readFile(__filename, 'utf-8')(function (content) {
 
 #### callAsync(fn, context, ...args)
 
-If for some reason you need to wrap asynchronous functions inline in algorithm, e.g. when you work with functions that come from uncertain API, or in case of methods where you prefer not to augment its class prototypes `callAsync` is the right choice:
+If for some reason you need to turn asynchronous functions into ones that return promises, inline in algorithm, then `callAsync` is for you.
+
+Still mind that `promisify` is much better (cleaner) choice if it's possible to prepare reusable wrapper upfront.
 
 ```javascript
 var callAsync = require('deferred').callAsync
+var invokeAsync = require('deferred').invokeAsync
 
-callAsync(db.find, db, 'books', { title: "Some title" }).done(function (book) {
+callAsync(someAsyncFn, context, arg1, arg2).done(function (result) {
+  // process result
+});
+```
+
+#### invokeAsync(obj, fnName|fn, ...args)
+
+If you need to turn asynchronous methods to ones that return promises, and you prefer not to augment its class prototypes, `invokeAsync` addresses that use case.
+
+```javascript
+var invokeAsync = require('deferred').invokeAsync
+
+invokeAsync(db, 'find', 'books', { title: "Some title" }).done(function (book) {
   // process result
 });
 
 ```
+
 
 ## Grouping promises
 

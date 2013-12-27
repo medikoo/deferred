@@ -21,6 +21,17 @@ module.exports = {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
 	},
+	"InvokeAsync": function (t, a, d) {
+		var x = {};
+		t.invokeAsync({}, function (cb) {
+			setTimeout(function () {
+				cb(null, x);
+			}, 0);
+			return {};
+		})(function (r) {
+			a(r, x);
+		}).end(d, d);
+	},
 	"CallAsync": function (t, a, d) {
 		var x = {};
 		t.callAsync(function (cb) {

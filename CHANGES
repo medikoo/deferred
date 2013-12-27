@@ -1,3 +1,6 @@
+v0.6.8  --  2013.12.27
+* Function version of `invokeAsync` utility (further addresses #26)
+
 v0.6.7  --  2013.12.27
 * `callAsync` utility, to promisify asynchronous functions inline in algorithm.
   Fixes #26
