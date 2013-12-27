@@ -12,7 +12,7 @@ module.exports = function (t) {
 				setTimeout(function () {
 					callback(null, z);
 				}, 0);
-			}, 2).call(u, x, deferred(y), z)(function (result) {
+			}, u, x, deferred(y))(function (result) {
 				a(result, z);
 			}, a.never).end(d, d);
 		},
@@ -23,15 +23,9 @@ module.exports = function (t) {
 				setTimeout(function () {
 					callback(null, z);
 				}, 0);
-			}, 2).call(u, x)(function (result) {
+			}, u, x, undefined)(function (result) {
 				a(result, z);
 			}, a.never).end(d, d);
-		},
-		"Do not promisify promisified function": function (a) {
-			var fn, fn1;
-			fn = t.call(function () { });
-			fn1 = t.call(fn);
-			a(fn, fn1);
 		},
 		"Successful": function (a, d) {
 			var x = {}, y = {}, z = {};
@@ -40,7 +34,7 @@ module.exports = function (t) {
 				setTimeout(function () {
 					callback(null, z);
 				}, 0);
-			})(x, y)(function (result) {
+			}, null, x, y)(function (result) {
 				a(result, z, "Result");
 			}, a.never).end(d, d);
 		},
@@ -51,7 +45,7 @@ module.exports = function (t) {
 				setTimeout(function () {
 					callback(null, x, y, z);
 				}, 0);
-			})(x, y)(function (result) {
+			}, null, x, y)(function (result) {
 				a.deep(result, [x, y, z], "Result");
 			}, a.never).end(d, d);
 		},
@@ -59,14 +53,12 @@ module.exports = function (t) {
 			var x = new Error('Test');
 			t.call(function (callback) {
 				setTimeout(function () { callback(x); }, 0);
-			}, 0)(y)(a.never, function (e) {
+			})(a.never, function (e) {
 				a(e, x);
 			}).end(d, d);
 		},
 		"Function crash": function (a) {
-			var x = new Error('Test'), fn;
-			fn = t.call(function () { throw x; });
-			a.throws(function () { fn(); });
+			a.throws(function () { throw x; });
 		}
 	};
 };
