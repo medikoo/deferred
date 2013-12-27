@@ -15,11 +15,22 @@ module.exports = {
 		delete o.promise;
 		delete o.profiler;
 		return o;
-	}), ['Deferred', 'delay', 'extend', 'gate', 'profile', 'profileEnd',
-		'promisify', 'promisifySync', 'map', 'reduce', 'some']),
+	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
+		'profileEnd', 'promisify', 'promisifySync', 'map', 'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
+	},
+	"CallAsync": function (t, a, d) {
+		var x = {};
+		t.callAsync(function (cb) {
+			setTimeout(function () {
+				cb(null, x);
+			}, 0);
+			return {};
+		})(function (r) {
+			a(r, x);
+		}).end(d, d);
 	},
 	"Delay": function (t, a, d) {
 		var x = {};

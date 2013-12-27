@@ -5,7 +5,7 @@ _Implementation originally inspired by Kris Kowal's [Q](https://github.com/krisk
 
 Deferred is complete, __[one of the fastest](#performance)__ and natural promise implementation in JavaScript, with Deferred you can write __[clear maintainable code](#promises-approach)__ that takes maximum out of asynchronicity, in fact due to multi-dimensional nature of promises ( __[chaining](#chaining)__ and __[nesting](#nesting)__) you're forced to program declaratively.  
 
-With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#promisify---working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
+With Deferred you also can: __[Process collections](#processing-collections)__ of deferred calls. __[Handle Node.js asynchronous functions](#working-with-asynchronous-functions-as-we-know-them-from-nodejs)__. __[Limit concurrency](#limiting-concurrency)__ of scheduled tasks. __[Emit progress events](#progress-and-other-events)__ or __[stream results partially](#streaming-data-partially)__ on the go.  
 
 In the end you may debug your flow by __[tracking unresolved promises](#monitoring-unresolved-promises)__ or gathering __[usage statistics](#usage-statistics)__.
 
@@ -13,11 +13,11 @@ _For good insight into promise/deferred concept and in general asynchronous prog
 
 __If you need help with deferred, please ask on dedicated mailing list: [deferred-js@googlegroups.com](https://groups.google.com/forum/#!forum/deferred-js)__
 
-## Comparision with callback style
+### Comparision with callback style
 
 Let's take an example script that concatenates all JavaScript files in a given directory and saves it to lib.js.
 
-### Plain Node.js, callbacks approach
+#### Plain Node.js, callbacks approach
 
 ```javascript
 var fs = require('fs');
@@ -66,7 +66,7 @@ readdir(__dirname, function (err, files) {
 });
 ```
 
-### Implementation with promises:
+#### Implementation with promises:
 
 ```javascript
 var promisify = require('deferred').promisify;
@@ -95,19 +95,19 @@ writeFile(__dirname + '/lib.js',
 ).done(); // If there was any error on the way throw it
 ```
 
-## Examples
+### Examples
 
 See [examples folder](examples) for a demonstration of promises usage in some other real world cases.
 
-## Installation
+### Installation
 
-### NPM
+#### NPM
 
 In your project path:
 
 	$ npm install deferred
 
-### Browser
+#### Browser
 
 Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
 
@@ -142,9 +142,9 @@ $ webmake --name=deferred --amd deferred/lib/index.js deferred.js
 
 _Mind that deferred relies on some ECMAScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
-## Deferred/Promise concept
+### Deferred/Promise concept
 
-### Deferred
+#### Deferred
 
 For work that doesn't return immediately (asynchronous) you may create deferred object. Deferred holds both `resolve` and `promise` objects. Observers interested in value are attached to `promise` object, with `resolve` we resolve promise with an actual value. In common usage `promise` is returned to the world and `resolve` is kept internally
 
@@ -179,7 +179,7 @@ resultPromise(function (value) {
 });
 ```
 
-### Promise
+#### Promise
 
 Promise is an object that represents eventual value which may already be available or is expected to be available in a future. Promise may succeed (fulfillment) or fail (rejection). Promise can be resolved only once.  
 In `deferred` (and most of the other promise implementations) you may listen for the value by passing observers to `then` function:
@@ -199,7 +199,7 @@ __If you want to keep clear visible distinction between promises and other objec
 
 Both callbacks `onsuccess` and `onfail` are optional. They will be called only once and only either `onsuccess` or `onfail` will be called.
 
-#### Chaining
+##### Chaining
 
 Promises by nature can be chained. `promise` function returns another promise which is resolved with a value returned by a callback function:
 
@@ -213,7 +213,7 @@ delayedAdd(2, 3)(function (result) {
 
 It's not just functions that promise function can take, it can be other promises or any other JavaScript value (with exception of `null` or `undefined` which will be treated as no value). Going that way you may override result of a promise chain with specific value.
 
-#### Nesting
+##### Nesting
 
 Promises can be nested. If a promise resolves with another promise, it's not really resolved. It's resolved only when final promise is resolved with a real value:
 
@@ -225,7 +225,7 @@ def.promise(function (result) {
 });
 ```
 
-#### Error handling
+##### Error handling
 
 Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintainable than when using callbacks approach.
 
@@ -244,7 +244,7 @@ delayedAdd(2, 3)(function (result) {
 });
 ```
 
-#### Ending chain
+##### Ending chain
 
 To expose the errors that are not handled, end promise chain with `.done()`, then error that broke the chain will be thrown:
 
@@ -276,7 +276,7 @@ promise(function (value) {
 
 And as with `then` either callback can be provided. If callback for error was omitted, eventual error will be thrown.
 
-#### Creating resolved promises
+##### Creating resolved promises
 
 You may create initially resolved promises.
 
@@ -288,7 +288,9 @@ promise(function (result) {
 });
 ```
 
-## Promisify - working with asynchronous functions as we know them from Node.js
+### Working with asynchronous functions as we know them from Node.js
+
+#### promisify(fn[, length])
 
 There is a known convention (coined by Node.js) for working with asynchronous calls. An asynchronous function receives a callback argument which handles both eventual error and expected value:
 
@@ -323,6 +325,19 @@ readFile(__filename, 'utf-8')(function (content) {
 
 `promisify` also takes care of input arguments. __It makes sure that all arguments that are to be passed to asynchronous function are first resolved.__
 
+#### callAsync(fn, context, ...args)
+
+If for some reason you need to wrap asynchronous functions inline in algorithm, e.g. when you work with functions that come from uncertain API, or in case of methods where you prefer not to augment its class prototypes `callAsync` is the right choice:
+
+```javascript
+var callAsync = require('deferred').callAsync
+
+callAsync(db.find, db, 'books', { title: "Some title" }).done(function (book) {
+  // process result
+});
+
+```
+
 ## Grouping promises
 
 When we're interested in results of more than one promise object we may group them into one promise with `deferred` function:
@@ -333,9 +348,9 @@ deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function (result)
 });
 ```
 
-## Processing collections
+### Processing collections
 
-### Map
+#### Map
 
 It's analogous to Array's map, with that difference that it returns promise (of an array) that would be resolved when promises for all items are resolved. Any error that would occur will reject the promise and resolve it with same error.
 
@@ -370,7 +385,7 @@ This function is available also as an extension on promise object.
 
 __See [limiting concurrency](#limiting-concurrency) section for info on how to limit maximum number of concurrent calls in `map`__
 
-### Reduce
+#### Reduce
 
 It's same as Array's reduce with that difference that it calls callback only after previous accumulated value is resolved, this way we may accumulate results of collection of promises or invoke some asynchronous tasks one after another.
 
@@ -385,7 +400,7 @@ deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)], function
 
 This function is available also as an extension on promise object.
 
-### Some
+#### Some
 
 Promise aware Array's some. Process collection one after another and stop when first item matches your criteria
 
@@ -402,7 +417,7 @@ deferred.some([filename1, filename2, filename3], function (a) {
 
 This function is available also as an extension on promise object.
 
-## Limiting concurrency
+### Limiting concurrency
 
 There are cases when we don't want to run too many tasks simultaneously. Like common case in Node.js when we don't want to open too many file descriptors.
 
@@ -435,7 +450,7 @@ deferred.map(filenames, deferred.gate(function (filename) {
 });
 ```
 
-## Progress and other events
+### Progress and other events
 
 __Promise objects are also an event emitters__. Deferred implementation is backed by cross-environment [event-emitter solution](https://github.com/medikoo/event-emitter)
 
@@ -466,7 +481,7 @@ upload.done(function (e) {
   // All files uploaded!
 });
 ```
-### Streaming data partially
+#### Streaming data partially
 
 Another use case would be to provide obtained data partially on the go (stream like).
 Imagine recursive directory reader that scans whole file system and provides filenames as it approaches them:
@@ -481,12 +496,12 @@ reader.done(function (allFilenames) {
 });
 ```
 
-## Promise extensions
+### Promise extensions
 
 Promise objects are equipped with some useful extensions. All extension are optional but are loaded by default when `deferred` is loaded via `require('deferred')` import.
 When preparing client-side file (with help of e.g. [modules-webmake](https://github.com/medikoo/modules-webmake)) you are free to decide, which extensions you want to take (see source of `lib/index.js` on how to do that)
 
-### aside
+#### aside
 
 Third brother of `then` and `done`. Has same signature but neither extends chain nor ends it, instead splits it by returning promise on which it was invoked. Useful when we want to return promise, but on a side (in parallel) do something else with obtained value:
 
@@ -500,7 +515,7 @@ var y = promise.aside(function (value) {
 console.log(y === promise); // true
 ```
 
-### catch
+#### catch
 
 Same as `then` but accepts only `onFail` callback.
 
@@ -519,7 +534,7 @@ promise2.done(function (value) {
 });
 ```
 
-### cb
+#### cb
 
 Convert back to callback style. Useful if you want to process regular callback at the end of promise chain. Simple use case would be regular asynchronous function built internally with promises. `cb` also makes sure that your callback is not called immediately but in next tick earliest.
 
@@ -531,7 +546,7 @@ var asyncFunction = function (x, y, callback)  {
 });
 ```
 
-### finally
+#### finally
 
 Invokes given callback when promise is either fulfilled or rejected
 
@@ -545,7 +560,7 @@ promise = asyncFn();
 promise.finally(cleanup);
 ```
 
-### get
+#### get
 
 To directly get to object property use `get`
 
@@ -575,7 +590,7 @@ promise.get('foo', 'bar')(function (value) {
 });
 ```
 
-### invoke & invokeAsync
+#### invoke & invokeAsync
 
 Schedule function call on returned object
 
@@ -598,11 +613,11 @@ promise.invokeAsync('foo', 3)(function (result) {
 });
 ```
 
-### map
+#### map
 
 See [promise aware version of Array's map](#map).
 
-### match
+#### match
 
 If promise expected value is a list that you want to match into function arguments then use `match`
 
@@ -614,17 +629,17 @@ promise.match(function (a, b) {
 });
 ```
 
-### reduce
+#### reduce
 
 See [promise aware version of Array's reduce](#reduce)
 
-### some
+#### some
 
 See [promise aware version of Array's some](#some)
 
-## Debugging
+### Debugging
 
-### Monitoring unresolved promises
+#### Monitoring unresolved promises
 
 In properly constructed flow, there should be no promises that are never resolved.
 If you want to be sure that it's not the case, or you suspect there are such issues, check whether deferred's monitor has something to say
@@ -644,7 +659,7 @@ deferred.monitor(10000, function (err) {
 
 This extension affects performance and it's best not to use it in production environment
 
-### Usage statistics
+#### Usage statistics
 
 Being able to see how many promises were initialized (and where) in our flow can be helpful to track application issues, it's also good way to confirm that constructed flow works as intended.
 
@@ -694,7 +709,7 @@ Unresolved promises were initialized at:
 
 __Using profiler significantly affects performance don't  use it in production environment.__
 
-## Performance
+### Performance
 
 Promises just by being rich objects introduce overhead over regular callbacks. If we do a lot asynchronous operations that are fast, performance of promise implementation that we rely on becomes a significant factor.
 
@@ -729,7 +744,7 @@ Promise overhead (concurrent calls) x10000:
 10:  3645ms  Q: nbind (generic wrapper)
 ```
 
-## Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
+### Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
 
 __Covered by over 300 hundred unit tests__
 
