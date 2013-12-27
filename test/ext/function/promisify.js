@@ -58,30 +58,15 @@ module.exports = function (t) {
 		"Erroneous": function (a, d) {
 			var x = new Error('Test');
 			t.call(function (callback) {
-				setTimeout(function () {
-					callback(x);
-				}, 0);
+				setTimeout(function () { callback(x); }, 0);
 			}, 0)(y)(a.never, function (e) {
 				a(e, x);
 			}).end(d, d);
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
-			fn = t.call(function () {
-				throw x;
-			});
-			a.throws(function () {
-				fn();
-			});
-		},
-		"True/False": function (a, d) {
-			t.call(function (callback) {
-				setTimeout(function () {
-					callback(false);
-				}, 0);
-			})()(function (result) {
-				a(result, false);
-			}, a.never).end(d, d);
+			fn = t.call(function () { throw x; });
+			a.throws(function () { fn(); });
 		}
 	};
 };
