@@ -58,7 +58,7 @@ module.exports = function (t) {
 			}).end(d, d);
 		},
 		"Function crash": function (a) {
-			a.throws(function () { throw x; });
+			a.throws(t.bind(function () { throw x; }));
 		}
 	};
 };
