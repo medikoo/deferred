@@ -728,7 +728,11 @@ __Using profiler significantly affects performance don't  use it in production e
 
 Promises just by being rich objects introduce overhead over regular callbacks. If we do a lot asynchronous operations that are fast, performance of promise implementation that we rely on becomes a significant factor.
 
-_benchmark_ folder contains few plain test cases that compares Deferred to other popular promise implementations. Base of test is plain [lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback) call to self file.
+_benchmark_ folder contains two tests. Tests reflect real use case I had in which performance of promise implementation appeared to be crucial.
+
+Base of a test is [lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback) (fastest asynchronous call in node.js API), It's called 10000 times in parallel and sequentially.
+
+_Note for benchmark purists: This test does real I/O, but there's no way to produce shim which will provide more reliable results (shim based on `setImmediate` adds more randomness to result than we got from calling real `lstat`)_
 
 _Example output taken under Node v0.10.20 on 2008 MBP._
 
