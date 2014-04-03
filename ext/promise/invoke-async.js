@@ -47,9 +47,7 @@ applyFn = function (fn, args, resolve, reject) {
 
 deferred.extend('invokeAsync', function (method/*, …args*/) {
 	var def;
-	if (!this.pending) {
-		this.pending = [];
-	}
+	if (!this.pending) this.pending = [];
 	def = deferred();
 	this.pending.push('invokeAsync', [arguments, def.resolve, def.reject]);
 	return def.promise;
