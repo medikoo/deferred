@@ -19,15 +19,15 @@ module.exports = function (name, ext) {
 		var result;
 		if (this.failed) {
 			reject(this.value);
-		} else {
-			try {
-				result = ext.apply(this.value, args);
-			} catch (e) {
-				reject(e);
-				return;
-			}
-			resolve(result);
+			return;
 		}
+		try {
+			result = ext.apply(this.value, args);
+		} catch (e) {
+			reject(e);
+			return;
+		}
+		resolve(result);
 	}, function (cb) {
 		((cb == null) || callable(cb));
 		if (this.failed) return this;
