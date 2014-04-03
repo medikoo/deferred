@@ -10,6 +10,7 @@ var isFunction = require('es5-ext/lib/Function/is-function')
 
 module.exports = {
 	"": indexTest(indexTest.readDir(dir)(function (o) {
+		delete o.assimilate;
 		delete o.benchmark;
 		delete o.deferred;
 		delete o.examples;
