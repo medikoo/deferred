@@ -14,9 +14,7 @@ var value    = require('es5-ext/lib/Object/valid-value')
 
 deferred.extend('get', function (/*…name*/) {
 	var def;
-	if (!this.pending) {
-		this.pending = [];
-	}
+	if (!this.pending) this.pending = [];
 	def = deferred();
 	this.pending.push('get', [arguments, def.resolve, def.reject]);
 	return def.promise;
