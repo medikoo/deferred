@@ -9,8 +9,9 @@
 var isCallable = require('es5-ext/lib/Object/is-callable')
   , validValue = require('es5-ext/lib/Object/valid-value')
   , deferred   = require('../../deferred')
-  , reject     = require('../../reject')
-  , isPromise  = require('../../is-promise');
+  , isPromise  = require('../../is-promise')
+
+  , reject = deferred.reject;
 
 deferred.extend('catch', function (cb) {
 	var def;

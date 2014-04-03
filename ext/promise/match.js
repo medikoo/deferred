@@ -12,7 +12,8 @@ var match      = require('es5-ext/lib/Function/prototype/match')
   , isCallable = require('es5-ext/lib/Object/is-callable')
   , isPromise  = require('../../is-promise')
   , deferred   = require('../../deferred')
-  , reject     = require('../../reject');
+
+  , reject = deferred.reject;
 
 deferred.extend('match', function (win, fail) {
 	var def;

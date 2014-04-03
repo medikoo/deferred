@@ -9,11 +9,11 @@
 
 var isCallable       = require('es5-ext/lib/Object/is-callable')
   , deferred         = require('../../deferred')
-  , reject           = require('../../reject')
   , isPromise        = require('../../is-promise')
   , processArguments = require('../_process-arguments')
 
   , slice = Array.prototype.slice, apply = Function.prototype.apply
+  , reject = deferred.reject
   , applyFn;
 
 applyFn = function (fn, args, resolve, reject) {

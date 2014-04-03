@@ -10,18 +10,17 @@ var toUint    = require('es5-ext/lib/Number/to-uint')
   , eeUnify   = require('event-emitter/lib/unify')
   , deferred  = require('../../deferred')
   , isPromise = require('../../is-promise')
-  , reject    = require('../../reject')
 
+  , reject = deferred.reject
   , apply = Function.prototype.apply, max = Math.max
-
-  , reject;
+  , gateReject;
 
 require('../promise/finally');
 
-reject = function () {
+gateReject = function () {
 	var e = new Error("Too many calls");
 	e.type = 'deferred-gate-rejected';
-	return deferred(e);
+	return reject(e);
 };
 
 module.exports = function (cLimit, qLimit) {
@@ -74,7 +73,7 @@ module.exports = function (cLimit, qLimit) {
 				queue.push([this, arguments, def]);
 				return def.promise;
 			}
-			return reject();
+			return gateReject();
 		}
 		return run(this, arguments);
 	};

@@ -13,10 +13,10 @@ var toArray          = require('es5-ext/lib/Array/from')
   , isCallable       = require('es5-ext/lib/Object/is-callable')
   , deferred         = require('../../deferred')
   , isPromise        = require('../../is-promise')
-  , reject           = require('../../reject')
   , processArguments = require('../_process-arguments')
 
   , slice = Array.prototype.slice, apply = Function.prototype.apply
+  , reject = deferred.reject
 
   , applyFn;
 

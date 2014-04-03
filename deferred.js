@@ -18,7 +18,8 @@ var isError    = require('es5-ext/lib/Error/is-error')
   , every = Array.prototype.every, push = Array.prototype.push
 
   , Deferred, createDeferred, count = 0, timeout, extendShim, ext
-  , protoSupported = Boolean(isPromise.__proto__);
+  , protoSupported = Boolean(isPromise.__proto__)
+  , resolve;
 
 extendShim = function (promise) {
 	ext._names.forEach(function (name) {
@@ -28,6 +29,16 @@ extendShim = function (promise) {
 	});
 	promise.returnsPromise = true;
 	promise.resolved = promise.__proto__.resolved;
+};
+
+resolve = function (value, failed) {
+	var promise = function (win, fail) { return promise.then(win, fail); };
+	promise.value = value;
+	promise.failed = failed;
+	promise.__proto__ = ext._resolved;
+	if (!protoSupported) { extendShim(promise); }
+	if (createDeferred._profile) createDeferred._profile(true);
+	return promise;
 };
 
 Deferred = function () {
@@ -125,7 +136,7 @@ Deferred.prototype = {
 };
 
 module.exports = createDeferred = function (value) {
-	var l = arguments.length, d, waiting, initialized, result, promise;
+	var l = arguments.length, d, waiting, initialized, result;
 	if (!l) return new Deferred();
 	if (l > 1) {
 		d = new Deferred();
@@ -156,14 +167,9 @@ module.exports = createDeferred = function (value) {
 		return d.promise;
 	}
 	if (isPromise(value)) return value;
-	promise = function (win, fail) { return promise.then(win, fail); };
-	promise.value = value;
-	promise.failed = isError(value);
-	promise.__proto__ = ext._resolved;
-	if (!protoSupported) { extendShim(promise); }
-	if (createDeferred._profile) createDeferred._profile(true);
-	return promise;
+	return resolve(value, isError(value));
 };
 
 createDeferred.Deferred = Deferred;
+createDeferred.reject = function (value) { return resolve(value, true); };
 ext = require('./_ext');

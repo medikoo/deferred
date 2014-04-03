@@ -16,10 +16,10 @@ module.exports = {
 		delete o.ext;
 		delete o.promise;
 		delete o.profiler;
-		delete o.reject;
 		return o;
 	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
-		'profileEnd', 'promisify', 'promisifySync', 'map', 'reduce', 'some']),
+		'profileEnd', 'promisify', 'promisifySync', 'reject', 'map', 'reduce',
+		'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);

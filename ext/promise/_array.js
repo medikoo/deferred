@@ -4,7 +4,8 @@
 
 var callable = require('es5-ext/lib/Object/valid-callable')
   , deferred = require('../../deferred')
-  , reject   = require('../../reject');
+
+  , reject = deferred.reject;
 
 module.exports = function (name, ext) {
 	deferred.extend(name, function (cb) {

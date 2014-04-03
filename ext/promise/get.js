@@ -8,9 +8,9 @@
 
 var value    = require('es5-ext/lib/Object/valid-value')
   , deferred = require('../../deferred')
-  , reject   = require('../../reject')
 
-  , reduce = Array.prototype.reduce;
+  , reduce = Array.prototype.reduce
+  , reject = deferred.reject;
 
 deferred.extend('get', function (/*…name*/) {
 	var def;

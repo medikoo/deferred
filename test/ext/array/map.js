@@ -1,7 +1,8 @@
 'use strict';
 
 var deferred = require('../../../deferred')
-  , reject   = require('../../../reject');
+
+  , reject = deferred.reject;
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
