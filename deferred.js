@@ -171,6 +171,10 @@ module.exports = createDeferred = function (value) {
 
 createDeferred.Deferred = Deferred;
 createDeferred.reject = function (value) { return resolve(value, true); };
-createDeferred.resolve = function (value) { return resolve(value, false); };
+createDeferred.resolve = function (value) {
+	value = assimilate(value);
+	if (isPromise(value)) return value;
+	return resolve(value, false);
+};
 ext = require('./_ext');
 assimilate = require('./assimilate');
