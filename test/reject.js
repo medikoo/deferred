@@ -1,6 +1,6 @@
 'use strict';
 
-var isPromise = require('../lib/is-promise');
+var isPromise = require('../is-promise');
 
 module.exports = function (t, a) {
 	var rejected = t('elo');

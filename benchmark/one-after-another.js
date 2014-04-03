@@ -14,7 +14,7 @@ var forEach    = require('es5-ext/lib/Object/for-each')
   , Bluebird   = require('bluebird')
   , kew        = require('kew')
   , when       = require('when')
-  , deferred   = require('../lib')
+  , deferred   = require('../')
 
   , now = Date.now
   , Deferred = deferred.Deferred, promisify = deferred.promisify

@@ -14,7 +14,7 @@ var generate   = require('es5-ext/lib/Array/generate')
   , Bluebird   = require('bluebird')
   , kew        = require('kew')
   , when       = require('when')
-  , deferred   = require('../lib')
+  , deferred   = require('../')
 
   , now = Date.now
   , Deferred = deferred.Deferred

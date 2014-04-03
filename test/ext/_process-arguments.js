@@ -1,7 +1,7 @@
 'use strict';
 
-var isPromise = require('../../lib/is-promise')
-  , deferred  = require('../../lib/deferred');
+var isPromise = require('../../is-promise')
+  , deferred  = require('../../deferred');
 
 module.exports = function (t) {
 	var x = {}, y = {}, e = new Error();

@@ -1,7 +1,7 @@
 'use strict';
 
-var isPromise = require('../lib/is-promise')
-  , reject    = require('../lib/reject')
+var isPromise = require('../is-promise')
+  , reject    = require('../reject')
 
   , x = {};
 

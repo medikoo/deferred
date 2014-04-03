@@ -6,11 +6,13 @@ var isFunction = require('es5-ext/lib/Function/is-function')
   , readdir    = require('fs').readdir
   , indexTest  = require('tad/lib/utils/index-test')
 
-  , dir = path.dirname(__dirname) + '/lib';
+  , dir = path.dirname(__dirname);
 
 module.exports = {
 	"": indexTest(indexTest.readDir(dir)(function (o) {
+		delete o.benchmark;
 		delete o.deferred;
+		delete o.examples;
 		delete o.ext;
 		delete o.promise;
 		delete o.profiler;

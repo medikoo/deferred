@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../lib/deferred')
+var deferred = require('../deferred')
 
   , x = {}, y = {}, e = new Error("Error");
 
