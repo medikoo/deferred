@@ -117,19 +117,19 @@ $ git clone git://github.com/medikoo/deferred.git
 $ cd deferred
 $ npm install
 $ cd ..
-$ webmake --name=deferred deferred/lib/index.js deferred.js
+$ webmake --name=deferred deferred/index.js deferred.js
 ```
 
 Last command bundles deferred with all it's functionalities, but you may need just a subset, you can have that by addressing specific modules directly, e.g. with following you will build just core functionality with map extension:
 
 ```
-$ webmake --name=deferred --include=deferred/lib/ext/promise/map.js deferred/lib/deferred.js deferred.js
+$ webmake --name=deferred --include=deferred/ext/promise/map.js deferred/deferred.js deferred.js
 ```
 
 If you work with AMD modules, use _amd_ option, so generated bundle is one:
 
 ```
-$ webmake --amd deferred/lib/index.js deferred.js
+$ webmake --amd deferred/index.js deferred.js
 ```
 
 _Mind that deferred relies on some ECMAScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
