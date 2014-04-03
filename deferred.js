@@ -43,15 +43,11 @@ resolve = function (value, failed) {
 
 Deferred = function () {
 	var promise = function (win, fail) { return promise.then(win, fail); };
-	if (!count) {
-		timeout = setTimeout(noop, 1e9);
-	}
+	if (!count) timeout = setTimeout(noop, 1e9);
 	++count;
-	if (createDeferred._monitor) {
-		promise.monitor = createDeferred._monitor();
-	}
+	if (createDeferred._monitor) promise.monitor = createDeferred._monitor();
 	promise.__proto__ = ext._unresolved;
-	if (!protoSupported) { extendShim(promise); }
+	if (!protoSupported) extendShim(promise);
 	(createDeferred._profile && createDeferred._profile());
 	this.promise = promise;
 	this.resolve = this.resolve.bind(this);
