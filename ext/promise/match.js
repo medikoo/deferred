@@ -18,12 +18,8 @@ var match      = require('es5-ext/lib/Function/prototype/match')
 deferred.extend('match', function (win, fail) {
 	var def;
 	((win == null) || callable(win));
-	if (!win && (fail == null)) {
-		return this;
-	}
-	if (!this.pending) {
-		this.pending = [];
-	}
+	if (!win && (fail == null)) return this;
+	if (!this.pending) this.pending = [];
 	def = deferred();
 	this.pending.push('match', [win, fail, def.resolve, def.reject]);
 	return def.promise;
