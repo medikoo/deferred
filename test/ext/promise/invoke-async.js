@@ -76,16 +76,6 @@ module.exports = function () {
 			deferred({}).invokeAsync(fn)(a.never, function (e) {
 				a(e, x);
 			}).end();
-		},
-		"True/False": function (a, d) {
-			var fn = function (callback) {
-				setTimeout(function () {
-					callback(false);
-				}, 0);
-			};
-			deferred({}).invokeAsync(fn)(function (res) {
-				a(res, false);
-			}, a.never).end(d, d);
 		}
 	};
 };

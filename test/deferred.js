@@ -1,6 +1,7 @@
 'use strict';
 
 var isPromise = require('../lib/is-promise')
+  , reject    = require('../lib/reject')
 
   , x = {};
 
@@ -36,7 +37,7 @@ module.exports = {
 				t(t(x), d1.promise(function () {
 					a(res, true, "Resolved");
 					d();
-				}), v = new Error("Error"), {})(a.never, function (e) {
+				}), reject(v = new Error("Error")), {})(a.never, function (e) {
 					a(e, v);
 					res = true;
 				}).end();
@@ -127,9 +128,6 @@ module.exports = {
 	},
 	"Reject": function (t, a) {
 		var e = new Error("Error!");
-		a.throws(function () {
-			t.reject("Error!");
-		}, "Throw on non error reject");
 		t().reject(e).end(a.never, function (result) { a(result, e); });
 	}
 };

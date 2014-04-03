@@ -1,6 +1,7 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../lib/deferred')
+  , reject   = require('../../../lib/reject');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error"), e2 = new Error("Error2");
@@ -104,7 +105,7 @@ module.exports = function (t) {
 				},
 				"Error": {
 					"": function (a, d) {
-						t.call([e])(a.never, function (res) {
+						t.call([reject(e)])(a.never, function (res) {
 							a(res, e);
 						}, a.never).end(d, d);
 					},
@@ -142,9 +143,9 @@ module.exports = function (t) {
 							t.call([e], function (acc, arg) {
 								a(arg, e, "Argument");
 								return e2;
-							}, null)(a.never, function (res) {
+							}, null)(function (res) {
 								a(res, e2);
-							}).end(d, d);
+							}, a.never).end(d, d);
 						}
 					}
 				}
@@ -159,7 +160,7 @@ module.exports = function (t) {
 					"Initial Error": function (a, d) {
 						t.call([x], function (err) {
 							a(err, e, "Call");
-							return e;
+							throw e;
 						}, e)(a.never, function (res) {
 							a(res, e);
 						}).end(d, d);
@@ -205,13 +206,13 @@ module.exports = function (t) {
 				t.call(list, function (a1, a2, a3, a4) {
 					a.deep([a1, a2, a3, a4], [e, x, 0, list]);
 					return e;
-				}, e)(a.never, function (res) {
+				}, reject(e))(a.never, function (res) {
 					a(res, e);
 				}).end(d, d);
 			},
 			"No callback": {
 				"Error": function (a, d) {
-					t.call([x, e, e2])(a.never, function (res) {
+					t.call([x, reject(e), e2])(a.never, function (res) {
 						a(res, e);
 					}).end(d, d);
 				},

@@ -42,7 +42,7 @@ module.exports = function (t) {
 						a(err, e);
 					});
 					py.resolve(y);
-					px.resolve(e);
+					px.reject(e);
 				}
 			}
 		}

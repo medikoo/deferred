@@ -1,6 +1,7 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../lib/deferred')
+  , reject   = require('../../../lib/reject');
 
 module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
@@ -57,7 +58,7 @@ module.exports = function (t) {
 		"Many": {
 			"No callback": {
 				"Error": function (a, d) {
-					t.call([x, y, deferred(x), e, z])(a.never, function (res) {
+					t.call([x, y, deferred(x), reject(e), z])(a.never, function (res) {
 						a(res, e);
 						d();
 					});
@@ -80,7 +81,7 @@ module.exports = function (t) {
 						if (count++) {
 							a.never();
 						}
-						return e;
+						throw e;
 					})(a.never, function (res) {
 						a(res, e);
 					}).end(d, d);
