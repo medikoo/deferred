@@ -70,7 +70,7 @@ Reduce.prototype = {
 		var value = this.list[this.current];
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(function (result) {
+				value.done(function (result) {
 					result = this.processCb(result);
 					if (this.state !== 'value') return;
 					this.processValue(result);
@@ -103,7 +103,7 @@ Reduce.prototype = {
 			}
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(function (result) {
+					value.done(function (result) {
 						this.state = 'value';
 						this.processValue(result);
 						if (!this.state) this.continue();

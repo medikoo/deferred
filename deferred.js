@@ -145,7 +145,7 @@ module.exports = createDeferred = function (value) {
 				return true;
 			}
 			++waiting;
-			value.end(function (value) {
+			value.done(function (value) {
 				result[index] = value;
 				if (!--waiting && initialized) d.resolve(result);
 			}, d.reject);

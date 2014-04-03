@@ -28,7 +28,7 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, 'dwa', px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.end(function (args) {
+					p.done(function (args) {
 						a.deep(args, [x, y, 'dwa', x]);
 					}, a.never);
 					py.resolve(y);
@@ -38,7 +38,7 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, 'dwa', px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.end(a.never, function (err) {
+					p.done(a.never, function (err) {
 						a(err, e);
 					});
 					py.resolve(y);

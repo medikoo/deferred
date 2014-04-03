@@ -36,7 +36,7 @@ Some.prototype = {
 		var value = this.list[this.current];
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(this.processCb, this.reject);
+				value.done(this.processCb, this.reject);
 				return;
 			}
 			if (value.failed) {
@@ -58,7 +58,7 @@ Some.prototype = {
 			}
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(this.processValue, this.reject);
+					value.done(this.processValue, this.reject);
 					return;
 				}
 				if (value.failed) {

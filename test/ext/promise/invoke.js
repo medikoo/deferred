@@ -12,7 +12,7 @@ module.exports = function (t, a, d) {
 	};
 	t({}).invoke(fn, x)(function (r) {
 		a(r, x);
-	}).end(d, d);
+	}).done(d, d);
 };
 
 var deferred = require('../../../deferred');
@@ -33,7 +33,7 @@ module.exports = function () {
 			};
 			deferred(z).invoke('foo', x)(function (r) {
 				a(r, 3);
-			}).end();
+			}).done();
 		},
 		"Method": function (a, d) {
 			var x = {}, fn, z = {};
@@ -49,23 +49,23 @@ module.exports = function () {
 			};
 			deferred(z).invoke(fn, x)(function (r) {
 				a(r, 3);
-			}).end();
+			}).done();
 		},
 		"Fail": function (a) {
 			var e = new Error("Error");
 			deferred(e).invoke('bla')(a.never, function (r) {
 				a(r, e);
-			}).end();
+			}).done();
 		},
 		"Null input": function (a) {
 			deferred(null).invoke('test')(a.never, function (e) {
 				a.ok(e instanceof TypeError);
-			}).end();
+			}).done();
 		},
 		"No Function": function (a) {
 			deferred({}).invoke('test')(a.never, function (e) {
 				a.ok(e instanceof TypeError);
-			}).end();
+			}).done();
 		},
 		"Promise arguments": function (a) {
 			var y = {}, z = {}, x = { foo: function (w, u) {
@@ -75,7 +75,7 @@ module.exports = function () {
 			} };
 			deferred(x).invoke('foo', deferred(y), z)(function (r) {
 				a(r, 'foo', "Result");
-			}, a.never).end();
+			}, a.never).done();
 		},
 		"Erroneous": function (a) {
 			var x, fn;
@@ -85,7 +85,7 @@ module.exports = function () {
 			};
 			deferred({}).invoke(fn)(a.never, function (e) {
 				a(e, x);
-			}).end();
+			}).done();
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
@@ -94,7 +94,7 @@ module.exports = function () {
 			};
 			deferred({}).invoke(fn)(a.never, function (e) {
 				a(e, x);
-			}).end();
+			}).done();
 		}
 	};
 };

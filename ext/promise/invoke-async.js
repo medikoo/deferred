@@ -81,7 +81,7 @@ deferred.extend('invokeAsync', function (method/*, …args*/) {
 			reject(args);
 			return;
 		}
-		args.end(function (args) {
+		args.done(function (args) {
 			applyFn.call(this, fn, args, resolve, reject);
 		}.bind(this.value), reject);
 	} else {
@@ -107,7 +107,7 @@ deferred.extend('invokeAsync', function (method/*, …args*/) {
 	if (isPromise(args)) {
 		if (args.failed) return args;
 		def = deferred();
-		args.end(function (args) {
+		args.done(function (args) {
 			applyFn.call(this, method, args, def.resolve, def.reject);
 		}.bind(this.value), def.reject);
 	} else if (!method.returnsPromise) {

@@ -36,7 +36,7 @@ DMap.prototype = {
 		++this.waiting;
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(this.processCb.bind(this, index), this.reject);
+				value.done(this.processCb.bind(this, index), this.reject);
 				return true;
 			}
 			if (value.failed) {
@@ -60,7 +60,7 @@ DMap.prototype = {
 			}
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(this.processValue.bind(this, index), this.reject);
+					value.done(this.processValue.bind(this, index), this.reject);
 					return true;
 				}
 				if (value.failed) {

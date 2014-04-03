@@ -7,7 +7,7 @@ module.exports = function (t, a, d) {
 	}, 100).call(x, y, z)(function (arg) {
 		p = y;
 		r = arg;
-	}).end();
+	}).done();
 	a.not(p, y, "Not yet");
 	setTimeout(function () {
 		a.not(p, y, "After a while");

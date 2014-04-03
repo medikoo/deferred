@@ -171,7 +171,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).end(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) next(); // Ignore first
 		});
 	};
@@ -186,7 +186,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).end(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) {
 				data["Deferred: Dedicated wrapper"] = now() - time;
 				next();
@@ -199,7 +199,7 @@ tests = [function () {
 	var i = count, j = count, dlstat = promisify(lstat);
 
 	self = function () {
-		dlstat(__filename).end(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) next(); // Ignore first
 		});
 	};
@@ -209,7 +209,7 @@ tests = [function () {
 	var i = count, j = count, dlstat = promisify(lstat);
 
 	self = function () {
-		dlstat(__filename).end(function () {
+		dlstat(__filename).done(function () {
 			if (!--i) {
 				data["Deferred: Promisify (generic wrapper)"] = now() - time;
 				next();
@@ -224,7 +224,7 @@ tests = [function () {
 	time = now();
 	deferred.map(files, function (name) {
 		return dlstat(name);
-	}).end(function () {
+	}).done(function () {
 		next();
 	});
 }, function () {
@@ -233,14 +233,14 @@ tests = [function () {
 	time = now();
 	deferred.map(files, function (name) {
 		return dlstat(name);
-	}).end(function () { next(); });
+	}).done(function () { next(); });
 }, function () {
 	var dlstat = promisify(lstat);
 
 	time = now();
 	deferred.map(files, function (name) {
 		return dlstat(name);
-	}).end(function () {
+	}).done(function () {
 		data["Deferred: Map + Promisify"] = now() - time;
 		next();
 	});

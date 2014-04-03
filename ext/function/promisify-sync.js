@@ -34,7 +34,7 @@ module.exports = function (length) {
 		if (isPromise(args)) {
 			if (args.failed) return args;
 			def = deferred();
-			args.end(function (args) {
+			args.done(function (args) {
 				applyFn.call(this, fn, args, def.resolve, def.reject);
 			}.bind(this), def.reject);
 		} else {

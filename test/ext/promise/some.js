@@ -12,5 +12,5 @@ module.exports = function (t, a, d) {
 	})(function (r) {
 		a(r, true);
 		a(count, 2, "Count");
-	}).end(d, d);
+	}).done(d, d);
 };

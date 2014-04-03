@@ -60,7 +60,7 @@ deferred.extend('invoke', function (method/*, …args*/) {
 			reject(args.value);
 			return;
 		}
-		args.end(function (args) {
+		args.done(function (args) {
 			applyFn.call(this, fn, args, resolve, reject);
 		}.bind(this.value), reject);
 	} else {
@@ -86,7 +86,7 @@ deferred.extend('invoke', function (method/*, …args*/) {
 	if (isPromise(args)) {
 		if (args.failed) return args;
 		def = deferred();
-		args.end(function (args) {
+		args.done(function (args) {
 			applyFn.call(this, method, args, def.resolve, def.reject);
 		}.bind(this.value), def.reject);
 		return def.promise;

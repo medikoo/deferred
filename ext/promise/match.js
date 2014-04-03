@@ -39,7 +39,7 @@ deferred.extend('match', function (win, fail) {
 				if (cb.failed) reject(cb.value);
 				else resolve(cb.value);
 			} else {
-				cb.end(resolve, reject);
+				cb.done(resolve, reject);
 			}
 			return;
 		}

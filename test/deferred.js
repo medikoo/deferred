@@ -29,7 +29,7 @@ module.exports = {
 				t(t(x), y, null)(function (r) {
 					a.deep(r, [x, y, null]);
 					d();
-				}).end();
+				}).done();
 			},
 			"Error": function (a, d) {
 				var d1 = t(), v, res = false;
@@ -40,11 +40,11 @@ module.exports = {
 				}), reject(v = new Error("Error")), {})(a.never, function (e) {
 					a(e, v);
 					res = true;
-				}).end();
+				}).done();
 			},
 			"Resolve not via then": function (a) {
 				var d = t();
-				t(1, d.promise).end(function () {
+				t(1, d.promise).done(function () {
 					throw new Error("ERROR");
 				});
 				a.throws(d.resolve);
@@ -53,7 +53,7 @@ module.exports = {
 	},
 	"Only first resolve is taken": function (t, a) {
 		var defer = t();
-		defer.promise.end();
+		defer.promise.done();
 		defer.resolve(1);
 		defer.resolve(2);
 		a(defer.promise.valueOf(), 1);
@@ -70,16 +70,16 @@ module.exports = {
 		a(d4.promise.resolved, true, "#4 resolved");
 		d1.promise(function (arg) {
 			a(arg, x, "#1");
-		}).end();
+		}).done();
 		d2.promise(function (arg) {
 			a(arg, x, "#2");
-		}).end();
+		}).done();
 		d3.promise(function (arg) {
 			a(arg, x, "#3");
-		}).end();
+		}).done();
 		d2.promise(function (arg) {
 			a(arg, x, "#4");
-		}).end();
+		}).done();
 	},
 	"Transfer pending": function (t, a) {
 		var d1 = t(), d2 = t(), x = {}, p;
@@ -111,10 +111,10 @@ module.exports = {
 		var def = t(), promise = def.promise, x = {}, count = 0;
 		promise(function () {
 			++count;
-		}, a.never).end();
+		}, a.never).done();
 		promise(function () {
 			a(count, 1);
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 		def.resolve(x);
 	},
 	"Resolve promise with other promise": function (t, a, d) {
@@ -122,12 +122,12 @@ module.exports = {
 		  , def2 = t(), p2 = def2.promise;
 		p1(function (result) {
 			a(result, x);
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 		def1.resolve(p2);
 		def2.resolve(x);
 	},
 	"Reject": function (t, a) {
 		var e = new Error("Error!");
-		t().reject(e).end(a.never, function (result) { a(result, e); });
+		t().reject(e).done(a.never, function (result) { a(result, e); });
 	}
 };
