@@ -18,7 +18,7 @@ module.exports = function (name, ext) {
 	}, function (args, resolve, reject) {
 		var result;
 		if (this.failed) {
-			resolve(this.value);
+			reject(this.value);
 		} else {
 			try {
 				result = ext.apply(this.value, args);
