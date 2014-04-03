@@ -134,5 +134,11 @@ module.exports = {
 		a(isPromise(rejected), true, "Promise");
 		a(rejected.failed, true, "Rejected");
 		a(rejected.value, 'elo', "value");
+	},
+	"Resolve function": function (t, a) {
+		var resolved = t.resolve('elo');
+		a(isPromise(resolved), true, "Promise");
+		a(resolved.failed, false, "Resolveed");
+		a(resolved.value, 'elo', "value");
 	}
 };
