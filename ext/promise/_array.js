@@ -11,9 +11,7 @@ module.exports = function (name, ext) {
 	deferred.extend(name, function (cb) {
 		var def;
 		((cb == null) || callable(cb));
-		if (!this.pending) {
-			this.pending = [];
-		}
+		if (!this.pending) this.pending = [];
 		def = deferred();
 		this.pending.push(name, [arguments, def.resolve, def.reject]);
 		return def.promise;
