@@ -11,9 +11,9 @@
 
 'use strict';
 
-var isError    = require('es5-ext/lib/Error/is-error')
-  , noop       = require('es5-ext/lib/Function/noop')
-  , isPromise  = require('./is-promise')
+var isError   = require('es5-ext/lib/Error/is-error')
+  , noop      = require('es5-ext/lib/Function/noop')
+  , isPromise = require('./is-promise')
 
   , every = Array.prototype.every, push = Array.prototype.push
 
