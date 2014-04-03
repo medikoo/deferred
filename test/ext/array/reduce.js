@@ -41,7 +41,7 @@ module.exports = function (t) {
 					}, a.never).done(d, d);
 				},
 				"Error": function (a, d) {
-					t.call([], a.never, e)(a.never, function (res) {
+					t.call([], a.never, reject(e))(a.never, function (res) {
 						a(res, e);
 					}).done(d, d);
 				}

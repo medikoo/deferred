@@ -10,6 +10,7 @@ var extend     = require('es5-ext/lib/Object/extend')
   , assimilate = require('../../assimilate')
 
   , call = Function.prototype.call
+  , resolve = deferred.resolve
   , Some;
 
 Some = function (list, cb, context) {
@@ -28,7 +29,7 @@ Some = function (list, cb, context) {
 		}
 		++this.current;
 	}
-	return deferred(false);
+	return resolve(false);
 };
 
 Some.prototype = {

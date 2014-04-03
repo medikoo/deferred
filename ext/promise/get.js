@@ -10,7 +10,7 @@ var value    = require('es5-ext/lib/Object/valid-value')
   , deferred = require('../../deferred')
 
   , reduce = Array.prototype.reduce
-  , reject = deferred.reject;
+  , resolve = deferred.resolve, reject = deferred.reject;
 
 deferred.extend('get', function (/*…name*/) {
 	var def;
@@ -41,5 +41,5 @@ deferred.extend('get', function (/*…name*/) {
 	} catch (e) {
 		return reject(e);
 	}
-	return deferred(result);
+	return resolve(result);
 });

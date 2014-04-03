@@ -7,7 +7,7 @@ var callable   = require('es5-ext/lib/Object/valid-callable')
   , isPromise  = require('./is-promise')
 
   , create = Object.create, defineProperty = Object.defineProperty
-  , deferred, reject;
+  , deferred, resolve, reject;
 
 module.exports = exports = function (name, unres, onres, res) {
 	name = String(name);
@@ -85,9 +85,9 @@ exports._resolved = ee(create(Function.prototype, {
 		if (isCallable(cb)) {
 			if (isPromise(cb)) return cb;
 			try { value = cb(this.value); } catch (e) { return reject(e); }
-			return deferred(value);
+			return resolve(value);
 		}
-		return deferred(cb);
+		return resolve(cb);
 	}),
 	done: d(function (win, fail) {
 		((win == null) || callable(win));
@@ -107,5 +107,6 @@ exports._resolved = ee(create(Function.prototype, {
 }));
 
 deferred = require('./deferred');
+resolve = deferred.resolve;
 reject = deferred.reject;
 deferred.extend = exports;

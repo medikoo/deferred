@@ -11,7 +11,7 @@ var isCallable = require('es5-ext/lib/Object/is-callable')
   , deferred   = require('../../deferred')
   , isPromise  = require('../../is-promise')
 
-  , reject = deferred.reject;
+  , resolve = deferred.resolve, reject = deferred.reject;
 
 deferred.extend('catch', function (cb) {
 	var def;
@@ -53,7 +53,7 @@ deferred.extend('catch', function (cb) {
 		try { value = cb(this.value); } catch (e) {
 			return reject(e);
 		}
-		return deferred(value);
+		return resolve(value);
 	}
-	return deferred(cb);
+	return resolve(cb);
 });

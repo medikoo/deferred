@@ -12,7 +12,7 @@ var toUint     = require('es5-ext/lib/Number/to-uint')
   , isPromise  = require('../../is-promise')
   , assimilate = require('../../assimilate')
 
-  , reject = deferred.reject
+  , resolve = deferred.resolve, reject = deferred.reject
   , apply = Function.prototype.apply, max = Math.max
   , gateReject;
 
@@ -52,7 +52,7 @@ module.exports = function (cLimit, qLimit) {
 			}
 			r = r.value;
 		}
-		if (!def) return deferred(r);
+		if (!def) return resolve(r);
 		def.resolve(r);
 		unload();
 	};

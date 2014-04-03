@@ -11,6 +11,7 @@ var extend     = require('es5-ext/lib/Object/extend')
 
   , call = Function.prototype.call
   , hasOwnProperty = Object.prototype.hasOwnProperty
+  , resolve = deferred.resolve
   , Reduce;
 
 Reduce = function (list, cb, initial, initialized) {
@@ -50,7 +51,7 @@ Reduce.prototype = {
 			if (!this.initialized) {
 				throw new Error("Reduce of empty array with no initial value");
 			}
-			return this.resolve ? this.resolve(this.value) : deferred(this.value);
+			return this.resolve ? this.resolve(this.value) : resolve(this.value);
 		}
 		if (!this.promise) extend(this, deferred());
 		this.processCb = this.processCb.bind(this);

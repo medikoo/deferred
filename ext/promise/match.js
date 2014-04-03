@@ -13,7 +13,7 @@ var match      = require('es5-ext/lib/Function/prototype/match')
   , isPromise  = require('../../is-promise')
   , deferred   = require('../../deferred')
 
-  , reject = deferred.reject;
+  , resolve = deferred.resolve, reject = deferred.reject;
 
 deferred.extend('match', function (win, fail) {
 	var def;
@@ -63,7 +63,7 @@ deferred.extend('match', function (win, fail) {
 		} catch (e) {
 			return reject(e);
 		}
-		return deferred(value);
+		return resolve(value);
 	}
-	return deferred(cb);
+	return resolve(cb);
 });
