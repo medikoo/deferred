@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../lib/deferred')
+var deferred = require('../deferred')
 
   , x = {}, y = {}, e = new Error("Error");
 
@@ -9,25 +9,25 @@ module.exports = {
 		var next = false;
 		deferred(null)(function () {
 			a(next, false);
-		}, a.never).end();
+		}, a.never).done();
 		next = true;
 	},
 	"Reject": function (a, d) {
 		deferred(e)(a.never, function (res) {
 			a(res, e);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Erroneous callback rejects promise": function (a, d) {
 		deferred(1)(function () {
 			throw e;
 		})(a.never, function (res) {
 			a(res, e);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Object promise resolves to same object": function (a, d) {
 		deferred(x)(function (result) {
 			a(result, x);
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 	},
 	"Promise returns promise": function (a) {
 		var p = deferred({});
@@ -43,28 +43,28 @@ module.exports = {
 		"Callback": function (a, d) {
 			deferred(x)(function (result) {
 				a(result, x);
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Null": function (a, d) {
 			deferred(x)(null, a.never)(function (result) {
 				a(result, x);
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Other value": function (a, d) {
 			deferred(x)(y, a.never)(function (result) {
 				a(result, y);
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Error": function (a, d) {
 			deferred(e)(a.never, function (result) {
 				a(result, e);
-			}).end(d, d);
+			}).done(d, d);
 		},
 		"Chain promise & resolve with function": function (a) {
 			var d1, fn, p1;
 			d1 = deferred();
 			fn = function () { return 'bar'; };
-			d1.promise(deferred('foo')).end(function (res) {
+			d1.promise(deferred('foo')).done(function (res) {
 				a(res, 'foo', "Unresolved");
 			});
 			d1.resolve(fn);
@@ -109,33 +109,33 @@ module.exports = {
 	"End": {
 		"No args": {
 			"Success": function (a) {
-				a(deferred(null).end(), undefined);
+				a(deferred(null).done(), undefined);
 			},
 			"Error": function (a) {
 				a.throws(function () {
-					deferred(e).end();
+					deferred(e).done();
 				});
 			}
 		},
 		"Args": {
 			"Success": function (a) {
-				deferred(x).end(function (res) {
+				deferred(x).done(function (res) {
 					a(res, x, "Result");
 				}, a.never);
 			},
 			"Error": function (a) {
-				deferred(e).end(a.never, function (err) {
+				deferred(e).done(a.never, function (err) {
 					a(err, e, "Error");
 				});
 			},
 			"Success #2": function (a) {
-				deferred(x).end(function (res) {
+				deferred(x).done(function (res) {
 					a(res, x, "Result");
 				}, null);
 			},
 			"Error: Throw": function (a) {
 				a.throws(function () {
-					deferred(e).end(a.never, null);
+					deferred(e).done(a.never, null);
 				});
 			}
 		}

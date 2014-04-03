@@ -11,42 +11,41 @@ var spread     = require('es5-ext/function/#/spread')
   , callable   = require('es5-ext/object/valid-callable')
   , isCallable = require('es5-ext/object/is-callable')
   , isPromise  = require('../../is-promise')
-  , deferred   = require('../../deferred');
+  , deferred   = require('../../deferred')
+
+  , resolve = deferred.resolve, reject = deferred.reject;
 
 deferred.extend('match', function (win, fail) {
 	var def;
 	((win == null) || callable(win));
-	if (!win && (fail == null)) {
-		return this;
-	}
-	if (!this.pending) {
-		this.pending = [];
-	}
+	if (!win && (fail == null)) return this;
+	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('match', [win, fail, def.resolve]);
+	this.pending.push('match', [win, fail, def.resolve, def.reject]);
 	return def.promise;
-}, function (win, fail, resolve) {
+}, function (win, fail, resolve, reject) {
 	var cb, value;
 	cb = this.failed ? fail : win;
 	if (cb == null) {
-		resolve(this);
+		if (this.failed) reject(this.value);
+		else resolve(this.value);
 	}
 	if (isCallable(cb)) {
 		if (isPromise(cb)) {
 			if (cb.resolved) {
-				resolve(cb.value);
+				if (cb.failed) reject(cb.value);
+				else resolve(cb.value);
 			} else {
-				cb.end(resolve, resolve);
+				cb.done(resolve, reject);
 			}
 			return;
 		}
-		if (!this.failed) {
-			cb = spread.call(cb);
-		}
+		if (!this.failed) cb = spread.call(cb);
 		try {
 			value = cb(this.value);
 		} catch (e) {
-			value = e;
+			reject(e);
+			return;
 		}
 		resolve(value);
 	} else {
@@ -55,18 +54,16 @@ deferred.extend('match', function (win, fail) {
 }, function (win, fail) {
 	var cb, value;
 	cb = this.failed ? fail : win;
-	if (cb == null) {
-		return this;
-	}
+	if (cb == null) return this;
 	if (isCallable(cb)) {
 		if (isPromise(cb)) return cb;
 		if (!this.failed) cb = spread.call(cb);
 		try {
 			value = cb(this.value);
 		} catch (e) {
-			value = e;
+			return reject(e);
 		}
-		return deferred(value);
+		return resolve(value);
 	}
-	return deferred(cb);
+	return resolve(cb);
 });

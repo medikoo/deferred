@@ -1,12 +1,12 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = {
 	"Deferred": function (a) {
 		var defer = deferred(), x = {}, y = { foo: x }
 		  , invoked = false;
-		defer.resolve(y).get('foo').end(function (r) {
+		defer.resolve(y).get('foo').done(function (r) {
 			invoked = true;
 			a(r, x);
 		});
@@ -14,20 +14,20 @@ module.exports = {
 	},
 	"Promise": function (a) {
 		var x = {}, y = { foo: x };
-		deferred(y).get('foo').end(function (r) {
+		deferred(y).get('foo').done(function (r) {
 			a(r, x);
 		});
 	},
 	"Nested": function (a) {
 		var x = {}, y = { foo: { bar: x } };
-		deferred(y).get('foo', 'bar').end(function (r) {
+		deferred(y).get('foo', 'bar').done(function (r) {
 			a(r, x);
 		});
 	},
 	"Safe for extensions": function (a) {
 		a.throws(function () {
 			var x = deferred();
-			x.promise.get('foo').end(function () {
+			x.promise.get('foo').done(function () {
 				throw new Error('Error');
 			});
 			x.resolve({ foo: 'bar' });

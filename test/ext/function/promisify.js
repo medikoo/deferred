@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -14,7 +14,7 @@ module.exports = function (t) {
 				}, 0);
 			}, 2).call(u, x, deferred(y), z)(function (result) {
 				a(result, z);
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Normal arguments": function (a, d) {
 			t.call(function (arg1, arg2, callback) {
@@ -25,7 +25,7 @@ module.exports = function (t) {
 				}, 0);
 			}, 2).call(u, x)(function (result) {
 				a(result, z);
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Do not promisify promisified function": function (a) {
 			var fn, fn1;
@@ -42,7 +42,7 @@ module.exports = function (t) {
 				}, 0);
 			})(x, y)(function (result) {
 				a(result, z, "Result");
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Successful: Many args": function (a, d) {
 			var x = {}, y = {}, z = {};
@@ -53,7 +53,7 @@ module.exports = function (t) {
 				}, 0);
 			})(x, y)(function (result) {
 				a.deep(result, [x, y, z], "Result");
-			}, a.never).end(d, d);
+			}, a.never).done(d, d);
 		},
 		"Erroneous": function (a, d) {
 			var x = new Error('Test');
@@ -61,7 +61,7 @@ module.exports = function (t) {
 				setTimeout(function () { callback(x); }, 0);
 			}, 0)(y)(a.never, function (e) {
 				a(e, x);
-			}).end(d, d);
+			}).done(d, d);
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;

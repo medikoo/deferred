@@ -6,17 +6,21 @@ var isFunction = require('es5-ext/function/is-function')
   , readdir    = require('fs').readdir
   , indexTest  = require('tad/lib/utils/index-test')
 
-  , dir = path.dirname(__dirname) + '/lib';
+  , dir = path.dirname(__dirname);
 
 module.exports = {
 	"": indexTest(indexTest.readDir(dir)(function (o) {
+		delete o.assimilate;
+		delete o.benchmark;
 		delete o.deferred;
+		delete o.examples;
 		delete o.ext;
 		delete o.promise;
 		delete o.profiler;
 		return o;
 	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
-		'profileEnd', 'promisify', 'promisifySync', 'map', 'reduce', 'some']),
+		'profileEnd', 'promisify', 'promisifySync', 'reject', 'resolve', 'map',
+		'reduce', 'some']),
 	"isPromise": function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
@@ -30,7 +34,7 @@ module.exports = {
 			return {};
 		})(function (r) {
 			a(r, x);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"CallAsync": function (t, a, d) {
 		var x = {};
@@ -41,7 +45,7 @@ module.exports = {
 			return {};
 		})(function (r) {
 			a(r, x);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Delay": function (t, a, d) {
 		var x = {};
@@ -49,7 +53,7 @@ module.exports = {
 			return r;
 		}, 5)(x)(function (r) {
 			a(r, x);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Gate": function (t, a) {
 		var fn, dx, dy, ready;
@@ -59,7 +63,7 @@ module.exports = {
 		dx = t();
 		fn(dx.promise);
 		dy = t();
-		fn(dy.promise).end(function () {
+		fn(dy.promise).done(function () {
 			a(ready, true);
 		});
 		dy.resolve({});
@@ -80,28 +84,28 @@ module.exports = {
 			return {};
 		})()(function (r) {
 			a(r, x);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"PromisifySync": function (t, a, d) {
 		t.promisifySync(function () {
 			return;
 		})()(function (r) {
 			a(r, undefined);
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Map": function (t, a, d) {
 		t.map([t(1), t(2), 3], function (res) {
 			return t(res * res);
 		})(function (r) {
 			a.deep(r, [1, 4, 9]);
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 	},
 	"Reduce": function (t, a, d) {
 		t.reduce([t(1), t(2), 3], function (arg1, arg2) {
 			return t(arg1 * arg2);
 		}, 1)(function (r) {
 			a(r, 6);
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 	},
 	"Some": function (t, a, d) {
 		var count = 0;
@@ -111,7 +115,7 @@ module.exports = {
 		})(function (r) {
 			a(r, true);
 			a(count, 2, "Count");
-		}, a.never).end(d, d);
+		}, a.never).done(d, d);
 	},
 	"Deferred function is main object": function (t, a) {
 		var d = t();

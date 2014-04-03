@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = function (t, a, d) {
 	var count = 0;
@@ -12,5 +12,5 @@ module.exports = function (t, a, d) {
 	})(function (r) {
 		a(r, true);
 		a(count, 2, "Count");
-	}).end(d, d);
+	}).done(d, d);
 };

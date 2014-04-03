@@ -5,22 +5,23 @@
 
 'use strict';
 
-var toUint    = require('es5-ext/number/to-uint')
-  , callable  = require('es5-ext/object/valid-callable')
-  , eeUnify   = require('event-emitter/lib/unify')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var toUint     = require('es5-ext/number/to-uint')
+  , callable   = require('es5-ext/object/valid-callable')
+  , eeUnify    = require('event-emitter/lib/unify')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
+  , resolve = deferred.resolve, reject = deferred.reject
   , apply = Function.prototype.apply, max = Math.max
-
-  , reject;
+  , gateReject;
 
 require('../promise/finally');
 
-reject = function () {
+gateReject = function () {
 	var e = new Error("Too many calls");
 	e.type = 'deferred-gate-rejected';
-	return deferred(e);
+	return reject(e);
 };
 
 module.exports = function (cLimit, qLimit) {
@@ -36,8 +37,12 @@ module.exports = function (cLimit, qLimit) {
 		try {
 			r = apply.call(fn, thisArg, args);
 		} catch (e) {
-			r = e;
+			if (!def) return reject(e);
+			def.reject(e);
+			unload();
+			return;
 		}
+		r = assimilate(r);
 		if (isPromise(r)) {
 			if (def) eeUnify(def.promise, r);
 			if (!r.resolved) {
@@ -47,7 +52,7 @@ module.exports = function (cLimit, qLimit) {
 			}
 			r = r.value;
 		}
-		if (!def) return deferred(r);
+		if (!def) return resolve(r);
 		def.resolve(r);
 		unload();
 	};
@@ -70,7 +75,7 @@ module.exports = function (cLimit, qLimit) {
 				queue.push([this, arguments, def]);
 				return def.promise;
 			}
-			return reject();
+			return gateReject();
 		}
 		return run(this, arguments);
 	};

@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -11,7 +11,7 @@ module.exports = function (t) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, y], "Arguments");
 				return z;
-			}, 2).call(u, x, deferred(y), z).end(function (result) {
+			}, 2).call(u, x, deferred(y), z).done(function (result) {
 				a(result, z);
 			});
 		},
@@ -20,7 +20,7 @@ module.exports = function (t) {
 				a(this, u, "Context");
 				a.deep([arg1, arg2], [x, undefined], "Arguments");
 				return z;
-			}, 2).call(u, x).end(function (result) {
+			}, 2).call(u, x).done(function (result) {
 				a(result, z);
 			});
 		},
@@ -28,7 +28,7 @@ module.exports = function (t) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;
-			})().end(a.never, function (result) {
+			})().done(a.never, function (result) {
 				a(result, e);
 			});
 		}

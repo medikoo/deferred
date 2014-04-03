@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = {
 	"Deferred": function (a) {
@@ -11,7 +11,7 @@ module.exports = {
 			a(m, x, "#1");
 			a(n, y, "#2");
 			a(o, w, "#3");
-		}).end();
+		}).done();
 		a(invoked, true, "Resolve in current tick");
 	},
 	"Promise": function (a, d) {
@@ -20,12 +20,12 @@ module.exports = {
 			a(m, x, "#1");
 			a(n, y, "#2");
 			a(o, w, "#3");
-		}).end(d, d);
+		}).done(d, d);
 	},
 	"Error": function (a, d) {
 		var e = new Error('E!');
 		deferred(e).match(a.never, function (err) {
 			a(err, e);
-		}).end(d, d);
+		}).done(d, d);
 	}
 };

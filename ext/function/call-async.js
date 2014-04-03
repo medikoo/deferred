@@ -42,7 +42,7 @@ callAsync = function (fn, length, context, args) {
 	try {
 		applyFn.call(context, fn, args, def);
 	} catch (e) {
-		def.resolve(e);
+		def.reject(e);
 		throw e;
 	}
 	return def.promise;

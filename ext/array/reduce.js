@@ -2,15 +2,16 @@
 
 'use strict';
 
-var isError   = require('es5-ext/error/is-error')
-  , assign    = require('es5-ext/object/assign')
-  , value     = require('es5-ext/object/valid-value')
-  , callable  = require('es5-ext/object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var assign     = require('es5-ext/object/assign')
+  , value      = require('es5-ext/object/valid-value')
+  , callable   = require('es5-ext/object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , call = Function.prototype.call
   , hasOwnProperty = Object.prototype.hasOwnProperty
+  , resolve = deferred.resolve
   , Reduce;
 
 Reduce = function (list, cb, initial, initialized) {
@@ -19,17 +20,18 @@ Reduce = function (list, cb, initial, initialized) {
 	this.initialized = initialized;
 	this.length = list.length >>> 0;
 
+	initial = assimilate(initial);
 	if (isPromise(initial)) {
 		if (!initial.resolved) {
 			assign(this, deferred());
 			initial.end(function (initial) {
 				this.value = initial;
 				this.init();
-			}.bind(this), this.resolve);
+			}.bind(this), this.reject);
 			return this.promise;
 		}
 		this.value = initial.value;
-		if (isError(this.value)) return initial;
+		if (initial.failed) return initial;
 	} else {
 		this.value = initial;
 	}
@@ -49,7 +51,7 @@ Reduce.prototype = {
 			if (!this.initialized) {
 				throw new Error("Reduce of empty array with no initial value");
 			}
-			return this.resolve ? this.resolve(this.value) : deferred(this.value);
+			return this.resolve ? this.resolve(this.value) : resolve(this.value);
 		}
 		if (!this.promise) assign(this, deferred());
 		this.processCb = this.processCb.bind(this);
@@ -68,25 +70,22 @@ Reduce.prototype = {
 		}
 	},
 	process: function () {
-		var value = this.list[this.current];
+		var value = assimilate(this.list[this.current]);
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(function (result) {
+				value.done(function (result) {
 					result = this.processCb(result);
 					if (this.state !== 'value') return;
 					this.processValue(result);
 					if (!this.state) this.continue();
-				}.bind(this), this.resolve);
+				}.bind(this), this.reject);
+				return;
+			}
+			if (value.failed) {
+				this.reject(value.value);
 				return;
 			}
 			value = value.value;
-			if (isError(value)) {
-				this.resolve(value);
-				return;
-			}
-		} else if (isError(value) && !this.cb) {
-			this.resolve(value);
-			return;
 		}
 		this.state = 'cb';
 		return value;
@@ -102,23 +101,24 @@ Reduce.prototype = {
 				value = call.call(this.cb, undefined, this.value, value, this.current,
 					this.list);
 			} catch (e) {
-				this.resolve(e);
+				this.reject(e);
 				return;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(function (result) {
+					value.done(function (result) {
 						this.state = 'value';
 						this.processValue(result);
 						if (!this.state) this.continue();
-					}.bind(this), this.resolve);
+					}.bind(this), this.reject);
+					return;
+				}
+				if (value.failed) {
+					this.reject(value.value);
 					return;
 				}
 				value = value.value;
-			}
-			if (isError(value)) {
-				this.resolve(value);
-				return;
 			}
 		}
 		this.state = 'value';

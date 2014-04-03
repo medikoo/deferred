@@ -1,7 +1,7 @@
 'use strict';
 
 var keys     = Object.keys
-  , deferred = require('../lib/deferred');
+  , deferred = require('../deferred');
 
 module.exports = function (t, a) {
 	var d1, d2, data;

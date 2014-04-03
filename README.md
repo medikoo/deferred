@@ -28,41 +28,41 @@ var writeFile = fs.writeFile;
 
 // Read all filenames in given path
 readdir(__dirname, function (err, files) {
-	var result, waiting;
-	if (err) {
-		// if we're unable to get file listing throw error
-		throw err;
-	}
+  var result, waiting;
+  if (err) {
+    // if we're unable to get file listing throw error
+    throw err;
+  }
 
-	// Filter *.js files and generated lib.js
-	files = files.filter(function (file) {
-		return (file.slice(-3) === '.js') && (file !== 'lib.js');
-	});
+  // Filter *.js files and generated lib.js
+  files = files.filter(function (file) {
+    return (file.slice(-3) === '.js') && (file !== 'lib.js');
+  });
 
-	// Read content of each file
-	waiting = 0;
-	result = [];
-	files.forEach(function (file, index) {
-		++waiting;
-		readFile(file, function (err, content) {
-			if (err) {
-				// We were not able to read file content, throw error
-				throw err;
-			}
-			result[index] = content;
+  // Read content of each file
+  waiting = 0;
+  result = [];
+  files.forEach(function (file, index) {
+    ++waiting;
+    readFile(file, function (err, content) {
+      if (err) {
+        // We were not able to read file content, throw error
+        throw err;
+      }
+      result[index] = content;
 
-			if (!--waiting) {
-				// Got content of all files
-				// Concatenate into one string and write into lib.js
-				writeFile(__dirname + '/lib.js', result.join("\n"), function (err) {
-					if (err) {
-						// We cannot write lib.js file, throw error
-						throw err;
-					}
-				});
-			}
-		});
-	});
+      if (!--waiting) {
+        // Got content of all files
+        // Concatenate into one string and write into lib.js
+        writeFile(__dirname + '/lib.js', result.join("\n"), function (err) {
+          if (err) {
+            // We cannot write lib.js file, throw error
+            throw err;
+          }
+        });
+      }
+    });
+  });
 });
 ```
 
@@ -78,19 +78,19 @@ var readFile = promisify(fs.readFile, 1); // Restrict arity to 1 + callback
 var writeFile = promisify(fs.writeFile);
 
 writeFile(__dirname + '/lib.js',
-	// Read all filenames in given path
-	readdir(__dirname)
+  // Read all filenames in given path
+  readdir(__dirname)
 
-	// Filter *.js files and generated lib.js
-	.invoke('filter', function (file) {
-		return (file.slice(-3) === '.js') && (file !== 'lib.js');
-	})
+  // Filter *.js files and generated lib.js
+  .invoke('filter', function (file) {
+    return (file.slice(-3) === '.js') && (file !== 'lib.js');
+  })
 
-	// Read content of all files
-	.map(readFile)
+  // Read content of all files
+  .map(readFile)
 
-	// Concatenate files content into one string
-	.invoke('join', '\n')
+  // Concatenate files content into one string
+  .invoke('join', '\n')
 
 ).done(); // If there was any error on the way throw it
 ```
@@ -105,7 +105,7 @@ See [examples folder](examples) for a demonstration of promises usage in some ot
 
 In your project path:
 
-	$ npm install deferred
+  $ npm install deferred
 
 #### Browser
 
@@ -146,19 +146,26 @@ Let's create `delay` function decorator:
 var deferred = require('deferred');
 
 var delay = function (fn, timeout) {
-	return function () {
-		var def = deferred(), self = this, args = arguments;
+  return function () {
+    var def = deferred(), self = this, args = arguments;
 
-		setTimeout(function () {
-			def.resolve(fn.apply(self, args));
-		}, timeout);
+    setTimeout(function () {
+      var value;
+      try {
+        value = fn.apply(self, args));
+      } catch (e) {
+        def.reject(e);
+        return;
+      }
+      def.resolve(value);
+    }, timeout);
 
-		return def.promise;
-	};
+    return def.promise;
+  };
 };
 
 var delayedAdd = delay(function (a, b) {
-	return a + b;
+  return a + b;
 }, 100);
 
 var resultPromise = delayedAdd(2, 3);
@@ -166,8 +173,8 @@ var resultPromise = delayedAdd(2, 3);
 console.log(deferred.isPromise(resultPromise)); // true
 
 resultPromise(function (value) {
-	// Invoked after 100 milliseconds
-	console.log(value); // 5
+  // Invoked after 100 milliseconds
+  console.log(value); // 5
 });
 ```
 
@@ -197,9 +204,9 @@ Promises by nature can be chained. `promise` function returns another promise wh
 
 ```javascript
 delayedAdd(2, 3)(function (result) {
-	return result * result
+  return result * result
 })(function (result) {
-	console.log(result); // 25
+  console.log(result); // 25
 });
 ```
 
@@ -213,7 +220,7 @@ Promises can be nested. If a promise resolves with another promise, it's not rea
 var def = deferred();
 def.resolve(delayedAdd(2, 3)); // Resolve promise with another promise
 def.promise(function (result) {
-	console.log(5); // 5;
+  console.log(5); // 5;
 });
 ```
 
@@ -228,11 +235,11 @@ To handle error, pass dedicated callback as second argument to promise function:
 
 ```javascript
 delayedAdd(2, 3)(function (result) {
-	throw new Error('Error!')
+  throw new Error('Error!')
 })(function () {
-	// never called
+  // never called
 }, function (e) {
-	// handle error;
+  // handle error;
 });
 ```
 
@@ -243,9 +250,9 @@ To expose the errors that are not handled, end promise chain with `.done()`, the
 ```javascript
 delayedAdd(2, 3)
 (function (result) {
-	throw new Error('Error!')
+  throw new Error('Error!')
 })(function (result) {
-	// never executed
+  // never executed
 })
 .done(); // throws error!
 ```
@@ -258,11 +265,11 @@ Signature of `done` function is same as for `then` (or promise itself)
 
 ```javascript
 promise(function (value) {
-	// process
+  // process
 }).done(function (result) {
-	// process result
+  // process result
 }, function (err) {
-	// handle error
+  // handle error
 });
 ```
 
@@ -276,7 +283,7 @@ You may create initially resolved promises.
 var promise = deferred(1);
 
 promise(function (result) {
-	console.log(result); // 1;
+  console.log(result); // 1;
 });
 ```
 
@@ -290,11 +297,11 @@ There is a known convention (coined by Node.js) for working with asynchronous ca
 var fs = require('fs');
 
 fs.readFile(__filename, 'utf-8', function (err, content) {
-	if (err) {
-		// handle error;
-		return;
-	}
-	// process content
+  if (err) {
+    // handle error;
+    return;
+  }
+  // process content
 });
 ```
 
@@ -302,14 +309,14 @@ It's not convenient to work with both promises and callback style functions. Whe
 
 ```javascript
 var deferred = require('deferred')
-	, fs = require('fs')
+  , fs = require('fs')
 
-	, readFile = deferred.promisify(fs.readFile);
+  , readFile = deferred.promisify(fs.readFile);
 
 readFile(__filename, 'utf-8')(function (content) {
-	// process content
+  // process content
 }, function (err) {
-	// handle error
+  // handle error
 });
 ```
 
@@ -351,7 +358,7 @@ When we're interested in results of more than one promise object we may group th
 
 ```javascript
 deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function (result) {
-	console.log(result); // [5, 8, 8]
+  console.log(result); // [5, 8, 8]
 });
 ```
 
@@ -367,9 +374,9 @@ In following example we take content of each file found in an array:
 var readFile = deferred.promisify(fs.readFile);
 
 deferred.map(filenames, function (filename) {
-	return readFile(filename, 'utf-8');
+  return readFile(filename, 'utf-8');
 })(function (result) {
-	// result is an array of file's contents
+  // result is an array of file's contents
 });
 ```
 
@@ -382,9 +389,9 @@ var readdir = deferred.promisify(fs.readdir);
 var readFile = deferred.promisify(fs.readFile);
 
 readdir(__dirname).map(function (filename) {
-	return readFile(filename, 'utf-8');
+  return readFile(filename, 'utf-8');
 })(function (result) {
-	// result is an array of file's contents
+  // result is an array of file's contents
 });
 ```
 
@@ -398,10 +405,10 @@ It's same as Array's reduce with that difference that it calls callback only aft
 
 ```javascript
 deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)], function (a, b) {
-	return delayedAdd(a, b);
+  return delayedAdd(a, b);
 })
 (function (result) {
-	console.log(result); // 21
+  console.log(result); // 21
 });
 ```
 
@@ -413,12 +420,12 @@ Promise aware Array's some. Process collection one after another and stop when f
 
 ```javascript
 deferred.some([filename1, filename2, filename3], function (a) {
-	return readFile(filename, 'utf8', function (data) {
-		if (data.indexOf('needle')) {
-			// Got it! Stop further processing
-			return true;
-		}
-	});
+  return readFile(filename, 'utf8', function (data) {
+    if (data.indexOf('needle')) {
+      // Got it! Stop further processing
+      return true;
+    }
+  });
 });
 ```
 
@@ -432,9 +439,9 @@ Handle that with `deferred.gate`, it wraps functions that return promises. It do
 
 ```javascript
 var fn = deferred.gate(function async() {
-	var def = deferred();
-	// ..
-	return def.promise;
+  var def = deferred();
+  // ..
+  return def.promise;
 }, 10);
 ```
 
@@ -451,9 +458,9 @@ In following example we'll limit concurrent readFile calls when using deferred.m
 ```javascript
 // Open maximum 100 file descriptors at once
 deferred.map(filenames, deferred.gate(function (filename) {
-	return readFile(filename, 'utf-8');
+  return readFile(filename, 'utf-8');
 }, 100))(function (result) {
-	// result is an array of file's contents
+  // result is an array of file's contents
 });
 ```
 
@@ -496,10 +503,10 @@ Imagine recursive directory reader that scans whole file system and provides fil
 ```javascript
 var reader = readdirDeep(rootPath); // reader promise is returned
 reader.on('data', function (someFilenames) {
-	// Called many times during scan with obtained names
+  // Called many times during scan with obtained names
 });
 reader.done(function (allFilenames) {
-	// File-system scan finished!
+  // File-system scan finished!
 });
 ```
 
@@ -517,7 +524,7 @@ var x = deferred({ foo: 'bar' });
 var promise = deferred({ foo: 'bar' });
 
 var y = promise.aside(function (value) {
-	console.log(value === x); // true
+  console.log(value === x); // true
 });
 console.log(y === promise); // true
 ```
@@ -549,7 +556,7 @@ With cb we may build hybrid functions that do both, handle asynchronous callback
 
 ```javascript
 var asyncFunction = function (x, y, callback)  {
-	return someAsyncProcessingThatReturnsPromise(x, y).cb(callback);
+  return someAsyncProcessingThatReturnsPromise(x, y).cb(callback);
 });
 ```
 
@@ -575,11 +582,11 @@ To directly get to object property use `get`
 var promise = deferred({ foo: 'bar' });
 
 promise(function (obj) {
-	console.log(obj.foo); // 'bar';
+  console.log(obj.foo); // 'bar';
 })
 
 promise.get('foo')(function (value) {
-	console.log(value); // 'bar'
+  console.log(value); // 'bar'
 });
 ```
 
@@ -589,11 +596,11 @@ You can get to nested properties as well:
 var promise = deferred({ foo: { bar: 317 });
 
 promise(function (obj) {
-	console.log(obj.foo.bar); // 317;
+  console.log(obj.foo.bar); // 317;
 })
 
 promise.get('foo', 'bar')(function (value) {
-	console.log(value); // 317
+  console.log(value); // 317
 });
 ```
 
@@ -605,18 +612,18 @@ Schedule function call on returned object
 var promise = deferred({ foo: function (arg) { return arg*arg; } });
 
 promise.invoke('foo', 3)(function (result) {
-	console.log(result); // 9
+  console.log(result); // 9
 });
 
 // For asynchronous functions use invokeAsync
 var promise = deferred({ foo: function (arg, callback) {
-	setTimeout(function () {
-		callback(null, arg*arg);
-	}, 100);
+  setTimeout(function () {
+    callback(null, arg*arg);
+  }, 100);
 } });
 
 promise.invokeAsync('foo', 3)(function (result) {
-	console.log(result); // 9
+  console.log(result); // 9
 });
 ```
 
@@ -632,7 +639,7 @@ If promise expected value is a list that you want to match into function argumen
 var promise = deferred([2, 3]);
 
 promise.match(function (a, b) {
-	console.log(a + b); // 5
+  console.log(a + b); // 5
 });
 ```
 

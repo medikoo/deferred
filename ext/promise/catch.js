@@ -9,16 +9,18 @@
 var isCallable = require('es5-ext/object/is-callable')
   , validValue = require('es5-ext/object/valid-value')
   , deferred   = require('../../deferred')
-  , isPromise  = require('../../is-promise');
+  , isPromise  = require('../../is-promise')
+
+  , resolve = deferred.resolve, reject = deferred.reject;
 
 deferred.extend('catch', function (cb) {
 	var def;
 	validValue(cb);
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('catch', [cb, def.resolve]);
+	this.pending.push('catch', [cb, def.resolve, def.reject]);
 	return def.promise;
-}, function (cb, resolve) {
+}, function (cb, resolve, reject) {
 	var value;
 	if (!this.failed) {
 		resolve(this.value);
@@ -26,11 +28,18 @@ deferred.extend('catch', function (cb) {
 	}
 	if (isCallable(cb)) {
 		if (isPromise(cb)) {
-			if (cb.resolved) resolve(cb.value);
-			else cb.done(resolve, resolve);
+			if (cb.resolved) {
+				if (cb.failed) reject(cb.value);
+				else resolve(cb.value);
+			} else {
+				cb.done(resolve, reject);
+			}
 			return;
 		}
-		try { value = cb(this.value); } catch (e) { value = e; }
+		try { value = cb(this.value); } catch (e) {
+			reject(e);
+			return;
+		}
 		resolve(value);
 		return;
 	}
@@ -41,8 +50,10 @@ deferred.extend('catch', function (cb) {
 	if (!this.failed) return this;
 	if (isCallable(cb)) {
 		if (isPromise(cb)) return cb;
-		try { value = cb(this.value); } catch (e) { value = e; }
-		return deferred(value);
+		try { value = cb(this.value); } catch (e) {
+			return reject(e);
+		}
+		return resolve(value);
 	}
-	return deferred(cb);
+	return resolve(cb);
 });

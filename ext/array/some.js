@@ -2,14 +2,15 @@
 
 'use strict';
 
-var isError   = require('es5-ext/error/is-error')
-  , assign    = require('es5-ext/object/assign')
-  , value     = require('es5-ext/object/valid-value')
-  , callable  = require('es5-ext/object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var assign     = require('es5-ext/object/assign')
+  , value      = require('es5-ext/object/valid-value')
+  , callable   = require('es5-ext/object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , call = Function.prototype.call
+  , resolve = deferred.resolve
   , Some;
 
 Some = function (list, cb, context) {
@@ -28,26 +29,23 @@ Some = function (list, cb, context) {
 		}
 		++this.current;
 	}
-	return deferred(false);
+	return resolve(false);
 };
 
 Some.prototype = {
 	current: 0,
 	process: function () {
-		var value = this.list[this.current];
+		var value = assimilate(this.list[this.current]);
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(this.processCb, this.resolve);
+				value.done(this.processCb, this.reject);
+				return;
+			}
+			if (value.failed) {
+				this.reject(value.value);
 				return;
 			}
 			value = value.value;
-			if (isError(value)) {
-				this.resolve(value);
-				return;
-			}
-		} else if (isError(value) && !this.cb) {
-			this.resolve(value);
-			return;
 		}
 		this.processCb(value);
 	},
@@ -57,19 +55,20 @@ Some.prototype = {
 				value = call.call(this.cb, this.context, value, this.current,
 					this.list);
 			} catch (e) {
-				this.resolve(e);
+				this.reject(e);
 				return;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(this.processValue, this.resolve);
+					value.done(this.processValue, this.reject);
+					return;
+				}
+				if (value.failed) {
+					this.reject(value.value);
 					return;
 				}
 				value = value.value;
-			}
-			if (isError(value)) {
-				this.resolve(value);
-				return;
 			}
 		}
 		this.processValue(value);

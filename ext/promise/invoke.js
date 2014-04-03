@@ -13,34 +13,34 @@ var isCallable       = require('es5-ext/object/is-callable')
   , processArguments = require('../_process-arguments')
 
   , slice = Array.prototype.slice, apply = Function.prototype.apply
-
+  , reject = deferred.reject
   , applyFn;
 
-applyFn = function (fn, args) {
+applyFn = function (fn, args, resolve, reject) {
+	var value;
 	try {
-		return apply.call(fn, this, args);
+		value = apply.call(fn, this, args);
 	} catch (e) {
-		return e;
+		return reject(e);
 	}
+	return resolve(value);
 };
 
 deferred.extend('invoke', function (method/*, …args*/) {
 	var def;
-	if (!this.pending) {
-		this.pending = [];
-	}
+	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('invoke', [arguments, def.resolve]);
+	this.pending.push('invoke', [arguments, def.resolve, def.reject]);
 	return def.promise;
-}, function (args, resolve) {
+}, function (args, resolve, reject) {
 	var fn;
 	if (this.failed) {
-		resolve(this);
+		reject(this);
 		return;
 	}
 
 	if (this.value == null) {
-		resolve(new TypeError("Cannot use null or undefined"));
+		reject(new TypeError("Cannot use null or undefined"));
 		return;
 	}
 
@@ -48,7 +48,7 @@ deferred.extend('invoke', function (method/*, …args*/) {
 	if (!isCallable(fn)) {
 		fn = String(fn);
 		if (!isCallable(this.value[fn])) {
-			resolve(new TypeError(fn + " is not a function"));
+			reject(new TypeError(fn + " is not a function"));
 			return;
 		}
 		fn = this.value[fn];
@@ -57,29 +57,27 @@ deferred.extend('invoke', function (method/*, …args*/) {
 	args = processArguments(slice.call(args, 1));
 	if (isPromise(args)) {
 		if (args.failed) {
-			resolve(args);
+			reject(args.value);
 			return;
 		}
-		args.end(function (args) {
-			resolve(applyFn.call(this, fn, args));
-		}.bind(this.value), resolve);
+		args.done(function (args) {
+			applyFn.call(this, fn, args, resolve, reject);
+		}.bind(this.value), reject);
 	} else {
-		resolve(applyFn.call(this.value, fn, args));
+		applyFn.call(this.value, fn, args, resolve, reject);
 	}
 }, function (method/*, …args*/) {
 	var args, def;
-	if (this.failed) {
-		return this;
-	}
+	if (this.failed) return this;
 
 	if (this.value == null) {
-		return deferred(new TypeError("Cannot use null or undefined"));
+		return reject(new TypeError("Cannot use null or undefined"));
 	}
 
 	if (!isCallable(method)) {
 		method = String(method);
 		if (!isCallable(this.value[method])) {
-			return deferred(new TypeError(method + " is not a function"));
+			return reject(new TypeError(method + " is not a function"));
 		}
 		method = this.value[method];
 	}
@@ -88,10 +86,10 @@ deferred.extend('invoke', function (method/*, …args*/) {
 	if (isPromise(args)) {
 		if (args.failed) return args;
 		def = deferred();
-		args.end(function (args) {
-			def.resolve(applyFn.call(this, method, args));
-		}.bind(this.value), def.resolve);
+		args.done(function (args) {
+			applyFn.call(this, method, args, def.resolve, def.reject);
+		}.bind(this.value), def.reject);
 		return def.promise;
 	}
-	return deferred(applyFn.call(this.value, method, args));
+	return applyFn.call(this.value, method, args, deferred, reject);
 });

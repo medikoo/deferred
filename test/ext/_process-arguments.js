@@ -1,7 +1,7 @@
 'use strict';
 
-var isPromise = require('../../lib/is-promise')
-  , deferred  = require('../../lib/deferred');
+var isPromise = require('../../is-promise')
+  , deferred  = require('../../deferred');
 
 module.exports = function (t) {
 	var x = {}, y = {}, e = new Error();
@@ -28,7 +28,7 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, 'dwa', px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.end(function (args) {
+					p.done(function (args) {
 						a.deep(args, [x, y, 'dwa', x]);
 					}, a.never);
 					py.resolve(y);
@@ -38,11 +38,11 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, 'dwa', px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.end(a.never, function (err) {
+					p.done(a.never, function (err) {
 						a(err, e);
 					});
 					py.resolve(y);
-					px.resolve(e);
+					px.reject(e);
 				}
 			}
 		}

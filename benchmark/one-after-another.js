@@ -14,7 +14,7 @@ var forEach    = require('es5-ext/object/for-each')
   , Bluebird   = require('bluebird')
   , kew        = require('kew')
   , when       = require('when')
-  , deferred   = require('../lib')
+  , deferred   = require('../')
 
   , now = Date.now
   , Deferred = deferred.Deferred, promisify = deferred.promisify
@@ -185,7 +185,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) self(stats);
 			else next(); // Ignore first one
 		});
@@ -202,7 +202,7 @@ tests = [function () {
 	};
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {
@@ -217,7 +217,7 @@ tests = [function () {
 	var i = count, dlstat = promisify(lstat);
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) self(stats);
 			else next(); // Ignore first one
 		});
@@ -228,7 +228,7 @@ tests = [function () {
 	var i = count, dlstat = promisify(lstat);
 
 	self = function () {
-		dlstat(__filename).end(function (stats) {
+		dlstat(__filename).done(function (stats) {
 			if (--i) {
 				self(stats);
 			} else {

@@ -1,6 +1,6 @@
 'use strict';
 
-var deferred = require('../../../lib/deferred');
+var deferred = require('../../../deferred');
 
 module.exports = function () {
 	return {
@@ -15,7 +15,7 @@ module.exports = function () {
 			};
 			deferred(z).invokeAsync('foo', x)(function (r) {
 				a.deep(r, [z, x]);
-			}).end(d, d);
+			}).done(d, d);
 		},
 		"Method": function (a, d) {
 			var x = {}, fn, z = {};
@@ -28,23 +28,23 @@ module.exports = function () {
 			};
 			deferred(z).invokeAsync(fn, x)(function (r) {
 				a.deep(r, [z, x]);
-			}).end(d, d);
+			}).done(d, d);
 		},
 		"Fail": function (a) {
 			var e = new Error("Error");
 			deferred(e).invokeAsync('bla')(a.never, function (r) {
 				a(r, e);
-			}).end();
+			}).done();
 		},
 		"Null input": function (a) {
 			deferred(null).invokeAsync('test')(a.never, function (e) {
 				a.ok(e instanceof TypeError);
-			}).end();
+			}).done();
 		},
 		"No Function": function (a) {
 			deferred({}).invokeAsync('test')(a.never, function (e) {
 				a.ok(e instanceof TypeError);
-			}).end();
+			}).done();
 		},
 		"Promise arguments": function (a) {
 			var y = {}, z = {}, x = { foo: function (w, u, cb) {
@@ -54,7 +54,7 @@ module.exports = function () {
 			} };
 			deferred(x).invokeAsync('foo', deferred(y), z)(function (r) {
 				a(r, 'foo', "Result");
-			}, a.never).end();
+			}, a.never).done();
 		},
 		"Erroneous": function (a, d) {
 			var x, fn;
@@ -66,7 +66,7 @@ module.exports = function () {
 			};
 			deferred({}).invokeAsync(fn)(a.never, function (e) {
 				a(e, x);
-			}).end(d, d);
+			}).done(d, d);
 		},
 		"Function crash": function (a) {
 			var x = new Error('Test'), fn;
@@ -75,17 +75,7 @@ module.exports = function () {
 			};
 			deferred({}).invokeAsync(fn)(a.never, function (e) {
 				a(e, x);
-			}).end();
-		},
-		"True/False": function (a, d) {
-			var fn = function (callback) {
-				setTimeout(function () {
-					callback(false);
-				}, 0);
-			};
-			deferred({}).invokeAsync(fn)(function (res) {
-				a(res, false);
-			}, a.never).end(d, d);
+			}).done();
 		}
 	};
 };

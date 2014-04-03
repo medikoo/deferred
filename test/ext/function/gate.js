@@ -1,7 +1,7 @@
 'use strict';
 
 var aFrom    = require('es5-ext/array/from')
-  , deferred = require('../../../lib/deferred');
+  , deferred = require('../../../deferred');
 
 module.exports = function (t) {
 	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved, released;
@@ -21,7 +21,7 @@ module.exports = function (t) {
 			dz = deferred();
 			a.not(hz = gfn(dz.promise, 'z'), dz.promise, "#3 blocked");
 			hz.on('test', function (arg) { invoked = arg; });
-			hz.end(function (r) {
+			hz.done(function (r) {
 				released = true;
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
@@ -43,7 +43,7 @@ module.exports = function (t) {
 			a(gfn(dx.promise), dx.promise, "#1");
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#2 blocked");
-			hz.end(function (r) {
+			hz.done(function (r) {
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
 			});
@@ -58,13 +58,13 @@ module.exports = function (t) {
 			a(gfn(dx.promise), dx.promise, "#1");
 			dy = deferred();
 			a(gfn(dy.promise), dy.promise, "#2");
-			gfn(x).end(null, function (err) {
+			gfn(x).done(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dy.resolve(y);
 			dz = deferred();
 			a(gfn(dz.promise), dz.promise, "#3");
-			gfn(x).end(null, function (err) {
+			gfn(x).done(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dx.resolve(x);
@@ -81,9 +81,9 @@ module.exports = function (t) {
 			// x, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.end(function (r) { a(r, z, "#3 held"); });
+			hz.done(function (r) { a(r, z, "#3 held"); });
 			// x, y, z
-			gfn(x).end(null, function (err) {
+			gfn(x).done(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dz.resolve(z);
@@ -96,11 +96,11 @@ module.exports = function (t) {
 			// x, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.end(function (r) {
+			hz.done(function (r) {
 				a(r, z, "#3 held");
 			});
 			// x, y, z
-			gfn(x).end(null, function (err) {
+			gfn(x).done(null, function (err) {
 				a(err.type, 'deferred-gate-rejected', "Reject error");
 			});
 			dz.resolve(z);

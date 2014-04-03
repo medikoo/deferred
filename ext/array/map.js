@@ -2,12 +2,12 @@
 
 'use strict';
 
-var isError   = require('es5-ext/error/is-error')
-  , assign    = require('es5-ext/object/assign')
-  , value     = require('es5-ext/object/valid-value')
-  , callable  = require('es5-ext/object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var assign     = require('es5-ext/object/assign')
+  , value      = require('es5-ext/object/valid-value')
+  , callable   = require('es5-ext/object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , every = Array.prototype.every
   , call = Function.prototype.call
@@ -22,9 +22,7 @@ DMap = function (list, cb, context) {
 
 	assign(this, deferred());
 	every.call(list, this.process, this);
-	if (!this.waiting) {
-		return this.resolve(this.result);
-	}
+	if (!this.waiting) return this.resolve(this.result);
 	this.initialized = true;
 
 	return this.promise;
@@ -35,56 +33,49 @@ DMap.prototype = {
 	initialized: false,
 	process: function (value, index) {
 		++this.waiting;
+		value = assimilate(value);
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.end(this.processCb.bind(this, index), this.resolve);
+				value.done(this.processCb.bind(this, index), this.reject);
 				return true;
 			}
-			value = value.value;
-			if (isError(value)) {
-				this.resolve(value);
+			if (value.failed) {
+				this.reject(value.value);
 				return false;
 			}
-		} else if (isError(value) && !this.cb) {
-			this.resolve(value);
-			return false;
+			value = value.value;
 		}
 		return this.processCb(index, value);
 	},
 	processCb: function (index, value) {
-		if (this.promise.resolved) {
-			return false;
-		}
+		if (this.promise.resolved) return false;
 		if (this.cb) {
 			try {
 				value = call.call(this.cb, this.context, value, index, this.list);
 			} catch (e) {
-				this.resolve(e);
+				this.reject(e);
 				return false;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.end(this.processValue.bind(this, index), this.resolve);
+					value.done(this.processValue.bind(this, index), this.reject);
 					return true;
 				}
+				if (value.failed) {
+					this.reject(value);
+					return false;
+				}
 				value = value.value;
-			}
-			if (isError(value)) {
-				this.resolve(value);
-				return false;
 			}
 		}
 		this.processValue(index, value);
 		return true;
 	},
 	processValue: function (index, value) {
-		if (this.promise.resolved) {
-			return;
-		}
+		if (this.promise.resolved) return;
 		this.result[index] = value;
-		if (!--this.waiting && this.initialized) {
-			this.resolve(this.result);
-		}
+		if (!--this.waiting && this.initialized) this.resolve(this.result);
 	}
 };
 

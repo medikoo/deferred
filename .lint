@@ -22,25 +22,12 @@ predef+ console, Buffer
 ./examples/test-with-mocha-and-should.js
 predef+ describe, it
 
-./lib/ext/array/map.js
+./ext/array
+./ext/function
 bitwise
 
-./lib/ext/array/reduce.js
-bitwise
-
-./lib/ext/array/some.js
-bitwise
-
-./lib/ext/function/promisify-sync.js
-bitwise
-
-./lib/ext/function/promisify.js
-bitwise
-
-./lib/monitor.js
-predef+ console
-
-./lib/profiler.js
+./monitor.js
+./profiler.js
 predef+ console
 
 ./test/index.js

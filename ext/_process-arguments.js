@@ -1,13 +1,14 @@
 'use strict';
 
-var arrayOf   = require('es5-ext/array/of')
-  , deferred  = require('../deferred')
-  , isPromise = require('../is-promise')
+var arrayOf    = require('es5-ext/array/of')
+  , deferred   = require('../deferred')
+  , isPromise  = require('../is-promise')
+  , assimilate = require('../assimilate')
 
   , push = Array.prototype.push, slice = Array.prototype.slice;
 
 module.exports = function (args, length) {
-	var i, l;
+	var i, l, arg;
 	if ((length != null) && (args.length !== length)) {
 		args = slice.call(args, 0, length);
 		if (args.length < length) {
@@ -15,13 +16,14 @@ module.exports = function (args, length) {
 		}
 	}
 	for (i = 0, l = args.length; i < l; ++i) {
-		if (isPromise(args[i])) {
-			if (!args[i].resolved) {
+		arg = assimilate(args[i]);
+		if (isPromise(arg)) {
+			if (!arg.resolved) {
 				if (l > 1) return deferred.apply(null, args);
-				return args[0](arrayOf);
+				return arg(arrayOf);
 			}
-			if (args[i].failed) return args[i];
-			args[i] = args[i].value;
+			if (arg.failed) return arg;
+			args[i] = arg.value;
 		}
 	}
 	return args;
