@@ -2,11 +2,12 @@
 
 'use strict';
 
-var extend    = require('es5-ext/lib/Object/extend')
-  , value     = require('es5-ext/lib/Object/valid-value')
-  , callable  = require('es5-ext/lib/Object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var extend     = require('es5-ext/lib/Object/extend')
+  , value      = require('es5-ext/lib/Object/valid-value')
+  , callable   = require('es5-ext/lib/Object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , call = Function.prototype.call
   , Some;
@@ -33,7 +34,7 @@ Some = function (list, cb, context) {
 Some.prototype = {
 	current: 0,
 	process: function () {
-		var value = this.list[this.current];
+		var value = assimilate(this.list[this.current]);
 		if (isPromise(value)) {
 			if (!value.resolved) {
 				value.done(this.processCb, this.reject);
@@ -56,6 +57,7 @@ Some.prototype = {
 				this.reject(e);
 				return;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
 					value.done(this.processValue, this.reject);

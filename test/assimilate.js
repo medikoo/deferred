@@ -1,6 +1,8 @@
 'use strict';
 
-var x = {};
+var deferred = require('../deferred')
+
+  , x = {};
 
 module.exports = {
 	"then": {
@@ -36,5 +38,15 @@ module.exports = {
 				a(value, x);
 			});
 		}
+	},
+	"via then": function (t, a, d) {
+		deferred('marko').then(function () {
+			return { then: function (resolve) {
+				resolve('foreign');
+			} };
+		}).done(function (value) {
+			a(value, 'foreign');
+			d();
+		});
 	}
 };

@@ -5,11 +5,12 @@
 
 'use strict';
 
-var toUint    = require('es5-ext/lib/Number/to-uint')
-  , callable  = require('es5-ext/lib/Object/valid-callable')
-  , eeUnify   = require('event-emitter/lib/unify')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var toUint     = require('es5-ext/lib/Number/to-uint')
+  , callable   = require('es5-ext/lib/Object/valid-callable')
+  , eeUnify    = require('event-emitter/lib/unify')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , reject = deferred.reject
   , apply = Function.prototype.apply, max = Math.max
@@ -41,6 +42,7 @@ module.exports = function (cLimit, qLimit) {
 			unload();
 			return;
 		}
+		r = assimilate(r);
 		if (isPromise(r)) {
 			if (def) eeUnify(def.promise, r);
 			if (!r.resolved) {

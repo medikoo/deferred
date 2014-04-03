@@ -2,11 +2,12 @@
 
 'use strict';
 
-var extend    = require('es5-ext/lib/Object/extend')
-  , value     = require('es5-ext/lib/Object/valid-value')
-  , callable  = require('es5-ext/lib/Object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var extend     = require('es5-ext/lib/Object/extend')
+  , value      = require('es5-ext/lib/Object/valid-value')
+  , callable   = require('es5-ext/lib/Object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , call = Function.prototype.call
   , hasOwnProperty = Object.prototype.hasOwnProperty
@@ -18,6 +19,7 @@ Reduce = function (list, cb, initial, initialized) {
 	this.initialized = initialized;
 	this.length = list.length >>> 0;
 
+	initial = assimilate(initial);
 	if (isPromise(initial)) {
 		if (!initial.resolved) {
 			extend(this, deferred());
@@ -67,7 +69,7 @@ Reduce.prototype = {
 		}
 	},
 	process: function () {
-		var value = this.list[this.current];
+		var value = assimilate(this.list[this.current]);
 		if (isPromise(value)) {
 			if (!value.resolved) {
 				value.done(function (result) {
@@ -101,6 +103,7 @@ Reduce.prototype = {
 				this.reject(e);
 				return;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
 					value.done(function (result) {

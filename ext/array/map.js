@@ -2,11 +2,12 @@
 
 'use strict';
 
-var extend    = require('es5-ext/lib/Object/extend')
-  , value     = require('es5-ext/lib/Object/valid-value')
-  , callable  = require('es5-ext/lib/Object/valid-callable')
-  , deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise')
+var extend     = require('es5-ext/lib/Object/extend')
+  , value      = require('es5-ext/lib/Object/valid-value')
+  , callable   = require('es5-ext/lib/Object/valid-callable')
+  , deferred   = require('../../deferred')
+  , isPromise  = require('../../is-promise')
+  , assimilate = require('../../assimilate')
 
   , every = Array.prototype.every
   , call = Function.prototype.call
@@ -21,9 +22,7 @@ DMap = function (list, cb, context) {
 
 	extend(this, deferred());
 	every.call(list, this.process, this);
-	if (!this.waiting) {
-		return this.resolve(this.result);
-	}
+	if (!this.waiting) return this.resolve(this.result);
 	this.initialized = true;
 
 	return this.promise;
@@ -34,6 +33,7 @@ DMap.prototype = {
 	initialized: false,
 	process: function (value, index) {
 		++this.waiting;
+		value = assimilate(value);
 		if (isPromise(value)) {
 			if (!value.resolved) {
 				value.done(this.processCb.bind(this, index), this.reject);
@@ -48,9 +48,7 @@ DMap.prototype = {
 		return this.processCb(index, value);
 	},
 	processCb: function (index, value) {
-		if (this.promise.resolved) {
-			return false;
-		}
+		if (this.promise.resolved) return false;
 		if (this.cb) {
 			try {
 				value = call.call(this.cb, this.context, value, index, this.list);
@@ -58,6 +56,7 @@ DMap.prototype = {
 				this.reject(e);
 				return false;
 			}
+			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
 					value.done(this.processValue.bind(this, index), this.reject);
@@ -74,13 +73,9 @@ DMap.prototype = {
 		return true;
 	},
 	processValue: function (index, value) {
-		if (this.promise.resolved) {
-			return;
-		}
+		if (this.promise.resolved) return;
 		this.result[index] = value;
-		if (!--this.waiting && this.initialized) {
-			this.resolve(this.result);
-		}
+		if (!--this.waiting && this.initialized) this.resolve(this.result);
 	}
 };
 

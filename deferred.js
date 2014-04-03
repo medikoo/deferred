@@ -19,7 +19,7 @@ var isError   = require('es5-ext/lib/Error/is-error')
 
   , Deferred, createDeferred, count = 0, timeout, extendShim, ext
   , protoSupported = Boolean(isPromise.__proto__)
-  , resolve;
+  , resolve, assimilate;
 
 extendShim = function (promise) {
 	ext._names.forEach(function (name) {
@@ -88,6 +88,7 @@ Deferred.prototype = {
 		this.resolved = true;
 		if (!--count) clearTimeout(timeout);
 		if (this.promise.monitor) clearTimeout(this.promise.monitor);
+		value = assimilate(value);
 		if (isPromise(value)) {
 			if (!value.resolved) {
 				if (!value.dependencies) {
@@ -139,6 +140,7 @@ module.exports = createDeferred = function (value) {
 		waiting = 0;
 		result = new Array(l);
 		every.call(arguments, function (value, index) {
+			value = assimilate(value);
 			if (!isPromise(value)) {
 				result[index] = value;
 				return true;
@@ -162,6 +164,7 @@ module.exports = createDeferred = function (value) {
 		if (!waiting) d.resolve(result);
 		return d.promise;
 	}
+	value = assimilate(value);
 	if (isPromise(value)) return value;
 	return resolve(value, isError(value));
 };
@@ -169,3 +172,4 @@ module.exports = createDeferred = function (value) {
 createDeferred.Deferred = Deferred;
 createDeferred.reject = function (value) { return resolve(value, true); };
 ext = require('./_ext');
+assimilate = require('./assimilate');
