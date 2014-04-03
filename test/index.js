@@ -16,6 +16,7 @@ module.exports = {
 		delete o.ext;
 		delete o.promise;
 		delete o.profiler;
+		delete o.reject;
 		return o;
 	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
 		'profileEnd', 'promisify', 'promisifySync', 'map', 'reduce', 'some']),
