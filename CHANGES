@@ -1,3 +1,27 @@
+v0.7.0  --  2014.04.04
+Major (breaking) changes:
+* Fix error handling:
+  Up to v0.6.x promise could have been rejected only with error instance, and
+  same way they couldn't be successfully resolved with an error instance. It was
+  not an issue if we followed good practices, still it didn't match `throw`
+  behavior (any JavaScript value can be thrown). Starting from v0.7 promise can
+  be rejected and resolved with any kind of value. It's also how promises behave
+  in other implementations including upcoming ECMAScript 6 standard.
+* Assimilate foreign promises. Promises from other implemantations (including
+  native promises) are detected and assimilated for recursive resolution.
+  Addresses issue #29
+* Rename `promise.match` to `promise.spread`, this is the name under which this
+  functionality was popularized in other libraries.
+* Remove `end`, as it was replaced by `done` in v0.6.4 (`end` was kept as an
+  alias to not break current programs)
+* Move modules from `lib` to root folder
+
+Other changes:
+* Expose `resolve` and `reject` functions on deferred. It complies to
+  `Promise.resolve` and `Promise.reject`
+* Remove Makefile (it's cross-environment package)
+* Fix handling of promise arguments in promisifySync
+
 v0.6.8  --  2013.12.27
 * Function version of `invokeAsync` utility (further addresses #26)
 
