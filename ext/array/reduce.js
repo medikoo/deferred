@@ -24,7 +24,7 @@ Reduce = function (list, cb, initial, initialized) {
 	if (isPromise(initial)) {
 		if (!initial.resolved) {
 			extend(this, deferred());
-			initial.end(function (initial) {
+			initial.done(function (initial) {
 				this.value = initial;
 				this.init();
 			}.bind(this), this.reject);
