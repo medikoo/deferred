@@ -54,7 +54,7 @@ deferred.extend('invokeAsync', function (method/*, …args*/) {
 }, function (args, resolve, reject) {
 	var fn;
 	if (this.failed) {
-		reject(this);
+		reject(this.value);
 		return;
 	}
 
@@ -76,7 +76,7 @@ deferred.extend('invokeAsync', function (method/*, …args*/) {
 	args = processArguments(slice.call(args, 1));
 	if (isPromise(args)) {
 		if (args.failed) {
-			reject(args);
+			reject(args.value);
 			return;
 		}
 		args.done(function (args) {

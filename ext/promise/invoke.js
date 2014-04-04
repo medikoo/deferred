@@ -35,7 +35,7 @@ deferred.extend('invoke', function (method/*, …args*/) {
 }, function (args, resolve, reject) {
 	var fn;
 	if (this.failed) {
-		reject(this);
+		reject(this.value);
 		return;
 	}
 

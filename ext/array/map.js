@@ -63,7 +63,7 @@ DMap.prototype = {
 					return true;
 				}
 				if (value.failed) {
-					this.reject(value);
+					this.reject(value.value);
 					return false;
 				}
 				value = value.value;

@@ -121,6 +121,14 @@ module.exports = function (t) {
 				throw new Error("ERROR");
 			});
 			a.throws(d.resolve);
+		},
+		"Return rejected promise in callback": function (a) {
+			var e = new Error("Some error");
+			t.call([1, 2], function () {
+				return reject(e);
+			}).done(a.never, function (err) {
+				a(err, e);
+			});
 		}
 	};
 };
