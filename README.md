@@ -631,18 +631,6 @@ promise.invokeAsync('foo', 3)(function (result) {
 
 See [promise aware version of Array's map](#map).
 
-#### match
-
-If promise expected value is a list that you want to match into function arguments then use `match`
-
-```javascript
-var promise = deferred([2, 3]);
-
-promise.match(function (a, b) {
-  console.log(a + b); // 5
-});
-```
-
 #### reduce
 
 See [promise aware version of Array's reduce](#reduce)
@@ -650,6 +638,18 @@ See [promise aware version of Array's reduce](#reduce)
 #### some
 
 See [promise aware version of Array's some](#some)
+
+#### spread
+
+If promise expected value is a list that you want to spread into function arguments then use `spread`
+
+```javascript
+var promise = deferred([2, 3]);
+
+promise.spread(function (a, b) {
+  console.log(a + b); // 5
+});
+```
 
 ### Debugging
 
