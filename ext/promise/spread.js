@@ -1,6 +1,6 @@
-// 'match' - Promise extensions
+// 'spread' - Promise extensions
 //
-// promise.match(onsuccess, onerror)
+// promise.spread(onsuccess, onerror)
 //
 // Matches eventual list result onto function arguments,
 // otherwise works same as 'then' (promise function itself)
@@ -15,13 +15,13 @@ var spread     = require('es5-ext/function/#/spread')
 
   , resolve = deferred.resolve, reject = deferred.reject;
 
-deferred.extend('match', function (win, fail) {
+deferred.extend('spread', function (win, fail) {
 	var def;
 	((win == null) || callable(win));
 	if (!win && (fail == null)) return this;
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('match', [win, fail, def.resolve, def.reject]);
+	this.pending.push('spread', [win, fail, def.resolve, def.reject]);
 	return def.promise;
 }, function (win, fail, resolve, reject) {
 	var cb, value;

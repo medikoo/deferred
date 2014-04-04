@@ -30,6 +30,6 @@ require('./ext/promise/get');
 require('./ext/promise/invoke');
 require('./ext/promise/invoke-async');
 require('./ext/promise/map');
-require('./ext/promise/match');
+require('./ext/promise/spread');
 require('./ext/promise/some');
 require('./ext/promise/reduce');
