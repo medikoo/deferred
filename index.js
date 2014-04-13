@@ -5,7 +5,7 @@
 'use strict';
 
 var call   = Function.prototype.call
-  , assign = require('es5-ext/object/assign-multiple');
+  , assign = require('es5-ext/object/assign');
 
 module.exports = assign(require('./deferred'), {
 	invokeAsync:   require('./invoke-async'),
