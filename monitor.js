@@ -6,7 +6,7 @@
 var max        = Math.max
   , callable   = require('es5-ext/object/valid-callable')
   , isCallable = require('es5-ext/object/is-callable')
-  , toUint     = require('es5-ext/number/to-uint')
+  , toPosInt   = require('es5-ext/number/to-pos-integer')
   , deferred   = require('./deferred');
 
 exports = module.exports = function (timeout, cb) {
@@ -17,7 +17,7 @@ exports = module.exports = function (timeout, cb) {
 		delete exports.callback;
 		return;
 	}
-	exports.timeout = timeout = max(toUint(timeout) || 5000, 50);
+	exports.timeout = timeout = max(toPosInt(timeout) || 5000, 50);
 	if (cb == null) {
 		if ((typeof console !== 'undefined') && console &&
 				isCallable(console.error)) {

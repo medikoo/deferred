@@ -5,7 +5,7 @@
 
 'use strict';
 
-var toUint     = require('es5-ext/number/to-uint')
+var toPosInt   = require('es5-ext/number/to-pos-integer')
   , callable   = require('es5-ext/object/valid-callable')
   , eeUnify    = require('event-emitter/lib/unify')
   , deferred   = require('../../deferred')
@@ -27,8 +27,8 @@ gateReject = function () {
 module.exports = function (cLimit, qLimit) {
 	var fn, count, decrement, unload, queue, run, result;
 	fn = callable(this);
-	cLimit = max(toUint(cLimit), 1);
-	qLimit = ((qLimit == null) || isNaN(qLimit)) ? Infinity : toUint(qLimit);
+	cLimit = max(toPosInt(cLimit), 1);
+	qLimit = ((qLimit == null) || isNaN(qLimit)) ? Infinity : toPosInt(qLimit);
 	count = 0;
 	queue = [];
 
