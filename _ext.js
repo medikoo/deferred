@@ -1,7 +1,7 @@
 'use strict';
 
 var callable   = require('es5-ext/object/valid-callable')
-  , d          = require('d/d')
+  , d          = require('d')
   , isCallable = require('es5-ext/object/is-callable')
   , ee         = require('event-emitter')
   , isPromise  = require('./is-promise')
