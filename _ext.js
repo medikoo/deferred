@@ -3,7 +3,7 @@
 var callable   = require('es5-ext/object/valid-callable')
   , d          = require('d/d')
   , isCallable = require('es5-ext/object/is-callable')
-  , ee         = require('event-emitter/lib/core')
+  , ee         = require('event-emitter')
   , isPromise  = require('./is-promise')
 
   , create = Object.create, defineProperty = Object.defineProperty
