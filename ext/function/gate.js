@@ -7,7 +7,7 @@
 
 var toPosInt   = require('es5-ext/number/to-pos-integer')
   , callable   = require('es5-ext/object/valid-callable')
-  , eeUnify    = require('event-emitter/lib/unify')
+  , eeUnify    = require('event-emitter/unify')
   , deferred   = require('../../deferred')
   , isPromise  = require('../../is-promise')
   , assimilate = require('../../assimilate')
