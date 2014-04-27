@@ -1,3 +1,6 @@
+v0.7.1  --  2013.04.27
+* Update internals to use latest versions of dependencies
+
 v0.7.0  --  2014.04.04
 Major (breaking) changes:
 * Fix error handling:
