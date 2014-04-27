@@ -101,7 +101,7 @@ module.exports = function (root) {
 		// with expected set of filenames and additionally you can recurse into sub
 		// directories:
 		//
-		// var readdir = require('fs2/lib/readdir');
+		// var readdir = require('fs2/readdir');
 		//
 		// readdir(root, {
 		//   depth: Infinity      // Recurse into subdirectories
