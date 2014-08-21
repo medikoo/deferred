@@ -3,7 +3,7 @@
 var deferred = require('../../../deferred');
 
 module.exports = {
-	"Deferred": function (a) {
+	Deferred: function (a) {
 		var defer = deferred(), w = {}, x = {}, y = {}, z = [x, y, w]
 		  , invoked = false;
 		defer.resolve(z).spread(function (m, n, o) {
@@ -14,7 +14,7 @@ module.exports = {
 		}).done();
 		a(invoked, true, "Resolve in current tick");
 	},
-	"Promise": function (a, d) {
+	Promise: function (a, d) {
 		var w = {}, x = {}, y = {}, z = [x, y, w];
 		deferred(z).spread(function (m, n, o) {
 			a(m, x, "#1");
@@ -22,7 +22,7 @@ module.exports = {
 			a(o, w, "#3");
 		}).done(d, d);
 	},
-	"Error": function (a, d) {
+	Error: function (a, d) {
 		var e = new Error('E!');
 		deferred(e).spread(a.never, function (err) {
 			a(err, e);

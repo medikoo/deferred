@@ -5,8 +5,8 @@ var deferred = require('../deferred')
   , x = {};
 
 module.exports = {
-	"then": {
-		"Resolve": function (t, a, d) {
+	then: {
+		Resolve: function (t, a, d) {
 			t({ then: function (resolve) {
 				resolve(x);
 			} }).done(function (value) {
@@ -14,7 +14,7 @@ module.exports = {
 				d();
 			}, a.never);
 		},
-		"Reject": function (t, a, d) {
+		Reject: function (t, a, d) {
 			t({ then: function (resolve, reject) {
 				reject(x);
 			} }).done(a.never, function (value) {
@@ -23,15 +23,15 @@ module.exports = {
 			});
 		}
 	},
-	"done": {
-		"Resolve": function (t, a) {
+	done: {
+		Resolve: function (t, a) {
 			t({ then: function () {}, done: function (resolve) {
 				resolve(x);
 			} }).done(function (value) {
 				a(value, x);
 			}, a.never);
 		},
-		"Reject": function (t, a) {
+		Reject: function (t, a) {
 			t({ then: function () {}, done: function (resolve, reject) {
 				reject(x);
 			} }).done(a.never, function (value) {

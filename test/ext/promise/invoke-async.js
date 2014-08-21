@@ -4,7 +4,7 @@ var deferred = require('../../../deferred');
 
 module.exports = function () {
 	return {
-		"Function": function (a, d) {
+		Function: function (a, d) {
 			var x = {}, z = {};
 			z.foo = function (y, cb) {
 				var self = this;
@@ -17,7 +17,7 @@ module.exports = function () {
 				a.deep(r, [z, x]);
 			}).done(d, d);
 		},
-		"Method": function (a, d) {
+		Method: function (a, d) {
 			var x = {}, fn, z = {};
 			fn = function (y, cb) {
 				var self = this;
@@ -30,7 +30,7 @@ module.exports = function () {
 				a.deep(r, [z, x]);
 			}).done(d, d);
 		},
-		"Fail": function (a) {
+		Fail: function (a) {
 			var e = new Error("Error");
 			deferred(e).invokeAsync('bla')(a.never, function (r) {
 				a(r, e);
@@ -56,7 +56,7 @@ module.exports = function () {
 				a(r, 'foo', "Result");
 			}, a.never).done();
 		},
-		"Erroneous": function (a, d) {
+		Erroneous: function (a, d) {
 			var x, fn;
 			x = new Error('Test');
 			fn = function (callback) {

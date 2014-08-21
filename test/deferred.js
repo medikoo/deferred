@@ -24,13 +24,13 @@ module.exports = {
 	"More than one argument": function (t) {
 		var x = {}, y = {};
 		return {
-			"Success": function (a, d) {
+			Success: function (a, d) {
 				t(t(x), y, null)(function (r) {
 					a.deep(r, [x, y, null]);
 					d();
 				}).done();
 			},
-			"Error": function (a, d) {
+			Error: function (a, d) {
 				var d1 = t(), v, res = false;
 				setTimeout(d1.resolve, 20);
 				t(t(x), d1.promise(function () {
@@ -125,7 +125,7 @@ module.exports = {
 		def1.resolve(p2);
 		def2.resolve(x);
 	},
-	"Reject": function (t, a) {
+	Reject: function (t, a) {
 		var e = new Error("Error!");
 		t().reject(e).done(a.never, function (result) { a(result, e); });
 	},

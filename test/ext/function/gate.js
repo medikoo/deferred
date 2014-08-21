@@ -11,7 +11,7 @@ module.exports = function (t) {
 		return p;
 	};
 	return {
-		"Limit": function (a) {
+		Limit: function (a) {
 			var invoked, x = {};
 			gfn = t.call(fn, 2);
 			dx = deferred();

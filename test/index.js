@@ -21,11 +21,11 @@ module.exports = {
 	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
 		'profileEnd', 'promisify', 'promisifySync', 'reject', 'resolve', 'map',
 		'reduce', 'some']),
-	"isPromise": function (t, a) {
+	isPromise: function (t, a) {
 		a(t.isPromise(t(null)), true);
 		a(t.isPromise({}), false);
 	},
-	"InvokeAsync": function (t, a, d) {
+	InvokeAsync: function (t, a, d) {
 		var x = {};
 		t.invokeAsync({}, function (cb) {
 			setTimeout(function () {
@@ -36,7 +36,7 @@ module.exports = {
 			a(r, x);
 		}).done(d, d);
 	},
-	"CallAsync": function (t, a, d) {
+	CallAsync: function (t, a, d) {
 		var x = {};
 		t.callAsync(function (cb) {
 			setTimeout(function () {
@@ -47,7 +47,7 @@ module.exports = {
 			a(r, x);
 		}).done(d, d);
 	},
-	"Delay": function (t, a, d) {
+	Delay: function (t, a, d) {
 		var x = {};
 		t.delay(function (r) {
 			return r;
@@ -55,7 +55,7 @@ module.exports = {
 			a(r, x);
 		}).done(d, d);
 	},
-	"Gate": function (t, a) {
+	Gate: function (t, a) {
 		var fn, dx, dy, ready;
 		fn = t.gate(function (p) {
 			return p;
@@ -71,11 +71,11 @@ module.exports = {
 		dx.resolve({});
 		ready = false;
 	},
-	"Profile": function (t, a) {
+	Profile: function (t, a) {
 		a(typeof t.profile, 'function', "Profile");
 		a(typeof t.profileEnd, 'function', "ProfileEnd");
 	},
-	"Promisify": function (t, a, d) {
+	Promisify: function (t, a, d) {
 		var x = {};
 		t.promisify(function (cb) {
 			setTimeout(function () {
@@ -86,28 +86,28 @@ module.exports = {
 			a(r, x);
 		}).done(d, d);
 	},
-	"PromisifySync": function (t, a, d) {
+	PromisifySync: function (t, a, d) {
 		t.promisifySync(function () {
 			return;
 		})()(function (r) {
 			a(r, undefined);
 		}).done(d, d);
 	},
-	"Map": function (t, a, d) {
+	Map: function (t, a, d) {
 		t.map([t(1), t(2), 3], function (res) {
 			return t(res * res);
 		})(function (r) {
 			a.deep(r, [1, 4, 9]);
 		}, a.never).done(d, d);
 	},
-	"Reduce": function (t, a, d) {
+	Reduce: function (t, a, d) {
 		t.reduce([t(1), t(2), 3], function (arg1, arg2) {
 			return t(arg1 * arg2);
 		}, 1)(function (r) {
 			a(r, 6);
 		}, a.never).done(d, d);
 	},
-	"Some": function (t, a, d) {
+	Some: function (t, a, d) {
 		var count = 0;
 		t.some([t(1), t(2), 3], function (res, index) {
 			++count;

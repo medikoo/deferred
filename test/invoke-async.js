@@ -27,7 +27,7 @@ module.exports = function (t) {
 				a(result, z);
 			}, a.never).done(d, d);
 		},
-		"Successful": function (a, d) {
+		Successful: function (a, d) {
 			var x = {}, y = {}, z = {};
 			t({}, function (arg1, arg2, callback) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
@@ -49,7 +49,7 @@ module.exports = function (t) {
 				a.deep(result, [x, y, z], "Result");
 			}, a.never).done(d, d);
 		},
-		"Erroneous": function (a, d) {
+		Erroneous: function (a, d) {
 			var x = new Error('Test');
 			t({}, function (callback) {
 				setTimeout(function () { callback(x); }, 0);

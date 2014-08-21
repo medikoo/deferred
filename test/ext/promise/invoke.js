@@ -19,7 +19,7 @@ var deferred = require('../../../deferred');
 
 module.exports = function () {
 	return {
-		"Function": function (a, d) {
+		Function: function (a, d) {
 			var x = {}, z = {};
 			z.foo = function (y, cb) {
 				var self = this;
@@ -35,7 +35,7 @@ module.exports = function () {
 				a(r, 3);
 			}).done();
 		},
-		"Method": function (a, d) {
+		Method: function (a, d) {
 			var x = {}, fn, z = {};
 			fn = function (y, cb) {
 				var self = this;
@@ -51,7 +51,7 @@ module.exports = function () {
 				a(r, 3);
 			}).done();
 		},
-		"Fail": function (a) {
+		Fail: function (a) {
 			var e = new Error("Error");
 			deferred(e).invoke('bla')(a.never, function (r) {
 				a(r, e);
@@ -77,7 +77,7 @@ module.exports = function () {
 				a(r, 'foo', "Result");
 			}, a.never).done();
 		},
-		"Erroneous": function (a) {
+		Erroneous: function (a) {
 			var x, fn;
 			x = new Error('Test');
 			fn = function () {

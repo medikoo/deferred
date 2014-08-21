@@ -3,7 +3,7 @@
 var deferred = require('../../../deferred');
 
 module.exports = {
-	"Deferred": function (a) {
+	Deferred: function (a) {
 		var defer = deferred(), x = {}, y = { foo: x }
 		  , invoked = false;
 		defer.resolve(y).get('foo').done(function (r) {
@@ -12,13 +12,13 @@ module.exports = {
 		});
 		a(invoked, true, "Resolved in current tick");
 	},
-	"Promise": function (a) {
+	Promise: function (a) {
 		var x = {}, y = { foo: x };
 		deferred(y).get('foo').done(function (r) {
 			a(r, x);
 		});
 	},
-	"Nested": function (a) {
+	Nested: function (a) {
 		var x = {}, y = { foo: { bar: x } };
 		deferred(y).get('foo', 'bar').done(function (r) {
 			a(r, x);

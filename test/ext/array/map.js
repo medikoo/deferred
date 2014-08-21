@@ -8,26 +8,26 @@ module.exports = function (t) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
 
 	return {
-		"Empty": {
+		Empty: {
 			"": function (a, d) {
 				t.call([])(function (result) {
 					a.deep(result, []);
 				}, a.never).done(d, d);
 			},
-			"Callback": function (a, d) {
+			Callback: function (a, d) {
 				t.call([], a.never)(function (result) {
 					a.deep(result, []);
 				}, a.never).done(d, d);
 			}
 		},
-		"One": {
-			"Value": {
+		One: {
+			Value: {
 				"": function (a, d) {
 					t.call([x])(function (result) {
 						a.deep(result, [x]);
 					}, a.never).done(d, d);
 				},
-				"Callback": function (a, d) {
+				Callback: function (a, d) {
 					var list = [x];
 					t.call(list, function (arg, index, target) {
 						a(arg, x, "Argument");
@@ -40,13 +40,13 @@ module.exports = function (t) {
 					}, a.never).done(d, d);
 				}
 			},
-			"Promise": {
+			Promise: {
 				"": function (a, d) {
 					t.call([deferred(x)])(function (result) {
 						a.deep(result, [x]);
 					}, a.never).done(d, d);
 				},
-				"Callback": function (a, d) {
+				Callback: function (a, d) {
 					t.call([deferred(x)], function (arg) {
 						a(arg, x, "Argument");
 						return y;
@@ -56,9 +56,9 @@ module.exports = function (t) {
 				}
 			}
 		},
-		"Many": {
+		Many: {
 			"No callback": {
-				"Error": function (a, d) {
+				Error: function (a, d) {
 					t.call([x, y, deferred(x), reject(e), z])(a.never, function (res) {
 						a(res, e);
 						d();
@@ -75,8 +75,8 @@ module.exports = function (t) {
 					}, a.never).done(d, d);
 				}
 			},
-			"Callback": {
-				"Error": function (a, d) {
+			Callback: {
+				Error: function (a, d) {
 					var count = 0;
 					t.call([x, y, deferred(x), z], function () {
 						if (count++) {

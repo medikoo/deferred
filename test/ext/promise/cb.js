@@ -4,7 +4,7 @@ var deferred = require('../../../deferred');
 
 module.exports = function () {
 	return {
-		"Unresolved": function (a, d) {
+		Unresolved: function (a, d) {
 			var x = {}, def = deferred(), p = def.promise, invoked = false;
 
 			a(p.cb(), p, "Callback is optional");
@@ -26,7 +26,7 @@ module.exports = function () {
 			a(invoked, false,
 				"Callback not invoked immediatelly on resolved promise");
 		},
-		"Errorneus": function (a, d) {
+		Errorneus: function (a, d) {
 			var x = new Error("Error")
 			  , p = deferred(x)
 			  , invoked = false;

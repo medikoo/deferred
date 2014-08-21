@@ -24,7 +24,7 @@ module.exports = function (t) {
 				a(result, z);
 			});
 		},
-		"Error": function (a) {
+		Error: function (a) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;
