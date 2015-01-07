@@ -3,7 +3,7 @@
 module
 
 indent 2
-maxlen 80
+maxlen 100
 tabs
 
 ass
