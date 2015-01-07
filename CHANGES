@@ -1,4 +1,9 @@
-v0.7.1  --  2013.04.27
+v0.7.2  --  2015.01.07
+* Force assimilation of pre v0.7 deferred promises.
+  Using them as own raised serious bugs
+* Configure lint scripts in package.json
+
+v0.7.1  --  2014.04.27
 * Update internals to use latest versions of dependencies
 
 v0.7.0  --  2014.04.04
