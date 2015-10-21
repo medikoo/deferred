@@ -10,6 +10,7 @@ var call   = Function.prototype.call
 module.exports = assign(require('./deferred'), {
 	invokeAsync:   require('./invoke-async'),
 	isPromise:     require('./is-promise'),
+	dynamicQueue:  require('./dynamic-queue'),
 	validPromise:  require('./valid-promise'),
 	callAsync:     call.bind(require('./ext/function/call-async')),
 	delay:         call.bind(require('./ext/function/delay')),
