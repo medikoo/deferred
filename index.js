@@ -27,6 +27,7 @@ module.exports = assign(require('./deferred'), {
 require('./ext/promise/aside');
 require('./ext/promise/catch');
 require('./ext/promise/cb');
+require('./ext/promise/delay');
 require('./ext/promise/finally');
 require('./ext/promise/get');
 require('./ext/promise/invoke');
