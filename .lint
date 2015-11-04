@@ -22,6 +22,7 @@ predef+ console, Buffer
 ./examples/test-with-mocha-and-should.js
 predef+ describe, it
 
+./lib/some-every.js
 ./ext/array
 ./ext/function
 bitwise
