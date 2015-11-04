@@ -18,6 +18,7 @@ module.exports = assign(require('./deferred'), {
 	monitor:       require('./monitor'),
 	promisify:     call.bind(require('./ext/function/promisify')),
 	promisifySync: call.bind(require('./ext/function/promisify-sync')),
+	every:         call.bind(require('./ext/array/every')),
 	find:          call.bind(require('./ext/array/find')),
 	map:           call.bind(require('./ext/array/map')),
 	reduce:        call.bind(require('./ext/array/reduce')),

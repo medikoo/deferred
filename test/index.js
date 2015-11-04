@@ -19,7 +19,7 @@ module.exports = {
 		delete o.profiler;
 		return o;
 	}), ['Deferred', 'callAsync', 'delay', 'extend', 'gate', 'profile',
-		'profileEnd', 'promisify', 'promisifySync', 'reject', 'resolve', 'find', 'map',
+		'profileEnd', 'promisify', 'promisifySync', 'reject', 'resolve', 'every', 'find', 'map',
 		'reduce', 'some']),
 	isPromise: function (t, a) {
 		a(t.isPromise(t(null)), true);
