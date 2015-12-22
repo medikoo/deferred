@@ -61,7 +61,7 @@ Deferred.prototype = {
 		this.promise.value = value;
 		this.promise.__proto__ = ext._resolved;
 		if (!protoSupported) this.promise.resolved = true;
-		deps = this.promise.dependencies
+		deps = this.promise.dependencies;
 		delete this.promise.dependencies;
 		while (deps) {
 			for (i = 0; (dPromise = deps[i]); ++i) {
