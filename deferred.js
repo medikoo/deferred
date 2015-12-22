@@ -57,23 +57,27 @@ Deferred = function () {
 Deferred.prototype = {
 	resolved: false,
 	_settle: function (value) {
-		var i, name, data;
+		var i, name, data, deps, dPromise, nuDeps;
 		this.promise.value = value;
 		this.promise.__proto__ = ext._resolved;
 		if (!protoSupported) this.promise.resolved = true;
-		if (this.promise.dependencies) {
-			this.promise.dependencies.forEach(function self(dPromise) {
+		deps = this.promise.dependencies
+		delete this.promise.dependencies;
+		while (deps) {
+			for (i = 0; (dPromise = deps[i]); ++i) {
 				dPromise.value = value;
 				dPromise.failed = this.failed;
 				dPromise.__proto__ = ext._resolved;
 				if (!protoSupported) dPromise.resolved = true;
 				delete dPromise.pending;
 				if (dPromise.dependencies) {
-					dPromise.dependencies.forEach(self, this);
+					if (!nuDeps) nuDeps = dPromise.dependencies;
+					else push.apply(nuDeps, dPromise.dependencies);
 					delete dPromise.dependencies;
 				}
-			}, this.promise);
-			delete this.promise.dependencies;
+			}
+			deps = nuDeps;
+			nuDeps = null;
 		}
 		if ((data = this.promise.pending)) {
 			for (i = 0; (name = data[i]); ++i) {
