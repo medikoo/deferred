@@ -220,7 +220,7 @@ Promises can be nested. If a promise resolves with another promise, it's not rea
 var def = deferred();
 def.resolve(delayedAdd(2, 3)); // Resolve promise with another promise
 def.promise(function (result) {
-  console.log(5); // 5;
+  console.log(result); // 5;
 });
 ```
 
