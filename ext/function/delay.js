@@ -2,10 +2,12 @@
 
 'use strict';
 
-var apply    = Function.prototype.apply
-  , callable = require('es5-ext/object/valid-callable')
-  , deferred = require('../../deferred')
+var callable      = require('es5-ext/object/valid-callable')
+  , nextTick      = require('next-tick')
+  , ensureTimeout = require('timers-ext/valid-timeout')
+  , deferred      = require('../../deferred')
 
+  , apply    = Function.prototype.apply
   , delayed;
 
 delayed = function (fn, args, resolve, reject) {
@@ -20,12 +22,17 @@ delayed = function (fn, args, resolve, reject) {
 };
 
 module.exports = function (timeout) {
-	var fn, result;
+	var fn, result, delay;
 	fn = callable(this);
+	if (timeout == null) {
+		delay = nextTick;
+	} else {
+		timeout = ensureTimeout(timeout);
+		delay = setTimeout;
+	}
 	result = function () {
 		var def = deferred();
-		setTimeout(delayed.bind(this, fn, arguments, def.resolve, def.reject),
-			timeout);
+		delay(delayed.bind(this, fn, arguments, def.resolve, def.reject), timeout);
 		return def.promise;
 	};
 	result.returnsPromise = true;
