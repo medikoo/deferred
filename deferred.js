@@ -101,7 +101,7 @@ Deferred.prototype = {
 				value.dependencies.push(this.promise);
 				if (this.promise.pending) {
 					if (value.pending) {
-						push.apply(value.pending, this.promise.pending);
+						this.promise.pending.forEach(function (promise) { value.pending.push(promise); });
 						this.promise.pending = value.pending;
 						if (this.promise.dependencies) {
 							this.promise.dependencies.forEach(function self(dPromise) {
