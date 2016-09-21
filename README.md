@@ -764,6 +764,6 @@ Promise overhead (concurrent calls) x10000:
 
 ### Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
 
-__Covered by over 300 hundred unit tests__
+__Covered by over 300 unit tests__
 
 	$ npm test
