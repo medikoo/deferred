@@ -419,7 +419,7 @@ This function is available also as an extension on promise object.
 Promise aware Array's some. Process collection one after another and stop when first item matches your criteria
 
 ```javascript
-deferred.some([filename1, filename2, filename3], function (a) {
+deferred.some([filename1, filename2, filename3], function (filename) {
   return readFile(filename, 'utf8', function (data) {
     if (data.indexOf('needle')) {
       // Got it! Stop further processing
