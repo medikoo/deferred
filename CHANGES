@@ -1,3 +1,7 @@
+v0.7.6  --  2017.03.15
+* Fix errors in documentation
+* Prevent stack trace related range errors
+
 v0.7.5  --  2016.01.28
 * Fix few stack trace overflow vulnerabilities
 * Improve delay arguments handling. `timeout` is now optional

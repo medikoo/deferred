@@ -1,6 +1,6 @@
 {
   "name": "deferred",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Modular and fast Promises implementation",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -19,14 +19,14 @@
     "url": "git://github.com/medikoo/deferred.git"
   },
   "dependencies": {
-    "d": "~0.1.1",
-    "es5-ext": "~0.10.11",
-    "event-emitter": "~0.3.4",
-    "next-tick": "~0.2.2",
-    "timers-ext": "0.1"
+    "d": "1",
+    "es5-ext": "~0.10.14",
+    "event-emitter": "~0.3.5",
+    "next-tick": "1",
+    "timers-ext": "~0.1.1"
   },
   "devDependencies": {
-    "tad": "~0.2.4",
+    "tad": "~0.2.7",
     "xlint": "~0.2.2",
     "xlint-jslint-medikoo": "~0.1.4"
   },
