@@ -19,7 +19,8 @@ var toPosInt   = require('es5-ext/number/to-pos-integer')
 require('../promise/finally');
 
 gateReject = function () {
-	var e = new Error("Too many calls");
+	var e = new Error("Too many calls at the gate");
+	e.code = 'DEFERRED_REJECTED_AT_GATE';
 	e.type = 'deferred-gate-rejected';
 	return reject(e);
 };
