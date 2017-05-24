@@ -9,3 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * improve gate error format ([ad4d71b](https://github.com/medikoo/deferred/commit/ad4d71b))
+
+## Old Changelog
+
+Can be found at `CHANGES`

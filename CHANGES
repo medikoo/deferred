@@ -1,3 +1,5 @@
+New changes are described in CHANGELOG.md
+
 v0.7.6  --  2017.03.15
 * Fix errors in documentation
 * Prevent stack trace related range errors
