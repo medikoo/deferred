@@ -51,7 +51,7 @@ module.exports = function (cLimit, qLimit) {
 				if (def) def.resolve(r);
 				return r.finally(decrement);
 			}
-			r = r.value;
+			if (!r.failed) r = r.value;
 		}
 		if (!def) return resolve(r);
 		def.resolve(r);

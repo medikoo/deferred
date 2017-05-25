@@ -106,6 +106,13 @@ module.exports = function (t) {
 			dz.resolve(z);
 			dy.resolve(y);
 			dx.resolve(x);
+		},
+		"Resolution type": function (a) {
+			var error = new Error("Test");		
+			gfn = t.call(function () { return deferred.reject(error); }, 1, 0);
+			gfn().done(a.never, function (err) {
+				a(err, error);
+			});
 		}
 	};
 };
