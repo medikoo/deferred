@@ -152,12 +152,12 @@ Deferred.prototype = {
 };
 
 module.exports = createDeferred = function (value) {
-	var l = arguments.length, d, waiting, initialized, result;
-	if (!l) return new Deferred();
-	if (l > 1) {
+	var length = arguments.length, d, waiting, initialized, result;
+	if (!length) return new Deferred();
+	if (length > 1) {
 		d = new Deferred();
 		waiting = 0;
-		result = new Array(l);
+		result = new Array(length);
 		every.call(arguments, function (itemValue, index) {
 			itemValue = assimilate(itemValue);
 			if (!isPromise(itemValue)) {
