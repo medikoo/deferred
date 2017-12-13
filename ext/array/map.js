@@ -2,12 +2,14 @@
 
 "use strict";
 
-var assign     = require("es5-ext/object/assign")
-  , value      = require("es5-ext/object/valid-value")
-  , callable   = require("es5-ext/object/valid-callable")
-  , deferred   = require("../../deferred")
-  , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate");
+var assign          = require("es5-ext/object/assign")
+  , isValue         = require("es5-ext/object/is-value")
+  , ensureValue     = require("es5-ext/object/valid-value")
+  , callable        = require("es5-ext/object/valid-callable")
+  , toNaturalNumber = require("es5-ext/number/to-pos-integer")
+  , deferred        = require("../../deferred")
+  , isPromise       = require("../../is-promise")
+  , assimilate      = require("../../assimilate");
 
 var every = Array.prototype.every, call = Function.prototype.call, DMap;
 
@@ -15,7 +17,7 @@ DMap = function (list, cb, context) {
 	this.list = list;
 	this.cb = cb;
 	this.context = context;
-	this.result = new Array(list.length >>> 0);
+	this.result = new Array(toNaturalNumber(list.length));
 
 	assign(this, deferred());
 	every.call(list, this.process, this);
@@ -77,8 +79,8 @@ DMap.prototype = {
 };
 
 module.exports = function (cb/*, thisArg*/) {
-	value(this);
-	cb == null || callable(cb);
+	ensureValue(this);
+	if (!isValue(cb)) callable(cb);
 
 	return new DMap(this, cb, arguments[1]);
 };
