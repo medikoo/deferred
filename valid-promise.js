@@ -2,9 +2,9 @@
 
 var isPromise = require("./is-promise");
 
-module.exports = function (x) {
-	if (!isPromise(x)) {
-		throw new TypeError(x + " is not a promise object");
+module.exports = function (value) {
+	if (!isPromise(value)) {
+		throw new TypeError(value + " is not a promise object");
 	}
-	return x;
+	return value;
 };
