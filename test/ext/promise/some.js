@@ -4,13 +4,15 @@ var deferred = require("../../../deferred");
 
 module.exports = function (t, a, d) {
 	var count = 0;
-	deferred([deferred(1), deferred(2), 3]).some(function (res) {
-		++count;
-		if (res > 1) {
-			return true;
-		}
-	})(function (r) {
-		a(r, true);
-		a(count, 2, "Count");
-	}).done(d, d);
+	deferred([deferred(1), deferred(2), 3])
+		.some(function (res) {
+			++count;
+			if (res > 1) {
+				return true;
+			}
+		})(function (r) {
+			a(r, true);
+			a(count, 2, "Count");
+		})
+		.done(d, d);
 };
