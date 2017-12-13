@@ -14,20 +14,20 @@
 //   console.log("Result:", result);
 // });
 
-var fs = require("fs")
-  , path = require("path")
-  , jsdom = require("jsdom")
-  , deferred = require("deferred")
+var fs       = require("fs")
+  , path     = require("path")
+  , jsdom    = require("jsdom")
+  , deferred = require("deferred");
 
 // Convert Node.js async functions, into ones that return a promise
-  , promisify = deferred.promisify
+var promisify = deferred.promisify
   , readdir = promisify(fs.readdir)
   , open = promisify(fs.open)
   , read = promisify(fs.read)
   , close = promisify(fs.close)
   , stat = promisify(fs.stat)
-
-  , extract, readFirstBytes;
+  , extract
+  , readFirstBytes;
 
 extract = function (html) {
 	var def = deferred(), data = this;
@@ -92,7 +92,6 @@ module.exports = function (root) {
 	//    as they're called in function passed to `gate`
 
 	return readdir(root).map(function (fileName) {
-
 		// Process only HTML files
 		if (path.extname(fileName) !== ".html") return;
 
