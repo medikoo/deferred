@@ -2,11 +2,12 @@
 
 "use strict";
 
-var isObject       = require("es5-ext/object/is-object")
-  , isPromise      = require("./is-promise")
-  , deferred       = require("./deferred")
-  , nextTick       = require("next-tick")
-  , getPrototypeOf = Object.getPrototypeOf;
+var isObject  = require("es5-ext/object/is-object")
+  , isPromise = require("./is-promise")
+  , deferred  = require("./deferred")
+  , nextTick  = require("next-tick");
+
+var getPrototypeOf = Object.getPrototypeOf;
 
 module.exports = function self(value) {
 	var then, done, def, resolve, reject;
