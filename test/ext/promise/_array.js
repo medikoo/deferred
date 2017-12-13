@@ -30,7 +30,9 @@ module.exports = function (t) {
 		Error: function (a) {
 			t("reduce", require("../../../ext/array/reduce"));
 			deferred([])
-				.reduce(function () {})(a.never, function (err) {
+				.reduce(function () {
+					return null;
+				})(a.never, function (err) {
 					a(isError(err), true, "Error");
 				})
 				.done();
