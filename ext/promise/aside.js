@@ -11,28 +11,33 @@
 var callable = require("es5-ext/object/valid-callable")
   , deferred = require("../../deferred");
 
-deferred.extend("aside", function (win, fail) {
-	(win == null) || callable(win);
-	(fail == null) || callable(fail);
-	if (win || fail) {
-		if (!this.pending) {
-			this.pending = [];
+deferred.extend(
+	"aside",
+	function (win, fail) {
+		win == null || callable(win);
+		fail == null || callable(fail);
+		if (win || fail) {
+			if (!this.pending) {
+				this.pending = [];
+			}
+			this.pending.push("aside", arguments);
 		}
-		this.pending.push("aside", arguments);
+		return this;
+	},
+	function (win, fail) {
+		var cb = this.failed ? fail : win;
+		if (cb) {
+			cb(this.value);
+		}
+	},
+	function (win, fail) {
+		var cb;
+		win == null || callable(win);
+		fail == null || callable(fail);
+		cb = this.failed ? fail : win;
+		if (cb) {
+			cb(this.value);
+		}
+		return this;
 	}
-	return this;
-}, function (win, fail) {
-	var cb = this.failed ? fail : win;
-	if (cb) {
-		cb(this.value);
-	}
-}, function (win, fail) {
-	var cb;
-	(win == null) || callable(win);
-	(fail == null) || callable(fail);
-	cb = this.failed ? fail : win;
-	if (cb) {
-		cb(this.value);
-	}
-	return this;
-});
+);
