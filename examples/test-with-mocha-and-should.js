@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 "use strict";
 
 // Example demonstrating the use of deferred in the context of unit tests with
