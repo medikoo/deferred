@@ -3,12 +3,14 @@
 
 "use strict";
 
-var assign     = require("es5-ext/object/assign")
-  , value      = require("es5-ext/object/valid-value")
-  , callable   = require("es5-ext/object/valid-callable")
-  , deferred   = require("../../deferred")
-  , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate");
+var assign          = require("es5-ext/object/assign")
+  , isValue         = require("es5-ext/object/is-value")
+  , ensureValue     = require("es5-ext/object/valid-value")
+  , callable        = require("es5-ext/object/valid-callable")
+  , toNaturalNumber = require("es5-ext/number/to-pos-integer")
+  , deferred        = require("../../deferred")
+  , isPromise       = require("../../is-promise")
+  , assimilate      = require("../../assimilate");
 
 var call = Function.prototype.call, resolve = deferred.resolve, Find;
 
@@ -16,7 +18,7 @@ Find = function (list, cb, context) {
 	this.list = list;
 	this.cb = cb;
 	this.context = context;
-	this.length = list.length >>> 0;
+	this.length = toNaturalNumber(list.length);
 
 	while (this.current < this.length) {
 		if (this.current in list) {
@@ -89,8 +91,8 @@ Find.prototype = {
 };
 
 module.exports = function (cb/*, thisArg*/) {
-	value(this);
-	cb == null || callable(cb);
+	ensureValue(this);
+	if (!isValue(cb)) callable(cb);
 
 	return new Find(this, cb, arguments[1]);
 };
