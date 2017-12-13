@@ -20,10 +20,10 @@
   },
   "dependencies": {
     "d": "1",
-    "es5-ext": "~0.10.14",
+    "es5-ext": "~0.10.37",
     "event-emitter": "~0.3.5",
     "next-tick": "1",
-    "timers-ext": "~0.1.1"
+    "timers-ext": "~0.1.2"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
