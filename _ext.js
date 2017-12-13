@@ -1,8 +1,9 @@
 "use strict";
 
 var callable   = require("es5-ext/object/valid-callable")
-  , d          = require("d")
   , isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
+  , d          = require("d")
   , ee         = require("event-emitter")
   , isPromise  = require("./is-promise");
 
@@ -10,7 +11,9 @@ var create = Object.create, defineProperty = Object.defineProperty, deferred, re
 
 module.exports = exports = function (name, unres, onres, res) {
 	name = String(name);
-	callable(res) && (onres == null || callable(onres)) && callable(unres);
+	callable(res);
+	if (isValue(onres)) callable(onres);
+	callable(unres);
 	defineProperty(exports._unresolved, name, d(unres));
 	exports._onresolve[name] = onres;
 	defineProperty(exports._resolved, name, d(res));
@@ -29,8 +32,8 @@ exports._unresolved = ee(
 			return def.promise;
 		}),
 		done: d(function (win, fail) {
-			win == null || callable(win);
-			fail == null || callable(fail);
+			if (isValue(win)) callable(win);
+			if (isValue(fail)) callable(fail);
 			if (!this.pending) this.pending = [];
 			this.pending.push("done", arguments);
 		}),
@@ -43,33 +46,33 @@ exports._unresolved = ee(
 );
 
 exports._onresolve = {
-	then: function (win, fail, resolve, reject) {
-		var value, cb = this.failed ? fail : win;
-		if (cb == null) {
-			if (this.failed) reject(this.value);
-			else resolve(this.value);
+	then: function (win, fail, promiseResolve, promiseReject) {
+		var value, cont = this.failed ? fail : win;
+		if (!isValue(cont)) {
+			if (this.failed) promiseReject(this.value);
+			else promiseResolve(this.value);
 			return;
 		}
-		if (isCallable(cb)) {
-			if (isPromise(cb)) {
-				if (cb.resolved) {
-					if (cb.failed) reject(cb.value);
-					else resolve(cb.value);
+		if (isCallable(cont)) {
+			if (isPromise(cont)) {
+				if (cont.resolved) {
+					if (cont.failed) promiseReject(cont.value);
+					else promiseResolve(cont.value);
 					return;
 				}
-				cb.done(resolve, reject);
+				cont.done(promiseResolve, promiseReject);
 				return;
 			}
 			try {
-				value = cb(this.value);
+				value = cont(this.value);
 			} catch (e) {
-				reject(e);
+				promiseReject(e);
 				return;
 			}
-			resolve(value);
+			promiseResolve(value);
 			return;
 		}
-		resolve(cb);
+		promiseResolve(cont);
 	},
 	done: function (win, fail) {
 		if (this.failed) {
@@ -86,22 +89,22 @@ exports._onresolve = {
 exports._resolved = ee(
 	create(Function.prototype, {
 		then: d(function (win, fail) {
-			var value, cb = this.failed ? fail : win;
-			if (cb == null) return this;
-			if (isCallable(cb)) {
-				if (isPromise(cb)) return cb;
+			var value, cont = this.failed ? fail : win;
+			if (!isValue(cont)) return this;
+			if (isCallable(cont)) {
+				if (isPromise(cont)) return cont;
 				try {
-					value = cb(this.value);
+					value = cont(this.value);
 				} catch (e) {
 					return reject(e);
 				}
 				return resolve(value);
 			}
-			return resolve(cb);
+			return resolve(cont);
 		}),
 		done: d(function (win, fail) {
-			win == null || callable(win);
-			fail == null || callable(fail);
+			if (isValue(win)) callable(win);
+			if (isValue(fail)) callable(fail);
 			if (this.failed) {
 				if (fail) {
 					fail(this.value);
