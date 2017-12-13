@@ -5,10 +5,9 @@
 var callable      = require("es5-ext/object/valid-callable")
   , nextTick      = require("next-tick")
   , ensureTimeout = require("timers-ext/valid-timeout")
-  , deferred      = require("../../deferred")
+  , deferred      = require("../../deferred");
 
-  , apply    = Function.prototype.apply
-  , delayed;
+var apply = Function.prototype.apply, delayed;
 
 delayed = function (fn, args, resolve, reject) {
 	var value;
