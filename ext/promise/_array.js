@@ -2,7 +2,8 @@
 
 "use strict";
 
-var callable = require("es5-ext/object/valid-callable")
+var isValue  = require("es5-ext/object/is-value")
+  , callable = require("es5-ext/object/valid-callable")
   , deferred = require("../../deferred");
 
 var reject = deferred.reject;
@@ -12,13 +13,13 @@ module.exports = function (name, ext) {
 		name,
 		function (cb) {
 			var def;
-			cb == null || callable(cb);
+			if (isValue(cb)) callable(cb);
 			if (!this.pending) this.pending = [];
 			def = deferred();
 			this.pending.push(name, [arguments, def.resolve, def.reject]);
 			return def.promise;
 		},
-		function (args, resolve, reject) {
+		function (args, resolve) {
 			var result;
 			if (this.failed) {
 				reject(this.value);
@@ -33,7 +34,7 @@ module.exports = function (name, ext) {
 			resolve(result);
 		},
 		function (cb) {
-			cb == null || callable(cb);
+			if (isValue(cb)) callable(cb);
 			if (this.failed) return this;
 			try {
 				return ext.apply(this.value, arguments);
