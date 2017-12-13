@@ -1,3 +1,5 @@
+/* eslint max-lines: "off" */
+
 "use strict";
 
 // Benchmark comparing performance of promise setups (concurrent)
@@ -10,7 +12,7 @@ var generate = require("es5-ext/array/generate")
   , forEach  = require("es5-ext/object/for-each")
   , pad      = require("es5-ext/string/#/pad")
   , lstat    = require("fs").lstat
-  , Q        = require("Q")
+  , QLib     = require("Q")
   , Bluebird = require("bluebird")
   , kew      = require("kew")
   , when     = require("when")
@@ -47,7 +49,7 @@ tests = [
 	function () {
 		var i = count, j = count;
 		self = function () {
-			lstat(__filename, function (err, stats) {
+			lstat(__filename, function (err) {
 				if (err) throw err;
 				if (!--i) {
 					data["Base (plain Node.js lstat call)"] = now() - time;
@@ -297,7 +299,7 @@ tests = [
 		var i = count, j = count, dlstat;
 
 		dlstat = function (path) {
-			var localDef = Q.defer();
+			var localDef = QLib.defer();
 			lstat(path, function (err, stats) {
 				if (err) localDef.reject(err);
 				else localDef.resolve(stats);
@@ -317,7 +319,7 @@ tests = [
 		var i = count, j = count, dlstat;
 
 		dlstat = function (path) {
-			var localDef = Q.defer();
+			var localDef = QLib.defer();
 			lstat(path, function (err, stats) {
 				if (err) localDef.reject(err);
 				else localDef.resolve(stats);
@@ -337,7 +339,7 @@ tests = [
 		while (j--) self();
 	},
 	function () {
-		var i = count, j = count, dlstat = Q.nbind(lstat, null);
+		var i = count, j = count, dlstat = QLib.nbind(lstat, null);
 
 		self = function () {
 			dlstat(__filename).done(function () {
@@ -348,7 +350,7 @@ tests = [
 		while (j--) self();
 	},
 	function () {
-		var i = count, j = count, dlstat = Q.nbind(lstat, null);
+		var i = count, j = count, dlstat = QLib.nbind(lstat, null);
 
 		self = function () {
 			dlstat(__filename).done(function () {
@@ -439,8 +441,8 @@ next = function () {
 					);
 				},
 				null,
-				function (a, b) {
-					return this[a] - this[b];
+				function (data1, data2) {
+					return this[data1] - this[data2];
 				}
 			);
 		}
