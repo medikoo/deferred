@@ -9,9 +9,9 @@ var aFrom          = require("es5-ext/array/from")
   , assign         = require("es5-ext/object/assign")
   , deferred       = require("./deferred")
   , isPromise      = require("./is-promise")
-  , assimilate     = require("./assimilate")
+  , assimilate     = require("./assimilate");
 
-  , DynamicQueue;
+var DynamicQueue;
 
 module.exports = DynamicQueue = function (list) {
 	if (!(this instanceof DynamicQueue)) return new DynamicQueue(list);
