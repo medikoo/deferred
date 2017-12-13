@@ -10,10 +10,12 @@ var toPosInt   = require("es5-ext/number/to-pos-integer")
   , eeUnify    = require("event-emitter/unify")
   , deferred   = require("../../deferred")
   , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate")
+  , assimilate = require("../../assimilate");
 
-  , resolve = deferred.resolve, reject = deferred.reject
-  , apply = Function.prototype.apply, max = Math.max
+var resolve = deferred.resolve
+  , reject = deferred.reject
+  , apply = Function.prototype.apply
+  , max = Math.max
   , gateReject;
 
 require("../promise/finally");
@@ -29,7 +31,7 @@ module.exports = function (cLimit, qLimit) {
 	var fn, count, decrement, unload, queue, run, result;
 	fn = callable(this);
 	cLimit = max(toPosInt(cLimit), 1);
-	qLimit = (qLimit == null) || isNaN(qLimit) ? Infinity : toPosInt(qLimit);
+	qLimit = qLimit == null || isNaN(qLimit) ? Infinity : toPosInt(qLimit);
 	count = 0;
 	queue = [];
 
