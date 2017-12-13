@@ -3,9 +3,9 @@
 var partial  = require("es5-ext/function/#/partial")
   , forEach  = require("es5-ext/object/for-each")
   , pad      = require("es5-ext/string/#/pad")
-  , deferred = require("./deferred")
+  , deferred = require("./deferred");
 
-  , resolved, rStats, unresolved, uStats, profile;
+var resolved, rStats, unresolved, uStats, profile;
 
 exports.profile = function () {
 	resolved = 0;
@@ -26,19 +26,26 @@ profile = function (isResolved) {
 		data = uStats;
 	}
 
-	stack = (new Error()).stack;
-	if (!stack.split("\n").slice(3).some(function (line) {
-			if ((line.search(/[\/\\]deferred[\/\\]/) === -1) &&
-					(line.search(/[\/\\]es5-ext[\/\\]/) === -1) &&
-					(line.indexOf(" (native)") === -1)) {
-				line = line.replace(/\n/g, "\\n").trim();
-				if (!data[line]) {
-					data[line] = { count: 0 };
+	stack = new Error().stack;
+	if (
+		!stack
+			.split("\n")
+			.slice(3)
+			.some(function (line) {
+				if (
+					line.search(/[\/\\]deferred[\/\\]/) === -1 &&
+					line.search(/[\/\\]es5-ext[\/\\]/) === -1 &&
+					line.indexOf(" (native)") === -1
+				) {
+					line = line.replace(/\n/g, "\\n").trim();
+					if (!data[line]) {
+						data[line] = { count: 0 };
+					}
+					++data[line].count;
+					return true;
 				}
-				++data[line].count;
-				return true;
-			}
-		})) {
+			})
+	) {
 		if (!data.unknown) {
 			data.unknown = { count: 0, stack: stack };
 		}
@@ -65,20 +72,30 @@ exports.profileEnd = function () {
 
 	if (unresolved) {
 		log += "\nUnresolved promises were initialized at:\n";
-		forEach(uStats, function (data, name) {
-			log += lpad.call(data.count) + " " + name + "\n";
-		}, null, function (a, b) {
-			return this[b].count - this[a].count;
-		});
+		forEach(
+			uStats,
+			function (data, name) {
+				log += lpad.call(data.count) + " " + name + "\n";
+			},
+			null,
+			function (a, b) {
+				return this[b].count - this[a].count;
+			}
+		);
 	}
 
 	if (resolved) {
 		log += "\nResolved promises were initialized at:\n";
-		forEach(rStats, function (data, name) {
-			log += lpad.call(data.count) + " " + name + "\n";
-		}, null, function (a, b) {
-			return this[b].count - this[a].count;
-		});
+		forEach(
+			rStats,
+			function (data, name) {
+				log += lpad.call(data.count) + " " + name + "\n";
+			},
+			null,
+			function (a, b) {
+				return this[b].count - this[a].count;
+			}
+		);
 	}
 	log += "------------------------------------------------------------\n";
 
