@@ -33,8 +33,8 @@ profile = function (isResolved) {
 			.slice(3)
 			.some(function (line) {
 				if (
-					line.search(/[\/\\]deferred[\/\\]/) === -1 &&
-					line.search(/[\/\\]es5-ext[\/\\]/) === -1 &&
+					line.search(/[/\\]deferred[/\\]/) === -1 &&
+					line.search(/[/\\]es5-ext[/\\]/) === -1 &&
 					line.indexOf(" (native)") === -1
 				) {
 					line = line.replace(/\n/g, "\\n").trim();
