@@ -92,7 +92,7 @@ Find.prototype = {
 
 module.exports = function (cb/*, thisArg*/) {
 	ensureValue(this);
-	if (!isValue(cb)) callable(cb);
+	if (isValue(cb)) callable(cb);
 
 	return new Find(this, cb, arguments[1]);
 };

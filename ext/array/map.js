@@ -80,7 +80,7 @@ DMap.prototype = {
 
 module.exports = function (cb/*, thisArg*/) {
 	ensureValue(this);
-	if (!isValue(cb)) callable(cb);
+	if (isValue(cb)) callable(cb);
 
 	return new DMap(this, cb, arguments[1]);
 };

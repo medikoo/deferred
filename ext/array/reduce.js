@@ -145,7 +145,7 @@ Reduce.prototype = {
 
 module.exports = function (cb/*, initial*/) {
 	ensureValue(this);
-	if (!isValue(cb)) callable(cb);
+	if (isValue(cb)) callable(cb);
 
 	return new Reduce(this, cb, arguments[1], arguments.length > 1);
 };
