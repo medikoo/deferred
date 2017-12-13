@@ -172,12 +172,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = kew.defer();
+			var localDef = kew.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def;
+			return localDef;
 		};
 
 		self = function () {
@@ -200,12 +200,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = kew.defer();
+			var localDef = kew.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def;
+			return localDef;
 		};
 
 		self = function () {
@@ -235,11 +235,11 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = new Deferred();
+			var localDef = new Deferred();
 			lstat(path, function (err, stats) {
-				def.resolve(err || stats);
+				localDef.resolve(err || stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
@@ -255,11 +255,11 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = new Deferred();
+			var localDef = new Deferred();
 			lstat(path, function (err, stats) {
-				def.resolve(err || stats);
+				localDef.resolve(err || stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
@@ -309,12 +309,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = Q.defer();
+			var localDef = Q.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
@@ -330,12 +330,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = Q.defer();
+			var localDef = Q.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
@@ -386,12 +386,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = when.defer();
+			var localDef = when.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
@@ -414,12 +414,12 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var def = when.defer();
+			var localDef = when.defer();
 			lstat(path, function (err, stats) {
-				if (err) def.reject(err);
-				else def.resolve(stats);
+				if (err) localDef.reject(err);
+				else localDef.resolve(stats);
 			});
-			return def.promise;
+			return localDef.promise;
 		};
 
 		self = function () {
