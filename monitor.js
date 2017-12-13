@@ -19,11 +19,11 @@ exports = module.exports = function (timeout, cb) {
 	}
 	exports.timeout = timeout = max(toPosInt(timeout) || 5000, 50);
 	if (cb == null) {
-		if ((typeof console !== "undefined") && console &&
-				isCallable(console.error)) {
+		if (typeof console !== "undefined" && console && isCallable(console.error)) {
 			cb = function (e) {
-				console.error((e.stack && e.stack.toString()) ||
-					"Unresolved promise: no stack available");
+				console.error(
+					(e.stack && e.stack.toString()) || "Unresolved promise: no stack available"
+				);
 			};
 		}
 	} else {
