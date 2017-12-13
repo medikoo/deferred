@@ -44,6 +44,7 @@ profile = function (isResolved) {
 					++data[line].count;
 					return true;
 				}
+				return false;
 			})
 	) {
 		if (!data.unknown) {
@@ -78,8 +79,8 @@ exports.profileEnd = function () {
 				log += lpad.call(data.count) + " " + name + "\n";
 			},
 			null,
-			function (a, b) {
-				return this[b].count - this[a].count;
+			function (data1, data2) {
+				return this[data2].count - this[data1].count;
 			}
 		);
 	}
@@ -92,8 +93,8 @@ exports.profileEnd = function () {
 				log += lpad.call(data.count) + " " + name + "\n";
 			},
 			null,
-			function (a, b) {
-				return this[b].count - this[a].count;
+			function (data1, data2) {
+				return this[data2].count - this[data1].count;
 			}
 		);
 	}
