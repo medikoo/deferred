@@ -7,9 +7,9 @@ var assign     = require("es5-ext/object/assign")
   , callable   = require("es5-ext/object/valid-callable")
   , deferred   = require("../../deferred")
   , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate")
+  , assimilate = require("../../assimilate");
 
-  , call = Function.prototype.call
+var call = Function.prototype.call
   , hasOwnProperty = Object.prototype.hasOwnProperty
   , resolve = deferred.resolve
   , Reduce;
@@ -24,10 +24,13 @@ Reduce = function (list, cb, initial, initialized) {
 	if (isPromise(initial)) {
 		if (!initial.resolved) {
 			assign(this, deferred());
-			initial.done(function (initial) {
-				this.value = initial;
-				this.init();
-			}.bind(this), this.reject);
+			initial.done(
+				function (initial) {
+					this.value = initial;
+					this.init();
+				}.bind(this),
+				this.reject
+			);
 			return this.promise;
 		}
 		this.value = initial.value;
@@ -73,12 +76,15 @@ Reduce.prototype = {
 		var value = assimilate(this.list[this.current]);
 		if (isPromise(value)) {
 			if (!value.resolved) {
-				value.done(function (result) {
-					result = this.processCb(result);
-					if (this.state !== "value") return;
-					this.processValue(result);
-					if (!this.state) this.continue();
-				}.bind(this), this.reject);
+				value.done(
+					function (result) {
+						result = this.processCb(result);
+						if (this.state !== "value") return;
+						this.processValue(result);
+						if (!this.state) this.continue();
+					}.bind(this),
+					this.reject
+				);
 				return;
 			}
 			if (value.failed) {
@@ -98,8 +104,7 @@ Reduce.prototype = {
 		}
 		if (this.cb) {
 			try {
-				value = call.call(this.cb, undefined, this.value, value, this.current,
-					this.list);
+				value = call.call(this.cb, undefined, this.value, value, this.current, this.list);
 			} catch (e) {
 				this.reject(e);
 				return;
@@ -107,11 +112,14 @@ Reduce.prototype = {
 			value = assimilate(value);
 			if (isPromise(value)) {
 				if (!value.resolved) {
-					value.done(function (result) {
-						this.state = "value";
-						this.processValue(result);
-						if (!this.state) this.continue();
-					}.bind(this), this.reject);
+					value.done(
+						function (result) {
+							this.state = "value";
+							this.processValue(result);
+							if (!this.state) this.continue();
+						}.bind(this),
+						this.reject
+					);
 					return;
 				}
 				if (value.failed) {
@@ -138,7 +146,7 @@ Reduce.prototype = {
 
 module.exports = function (cb/*, initial*/) {
 	value(this);
-	(cb == null) || callable(cb);
+	cb == null || callable(cb);
 
 	return new Reduce(this, cb, arguments[1], arguments.length > 1);
 };
