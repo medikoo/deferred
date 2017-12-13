@@ -2,7 +2,9 @@
 
 "use strict";
 
-var callable         = require("es5-ext/object/valid-callable")
+var isValue          = require("es5-ext/object/is-value")
+  , callable         = require("es5-ext/object/valid-callable")
+  , toNaturalNumber  = require("es5-ext/number/to-pos-integer")
   , deferred         = require("../../deferred")
   , isPromise        = require("../../is-promise")
   , processArguments = require("../_process-arguments");
@@ -24,7 +26,7 @@ module.exports = function (length) {
 	var fn, result;
 	fn = callable(this);
 	if (fn.returnsPromise) return fn;
-	if (length != null) length >>>= 0;
+	if (isValue(length)) length = toNaturalNumber(length);
 	result = function () {
 		var args, def;
 		args = processArguments(arguments, length);
@@ -33,8 +35,8 @@ module.exports = function (length) {
 			if (args.failed) return args;
 			def = deferred();
 			args.done(
-				function (args) {
-					applyFn.call(this, fn, args, def.resolve, def.reject);
+				function (resolvedArgs) {
+					applyFn.call(this, fn, resolvedArgs, def.resolve, def.reject);
 				}.bind(this),
 				def.reject
 			);
