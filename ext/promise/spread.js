@@ -8,6 +8,7 @@
 "use strict";
 
 var spread     = require("es5-ext/function/#/spread")
+  , isValue    = require("es5-ext/object/is-value")
   , callable   = require("es5-ext/object/valid-callable")
   , isCallable = require("es5-ext/object/is-callable")
   , isPromise  = require("../../is-promise")
@@ -19,27 +20,27 @@ deferred.extend(
 	"spread",
 	function (win, fail) {
 		var def;
-		win == null || callable(win);
-		if (!win && fail == null) return this;
+		if (isValue(win)) callable(win);
+		if (!win && !isValue(fail)) return this;
 		if (!this.pending) this.pending = [];
 		def = deferred();
 		this.pending.push("spread", [win, fail, def.resolve, def.reject]);
 		return def.promise;
 	},
-	function (win, fail, resolve, reject) {
+	function (win, fail, localResolve, localReject) {
 		var cb, value;
 		cb = this.failed ? fail : win;
-		if (cb == null) {
-			if (this.failed) reject(this.value);
-			else resolve(this.value);
+		if (!isValue(cb)) {
+			if (this.failed) localReject(this.value);
+			else localResolve(this.value);
 		}
 		if (isCallable(cb)) {
 			if (isPromise(cb)) {
 				if (cb.resolved) {
-					if (cb.failed) reject(cb.value);
-					else resolve(cb.value);
+					if (cb.failed) localReject(cb.value);
+					else localResolve(cb.value);
 				} else {
-					cb.done(resolve, reject);
+					cb.done(localResolve, localReject);
 				}
 				return;
 			}
@@ -47,18 +48,18 @@ deferred.extend(
 			try {
 				value = cb(this.value);
 			} catch (e) {
-				reject(e);
+				localReject(e);
 				return;
 			}
-			resolve(value);
+			localResolve(value);
 		} else {
-			resolve(cb);
+			localResolve(cb);
 		}
 	},
 	function (win, fail) {
 		var cb, value;
 		cb = this.failed ? fail : win;
-		if (cb == null) return this;
+		if (!isValue(cb)) return this;
 		if (isCallable(cb)) {
 			if (isPromise(cb)) return cb;
 			if (!this.failed) cb = spread.call(cb);
