@@ -1,6 +1,6 @@
 {
   "name": "deferred",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "description": "Modular and fast Promises implementation",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
