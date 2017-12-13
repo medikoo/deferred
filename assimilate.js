@@ -25,11 +25,11 @@ module.exports = function self(value) {
 		done = value.done;
 	} catch (ignore) {}
 	def = deferred();
-	resolve = function (value) {
-		def.resolve(self(value));
+	resolve = function (resolvedValue) {
+		def.resolve(self(resolvedValue));
 	};
-	reject = function (value) {
-		def.reject(value);
+	reject = function (resolvedReason) {
+		def.reject(resolvedReason);
 	};
 	if (typeof done === "function") {
 		try {
@@ -42,14 +42,14 @@ module.exports = function self(value) {
 	try {
 		then.call(
 			value,
-			function (value) {
+			function (resolvedValue) {
 				nextTick(function () {
-					resolve(value);
+					resolve(resolvedValue);
 				});
 			},
-			function (value) {
+			function (resolvedReason) {
 				nextTick(function () {
-					reject(value);
+					reject(resolvedReason);
 				});
 			}
 		);
