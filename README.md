@@ -763,7 +763,12 @@ Promise overhead (concurrent calls) x10000:
 ```
 
 ### Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_shield)
 
 __Covered by over 300 unit tests__
 
 	$ npm test
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_large)
