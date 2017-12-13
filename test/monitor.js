@@ -1,6 +1,7 @@
 "use strict";
 
-var deferred = require("../deferred");
+var isValue  = require("es5-ext/object/is-value")
+  , deferred = require("../deferred");
 
 module.exports = function (t, a, d) {
 	var invoked, df, cachet, cachec;
@@ -13,7 +14,7 @@ module.exports = function (t, a, d) {
 	df = deferred();
 	setTimeout(function () {
 		a(invoked, true, "Invoked");
-		t(cachet == null ? false : cachet, cachec);
+		t(isValue(cachet) ? cachet : false, cachec);
 		df.resolve();
 		d();
 	}, 150);
