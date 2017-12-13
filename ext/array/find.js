@@ -8,11 +8,9 @@ var assign     = require("es5-ext/object/assign")
   , callable   = require("es5-ext/object/valid-callable")
   , deferred   = require("../../deferred")
   , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate")
+  , assimilate = require("../../assimilate");
 
-  , call = Function.prototype.call
-  , resolve = deferred.resolve
-  , Find;
+var call = Function.prototype.call, resolve = deferred.resolve, Find;
 
 Find = function (list, cb, context) {
 	this.list = list;
@@ -92,7 +90,7 @@ Find.prototype = {
 
 module.exports = function (cb/*, thisArg*/) {
 	value(this);
-	(cb == null) || callable(cb);
+	cb == null || callable(cb);
 
 	return new Find(this, cb, arguments[1]);
 };
