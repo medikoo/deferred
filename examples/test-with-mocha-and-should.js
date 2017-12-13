@@ -6,11 +6,10 @@
 // Usage:
 // $ mocha test/deferred_with_mocha_and_should.test.js
 
-var should = require("should")
+var should   = require("should")
   , deferred = require("deferred");
 
 describe("Async functions with promises", function () {
-
 	it("should produce a result without error", function (done) {
 		var asyncFunc1, asyncFunc2, asyncFunc3;
 
@@ -53,13 +52,16 @@ describe("Async functions with promises", function () {
 		asyncFunc1("Intial_value")
 			.then(asyncFunc2)
 			.then(asyncFunc3)
-			.done(function (result) {
-				console.log("Final result is:", result);
-				result.should.equal("Intial_valuewithsomemore");
-				done();
-			}, function (err) {
-				should.not.exist(err);
-				done();
-			});
+			.done(
+				function (result) {
+					console.log("Final result is:", result);
+					result.should.equal("Intial_valuewithsomemore");
+					done();
+				},
+				function (err) {
+					should.not.exist(err);
+					done();
+				}
+			);
 	});
 });
