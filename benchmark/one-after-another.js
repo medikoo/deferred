@@ -1,3 +1,5 @@
+/* eslint max-lines: "off" */
+
 "use strict";
 
 // Benchmark comparing overhead introduced by promise implementations
@@ -10,7 +12,7 @@
 var forEach  = require("es5-ext/object/for-each")
   , pad      = require("es5-ext/string/#/pad")
   , lstat    = require("fs").lstat
-  , Q        = require("Q")
+  , QLib     = require("Q")
   , Bluebird = require("bluebird")
   , kew      = require("kew")
   , when     = require("when")
@@ -309,7 +311,7 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var localDef = Q.defer();
+			var localDef = QLib.defer();
 			lstat(path, function (err, stats) {
 				if (err) localDef.reject(err);
 				else localDef.resolve(stats);
@@ -330,7 +332,7 @@ tests = [
 		var i = count, dlstat;
 
 		dlstat = function (path) {
-			var localDef = Q.defer();
+			var localDef = QLib.defer();
 			lstat(path, function (err, stats) {
 				if (err) localDef.reject(err);
 				else localDef.resolve(stats);
@@ -353,7 +355,7 @@ tests = [
 		self();
 	},
 	function () {
-		var i = count, dlstat = Q.nbind(lstat, null);
+		var i = count, dlstat = QLib.nbind(lstat, null);
 
 		self = function () {
 			dlstat(__filename).done(function (stats) {
@@ -365,7 +367,7 @@ tests = [
 		self();
 	},
 	function () {
-		var i = count, dlstat = Q.nbind(lstat, null);
+		var i = count, dlstat = QLib.nbind(lstat, null);
 
 		self = function () {
 			dlstat(__filename).done(function (stats) {
@@ -460,8 +462,8 @@ next = function () {
 					);
 				},
 				null,
-				function (a, b) {
-					return this[a] - this[b];
+				function (data1, data2) {
+					return this[data1] - this[data2];
 				}
 			);
 		}
