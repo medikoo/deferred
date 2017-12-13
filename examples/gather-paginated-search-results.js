@@ -10,7 +10,7 @@
 var deferred = require("deferred")
   , http     = require("http");
 
-var getPage, n, result = {};
+var getPage, pageN, result = {};
 
 getPage = function (path) {
 	var d = deferred();
@@ -39,15 +39,15 @@ getPage = function (path) {
 
 // 2. Invoke promise loop
 
-n = 1;
-getPage("/page/" + n)(function process(content) {
+pageN = 1;
+getPage("/page/" + pageN)(function process(content) {
 	var isNextPage = false;
 	// ...populate result...
 
 	// ...decide whether we need to download next page
 
-	if (isNextPage) return getPage("/page/" + ++n)(process);
+	if (isNextPage) return getPage("/page/" + ++pageN)(process);
 	return result;
-}).done(function (result) {
+}).done(function (finalResult) {
 	// Process final result
 });
