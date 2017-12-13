@@ -2,6 +2,8 @@
 
 "use strict";
 
-module.exports = function (o) {
-	return (typeof o === "function") && (typeof o.then === "function") && (o.end !== o.done);
+module.exports = function (value) {
+	return (
+		typeof value === "function" && typeof value.then === "function" && value.end !== value.done
+	);
 };
