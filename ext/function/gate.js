@@ -1,3 +1,5 @@
+/* eslint max-statements: "off" */
+
 // Limit number of concurrent function executions (to cLimit number).
 // Limited calls are queued. Optionaly maximum queue length can also be
 // controlled with qLimit value, any calls that would reach over that limit
@@ -7,6 +9,7 @@
 
 var toPosInt   = require("es5-ext/number/to-pos-integer")
   , callable   = require("es5-ext/object/valid-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , eeUnify    = require("event-emitter/unify")
   , deferred   = require("../../deferred")
   , isPromise  = require("../../is-promise")
@@ -31,33 +34,32 @@ module.exports = function (cLimit, qLimit) {
 	var fn, count, decrement, unload, queue, run, result;
 	fn = callable(this);
 	cLimit = max(toPosInt(cLimit), 1);
-	qLimit = qLimit == null || isNaN(qLimit) ? Infinity : toPosInt(qLimit);
+	qLimit = !isValue(qLimit) || isNaN(qLimit) ? Infinity : toPosInt(qLimit);
 	count = 0;
 	queue = [];
 
 	run = function (thisArg, args, def) {
-		var r;
+		var localResult;
 		try {
-			r = apply.call(fn, thisArg, args);
+			localResult = apply.call(fn, thisArg, args);
 		} catch (e) {
 			if (!def) return reject(e);
 			def.reject(e);
-			unload();
-			return;
+			return unload();
 		}
-		r = assimilate(r);
-		if (isPromise(r)) {
-			if (def) eeUnify(def.promise, r);
-			if (!r.resolved) {
+		localResult = assimilate(localResult);
+		if (isPromise(localResult)) {
+			if (def) eeUnify(def.promise, localResult);
+			if (!localResult.resolved) {
 				++count;
-				if (def) def.resolve(r);
-				return r.finally(decrement);
+				if (def) def.resolve(localResult);
+				return localResult.finally(decrement);
 			}
-			if (!r.failed) r = r.value;
+			if (!localResult.failed) localResult = localResult.value;
 		}
-		if (!def) return resolve(r);
-		def.resolve(r);
-		unload();
+		if (!def) return resolve(localResult);
+		def.resolve(localResult);
+		return unload();
 	};
 
 	decrement = function () {
