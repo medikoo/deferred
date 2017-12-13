@@ -58,7 +58,7 @@ extract = function (html) {
 
 readFirstBytes = function (filePath, byteCount) {
 	return open(filePath, "r").then(function (fd) {
-		var buffer = new Buffer(byteCount);
+		var buffer = Buffer.alloc(byteCount);
 		return read(fd, buffer, 0, buffer.length, null).then(
 			// The callback of fs.read has 2 args: bytesRead, buffer
 			function (args) {
@@ -69,7 +69,7 @@ readFirstBytes = function (filePath, byteCount) {
 	});
 };
 
-module.exports = function (root) {
+module.exports = function (rootPath) {
 	var result = {};
 
 	// Read folder
@@ -91,9 +91,9 @@ module.exports = function (root) {
 	//    Above will invoke no more than 100 concurrent async calls of `readFile`
 	//    as they're called in function passed to `gate`
 
-	return readdir(root).map(function (fileName) {
+	return readdir(rootPath).map(function (fileName) {
 		// Process only HTML files
-		if (path.extname(fileName) !== ".html") return;
+		if (path.extname(fileName) !== ".html") return null;
 
 		// Note: You  may also use `readdir` from `fs2` package (needs to be
 		// installed aside), then you can configure `readdir` so it results only
@@ -112,7 +112,7 @@ module.exports = function (root) {
 		// promisified
 
 		// Resolve full path to file
-		fileName = path.resolve(root, fileName);
+		fileName = path.resolve(rootPath, fileName);
 
 		// Read file stats
 		return stat(fileName).then(function (stats) {
