@@ -7,12 +7,9 @@ var assign     = require("es5-ext/object/assign")
   , callable   = require("es5-ext/object/valid-callable")
   , deferred   = require("../../deferred")
   , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate")
+  , assimilate = require("../../assimilate");
 
-  , every = Array.prototype.every
-  , call = Function.prototype.call
-
-  , DMap;
+var every = Array.prototype.every, call = Function.prototype.call, DMap;
 
 DMap = function (list, cb, context) {
 	this.list = list;
@@ -81,7 +78,7 @@ DMap.prototype = {
 
 module.exports = function (cb/*, thisArg*/) {
 	value(this);
-	(cb == null) || callable(cb);
+	cb == null || callable(cb);
 
 	return new DMap(this, cb, arguments[1]);
 };
