@@ -8,14 +8,15 @@
 
 "use strict";
 
-var callable = require("es5-ext/object/valid-callable")
+var isValue  = require("es5-ext/object/is-value")
+  , callable = require("es5-ext/object/valid-callable")
   , deferred = require("../../deferred");
 
 deferred.extend(
 	"aside",
 	function (win, fail) {
-		win == null || callable(win);
-		fail == null || callable(fail);
+		if (isValue(win)) callable(win);
+		if (isValue(fail)) callable(fail);
 		if (win || fail) {
 			if (!this.pending) {
 				this.pending = [];
@@ -32,8 +33,8 @@ deferred.extend(
 	},
 	function (win, fail) {
 		var cb;
-		win == null || callable(win);
-		fail == null || callable(fail);
+		if (isValue(win)) callable(win);
+		if (isValue(fail)) callable(fail);
 		cb = this.failed ? fail : win;
 		if (cb) {
 			cb(this.value);
