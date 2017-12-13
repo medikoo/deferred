@@ -21,9 +21,10 @@ module.exports = DynamicQueue = function (list) {
 	list.every(this.add, this);
 	if (!this.waiting) {
 		this.resolve();
-		return;
+		return null;
 	}
 	this.initialized = true;
+	return null;
 };
 
 DynamicQueue.prototype = {
@@ -46,7 +47,7 @@ DynamicQueue.prototype = {
 		return this._processValue();
 	},
 	_processValue: function () {
-		if (this.promise.resolved) return;
+		if (this.promise.resolved) return null;
 		if (!--this.waiting && this.initialized) this.resolve();
 		return true;
 	}
