@@ -11,8 +11,8 @@ module.exports = function (length) {
 	if (fn.returnsPromise) return fn;
 	if (length != null) length >>>= 0;
 	result = function () {
- return callAsync(fn, length, this, arguments);
-};
+		return callAsync(fn, length, this, arguments);
+	};
 	result.returnsPromise = true;
 	return result;
 };
