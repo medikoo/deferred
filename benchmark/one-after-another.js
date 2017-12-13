@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Benchmark comparing overhead introduced by promise implementations
 // (one by after another)
@@ -7,14 +7,14 @@
 // $ npm install Q when kew bluebird
 // $ node benchmark/one-after-another.js
 
-var forEach    = require('es5-ext/object/for-each')
-  , pad        = require('es5-ext/string/#/pad')
-  , lstat      = require('fs').lstat
-  , Q          = require('Q')
-  , Bluebird   = require('bluebird')
-  , kew        = require('kew')
-  , when       = require('when')
-  , deferred   = require('../')
+var forEach    = require("es5-ext/object/for-each")
+  , pad        = require("es5-ext/string/#/pad")
+  , lstat      = require("fs").lstat
+  , Q          = require("Q")
+  , Bluebird   = require("bluebird")
+  , kew        = require("kew")
+  , when       = require("when")
+  , deferred   = require("../")
 
   , now = Date.now
   , Deferred = deferred.Deferred, promisify = deferred.promisify
@@ -26,7 +26,8 @@ console.log("Promise overhead (calling one after another)",
 	"x" + count + ":\n");
 
 // Base
-tests = [function () {
+tests = [
+function () {
 	var i = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
@@ -61,7 +62,11 @@ tests = [function () {
 		dlstat(__filename).done(function (stats) {
 			if (--i) self(stats);
 			else next();
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -77,7 +82,11 @@ tests = [function () {
 				// Get out of try/catch clause
 				next();
 			}
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -97,7 +106,11 @@ tests = [function () {
 		dlstat(__filename).done(function (stats) {
 			if (--i) self(stats);
 			else next();
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -122,7 +135,11 @@ tests = [function () {
 				// Get out of try/catch clause
 				next();
 			}
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -144,7 +161,11 @@ tests = [function () {
 		dlstat(__filename).then(function (stats) {
 			if (--i) self(stats);
 			else nextTick(next);
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -169,7 +190,11 @@ tests = [function () {
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	self();
@@ -180,7 +205,9 @@ tests = [function () {
 
 	dlstat = function (path) {
 		var def = new Deferred();
-		lstat(path, function (err, stats) { def.resolve(err || stats); });
+		lstat(path, function (err, stats) {
+ def.resolve(err || stats);
+});
 		return def.promise;
 	};
 
@@ -197,7 +224,9 @@ tests = [function () {
 
 	dlstat = function (path) {
 		var def = new Deferred();
-		lstat(path, function (err, stats) { def.resolve(err || stats); });
+		lstat(path, function (err, stats) {
+ def.resolve(err || stats);
+});
 		return def.promise;
 	};
 
@@ -330,7 +359,11 @@ tests = [function () {
 		dlstat(__filename).then(function (stats) {
 			if (--i) self(stats);
 			else nextTick(next);
-		}, function (e) { nextTick(function () { throw e; }); });
+		}, function (e) {
+ nextTick(function () {
+ throw e;
+});
+});
 	};
 	time = now();
 	self();
@@ -354,11 +387,16 @@ tests = [function () {
 				data["When: Dedicated wrapper"] = now() - time;
 				nextTick(next);
 			}
-		}, function (e) { nextTick(function () { throw e; }); });
+		}, function (e) {
+ nextTick(function () {
+ throw e;
+});
+});
 	};
 	time = now();
 	self();
-}];
+}
+];
 
 next = function () {
 	setTimeout(function () {
@@ -369,7 +407,9 @@ next = function () {
 			forEach(data, function (value, name, obj, index) {
 				console.log(pad.call(index + 1 + ":", " ", 3),
 					pad.call(value, " ", 5) + "ms ", name);
-			}, null, function (a, b) { return this[a] - this[b]; });
+			}, null, function (a, b) {
+ return this[a] - this[b];
+});
 		}
 	}, 100);
 };

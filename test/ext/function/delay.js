@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (t, a, d) {
 	var x = {}, y = {}, z = {}, p, r;

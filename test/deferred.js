@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var isPromise = require('../is-promise')
+var isPromise = require("../is-promise")
 
   , x = {};
 
@@ -24,13 +24,13 @@ module.exports = {
 	"More than one argument": function (t) {
 		var x = {}, y = {};
 		return {
-			Success: function (a, d) {
+			"Success": function (a, d) {
 				t(t(x), y, null)(function (r) {
 					a.deep(r, [x, y, null]);
 					d();
 				}).done();
 			},
-			Error: function (a, d) {
+			"Error": function (a, d) {
 				var d1 = t(), v, res = false;
 				setTimeout(d1.resolve, 20);
 				t(t(x), d1.promise(function () {
@@ -84,25 +84,37 @@ module.exports = {
 		var d1 = t(), d2 = t(), x = {}, p;
 		d1.resolve(d2.promise);
 		p = d1.promise(function (arg) {
-			return [arg, 'foo'];
+			return [arg, "foo"];
 		});
 		d2.resolve(x);
 		a(p.resolved, true, "Transfered");
-		a.deep(p.value, [x, 'foo'], "Transfered value");
+		a.deep(p.value, [x, "foo"], "Transfered value");
 	},
 	"Resolve corner case": function (t, a) {
 		var d1 = t(), d2 = t(), d3 = t(), d4 = t(), count = 0;
 
-		d1.promise(function () { ++count; });
-		d2.promise(function () { ++count; });
-		d3.promise(function () { ++count; });
-		d4.promise(function () { ++count; });
+		d1.promise(function () {
+ ++count;
+});
+		d2.promise(function () {
+ ++count;
+});
+		d3.promise(function () {
+ ++count;
+});
+		d4.promise(function () {
+ ++count;
+});
 
 		d1.resolve(d2.promise);
 		d2.resolve(d3.promise);
 		d3.resolve(d4.promise);
-		d2.promise(function () { ++count; });
-		d1.promise(function () { ++count; });
+		d2.promise(function () {
+ ++count;
+});
+		d1.promise(function () {
+ ++count;
+});
 		d4.resolve({});
 		a(count, 6);
 	},
@@ -125,20 +137,22 @@ module.exports = {
 		def1.resolve(p2);
 		def2.resolve(x);
 	},
-	Reject: function (t, a) {
+	"Reject": function (t, a) {
 		var e = new Error("Error!");
-		t().reject(e).done(a.never, function (result) { a(result, e); });
+		t().reject(e).done(a.never, function (result) {
+ a(result, e);
+});
 	},
 	"Reject function": function (t, a) {
-		var rejected = t.reject('elo');
+		var rejected = t.reject("elo");
 		a(isPromise(rejected), true, "Promise");
 		a(rejected.failed, true, "Rejected");
-		a(rejected.value, 'elo', "value");
+		a(rejected.value, "elo", "value");
 	},
 	"Resolve function": function (t, a) {
-		var resolved = t.resolve('elo');
+		var resolved = t.resolve("elo");
 		a(isPromise(resolved), true, "Promise");
 		a(resolved.failed, false, "Resolveed");
-		a(resolved.value, 'elo', "value");
+		a(resolved.value, "elo", "value");
 	}
 };

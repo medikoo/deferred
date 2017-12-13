@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = function (t, a, d) {
 	deferred([deferred(2), deferred(3), 4]).reduce(function (arg1, arg2) {

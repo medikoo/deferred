@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../deferred')
+var deferred = require("../deferred")
 
   , x = {}, y = {}, e = new Error("Error");
 
@@ -12,7 +12,7 @@ module.exports = {
 		}, a.never).done();
 		next = true;
 	},
-	Reject: function (a, d) {
+	"Reject": function (a, d) {
 		deferred(e)(a.never, function (res) {
 			a(res, e);
 		}).done(d, d);
@@ -33,19 +33,19 @@ module.exports = {
 		var p = deferred({});
 		a(deferred(p), p);
 	},
-	ValueOf: function (a) {
+	"ValueOf": function (a) {
 		var def = deferred(), y = def.promise;
 		a(y.valueOf(), y, "Unresolved");
 		def.resolve(x);
 		a(y.valueOf(), x, "Resolved");
 	},
-	Then: {
-		Callback: function (a, d) {
+	"Then": {
+		"Callback": function (a, d) {
 			deferred(x)(function (result) {
 				a(result, x);
 			}, a.never).done(d, d);
 		},
-		Null: function (a, d) {
+		"Null": function (a, d) {
 			deferred(x)(null, a.never)(function (result) {
 				a(result, x);
 			}, a.never).done(d, d);
@@ -55,7 +55,7 @@ module.exports = {
 				a(result, y);
 			}, a.never).done(d, d);
 		},
-		Error: function (a, d) {
+		"Error": function (a, d) {
 			deferred(e)(a.never, function (result) {
 				a(result, e);
 			}).done(d, d);
@@ -63,16 +63,18 @@ module.exports = {
 		"Chain promise & resolve with function": function (a) {
 			var d1, fn, p1;
 			d1 = deferred();
-			fn = function () { return 'bar'; };
-			d1.promise(deferred('foo')).done(function (res) {
-				a(res, 'foo', "Unresolved");
+			fn = function () {
+ return "bar";
+};
+			d1.promise(deferred("foo")).done(function (res) {
+				a(res, "foo", "Unresolved");
 			});
 			d1.resolve(fn);
 			p1 = deferred(2);
 			a(deferred(1)(p1), p1, "Resolved");
 		}
 	},
-	Done: {
+	"Done": {
 		"No args": {
 			Success: function (a) {
 				a(deferred(null).done(), undefined);
@@ -83,13 +85,13 @@ module.exports = {
 				});
 			}
 		},
-		Args: {
-			Success: function (a) {
+		"Args": {
+			"Success": function (a) {
 				deferred(x).done(function (res) {
 					a(res, x, "Result");
 				}, a.never);
 			},
-			Error: function (a) {
+			"Error": function (a) {
 				deferred(e).done(a.never, function (err) {
 					a(err, e, "Error");
 				});
@@ -106,7 +108,7 @@ module.exports = {
 			}
 		}
 	},
-	End: {
+	"End": {
 		"No args": {
 			Success: function (a) {
 				a(deferred(null).done(), undefined);
@@ -117,13 +119,13 @@ module.exports = {
 				});
 			}
 		},
-		Args: {
-			Success: function (a) {
+		"Args": {
+			"Success": function (a) {
 				deferred(x).done(function (res) {
 					a(res, x, "Result");
 				}, a.never);
 			},
-			Error: function (a) {
+			"Error": function (a) {
 				deferred(e).done(a.never, function (err) {
 					a(err, e, "Error");
 				});

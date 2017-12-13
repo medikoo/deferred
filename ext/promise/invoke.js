@@ -5,12 +5,12 @@
 // On resolved object calls method that returns immediately.
 // 'name' can be method name or method itself.
 
-'use strict';
+"use strict";
 
-var isCallable       = require('es5-ext/object/is-callable')
-  , deferred         = require('../../deferred')
-  , isPromise        = require('../../is-promise')
-  , processArguments = require('../_process-arguments')
+var isCallable       = require("es5-ext/object/is-callable")
+  , deferred         = require("../../deferred")
+  , isPromise        = require("../../is-promise")
+  , processArguments = require("../_process-arguments")
 
   , slice = Array.prototype.slice, apply = Function.prototype.apply
   , reject = deferred.reject
@@ -26,11 +26,11 @@ applyFn = function (fn, args, resolve, reject) {
 	return resolve(value);
 };
 
-deferred.extend('invoke', function (method/*, …args*/) {
+deferred.extend("invoke", function (method/*, …args*/) {
 	var def;
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('invoke', [arguments, def.resolve, def.reject]);
+	this.pending.push("invoke", [arguments, def.resolve, def.reject]);
 	return def.promise;
 }, function (args, resolve, reject) {
 	var fn;

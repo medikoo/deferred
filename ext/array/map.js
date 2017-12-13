@@ -1,13 +1,13 @@
 // Promise aware Array's map
 
-'use strict';
+"use strict";
 
-var assign     = require('es5-ext/object/assign')
-  , value      = require('es5-ext/object/valid-value')
-  , callable   = require('es5-ext/object/valid-callable')
-  , deferred   = require('../../deferred')
-  , isPromise  = require('../../is-promise')
-  , assimilate = require('../../assimilate')
+var assign     = require("es5-ext/object/assign")
+  , value      = require("es5-ext/object/valid-value")
+  , callable   = require("es5-ext/object/valid-callable")
+  , deferred   = require("../../deferred")
+  , isPromise  = require("../../is-promise")
+  , assimilate = require("../../assimilate")
 
   , every = Array.prototype.every
   , call = Function.prototype.call
@@ -81,7 +81,7 @@ DMap.prototype = {
 
 module.exports = function (cb/*, thisArg*/) {
 	value(this);
-	((cb == null) || callable(cb));
+	(cb == null) || callable(cb);
 
 	return new DMap(this, cb, arguments[1]);
 };

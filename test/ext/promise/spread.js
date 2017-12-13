@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = {
 	Deferred: function (a) {
@@ -23,7 +23,7 @@ module.exports = {
 		}).done(d, d);
 	},
 	Error: function (a, d) {
-		var e = new Error('E!');
+		var e = new Error("E!");
 		deferred(e).spread(a.never, function (err) {
 			a(err, e);
 		}).done(d, d);

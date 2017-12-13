@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -33,7 +33,7 @@ module.exports = function (t) {
 			fn1 = t.call(fn);
 			a(fn, fn1);
 		},
-		Successful: function (a, d) {
+		"Successful": function (a, d) {
 			var x = {}, y = {}, z = {};
 			t.call(function (arg1, arg2, callback) {
 				a.deep([arg1, arg2], [x, y], "Arguments");
@@ -55,18 +55,24 @@ module.exports = function (t) {
 				a.deep(result, [x, y, z], "Result");
 			}, a.never).done(d, d);
 		},
-		Erroneous: function (a, d) {
-			var x = new Error('Test');
+		"Erroneous": function (a, d) {
+			var x = new Error("Test");
 			t.call(function (callback) {
-				setTimeout(function () { callback(x); }, 0);
+				setTimeout(function () {
+ callback(x);
+}, 0);
 			}, 0)(y)(a.never, function (e) {
 				a(e, x);
 			}).done(d, d);
 		},
 		"Function crash": function (a) {
-			var x = new Error('Test'), fn;
-			fn = t.call(function () { throw x; });
-			a.throws(function () { fn(); });
+			var x = new Error("Test"), fn;
+			fn = t.call(function () {
+ throw x;
+});
+			a.throws(function () {
+ fn();
+});
 		}
 	};
 };

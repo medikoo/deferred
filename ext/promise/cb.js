@@ -18,13 +18,13 @@
 //
 // `cb` extension returns promise and handles eventual callback (optional)
 
-'use strict';
+"use strict";
 
-var callable   = require('es5-ext/object/valid-callable')
-  , nextTick   = require('next-tick')
-  , deferred   = require('../../deferred');
+var callable   = require("es5-ext/object/valid-callable")
+  , nextTick   = require("next-tick")
+  , deferred   = require("../../deferred");
 
-deferred.extend('cb', function (cb) {
+deferred.extend("cb", function (cb) {
 	if (cb == null) return this;
 	callable(cb);
 	nextTick(function () {
@@ -33,7 +33,7 @@ deferred.extend('cb', function (cb) {
 			else cb(null, this.value);
 		} else {
 			if (!this.pending) this.pending = [];
-			this.pending.push('cb', [cb]);
+			this.pending.push("cb", [cb]);
 		}
 	}.bind(this));
 	return this;

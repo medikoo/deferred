@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-var aFrom    = require('es5-ext/array/from')
-  , deferred = require('../../../deferred');
+var aFrom    = require("es5-ext/array/from")
+  , deferred = require("../../../deferred");
 
 module.exports = function (t) {
 	var fn, gfn, x = {}, y = {}, z = {}, args, dx, dy, dz, hz, resolved, released;
@@ -11,16 +11,18 @@ module.exports = function (t) {
 		return p;
 	};
 	return {
-		Limit: function (a) {
+		"Limit": function (a) {
 			var invoked, x = {};
 			gfn = t.call(fn, 2);
 			dx = deferred();
-			a(gfn(dx.promise, 'x'), dx.promise, "#1");  // x
+			a(gfn(dx.promise, "x"), dx.promise, "#1"); // X
 			dy = deferred();
-			a(gfn(dy.promise, 'y'), dy.promise, "#2");  // y
+			a(gfn(dy.promise, "y"), dy.promise, "#2"); // Y
 			dz = deferred();
-			a.not(hz = gfn(dz.promise, 'z'), dz.promise, "#3 blocked");
-			hz.on('test', function (arg) { invoked = arg; });
+			a.not(hz = gfn(dz.promise, "z"), dz.promise, "#3 blocked");
+			hz.on("test", function (arg) {
+ invoked = arg;
+});
 			hz.done(function (r) {
 				released = true;
 				a(r, z, "Held resolution");
@@ -29,8 +31,8 @@ module.exports = function (t) {
 			gfn(x, y, z);
 			dz.resolve(z);
 			resolved = true;
-			dy.resolve(y); // z, 4
-			dz.promise.emit('test', x);
+			dy.resolve(y); // Z, 4
+			dz.promise.emit("test", x);
 			a(invoked, x, "Events unified");
 			a(released, true, "Released");
 			resolved = false;
@@ -59,49 +61,51 @@ module.exports = function (t) {
 			dy = deferred();
 			a(gfn(dy.promise), dy.promise, "#2");
 			gfn(x).done(null, function (err) {
-				a(err.type, 'deferred-gate-rejected', "Reject error");
+				a(err.type, "deferred-gate-rejected", "Reject error");
 			});
 			dy.resolve(y);
 			dz = deferred();
 			a(gfn(dz.promise), dz.promise, "#3");
 			gfn(x).done(null, function (err) {
-				a(err.type, 'deferred-gate-rejected', "Reject error");
+				a(err.type, "deferred-gate-rejected", "Reject error");
 			});
 			dx.resolve(x);
 			dz.resolve(z);
 		},
 		"Queue limit 2": function (a) {
 			gfn = t.call(fn, 2, 1);
-			// x
+			// X
 			dx = deferred();
 			a(gfn(dx.promise), dx.promise, "#1");
-			// x, y
+			// X, y
 			dy = deferred();
 			a(gfn(dy.promise), dy.promise, "#2");
-			// x, y, z
+			// X, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.done(function (r) { a(r, z, "#3 held"); });
-			// x, y, z
+			hz.done(function (r) {
+ a(r, z, "#3 held");
+});
+			// X, y, z
 			gfn(x).done(null, function (err) {
-				a(err.type, 'deferred-gate-rejected', "Reject error");
+				a(err.type, "deferred-gate-rejected", "Reject error");
 			});
 			dz.resolve(z);
 			dy.resolve(y);
 
-			// x
+			// X
 			// x, y
 			dy = deferred();
 			a(gfn(dy.promise), dy.promise, "#2");
-			// x, y, z
+			// X, y, z
 			dz = deferred();
 			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
 			hz.done(function (r) {
 				a(r, z, "#3 held");
 			});
-			// x, y, z
+			// X, y, z
 			gfn(x).done(null, function (err) {
-				a(err.type, 'deferred-gate-rejected', "Reject error");
+				a(err.type, "deferred-gate-rejected", "Reject error");
 			});
 			dz.resolve(z);
 			dy.resolve(y);
@@ -109,7 +113,9 @@ module.exports = function (t) {
 		},
 		"Resolution type": function (a) {
 			var error = new Error("Test");
-			gfn = t.call(function () { return deferred.reject(error); }, 1, 0);
+			gfn = t.call(function () {
+ return deferred.reject(error);
+}, 1, 0);
 			gfn().done(a.never, function (err) {
 				a(err, error);
 			});

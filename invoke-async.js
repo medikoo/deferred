@@ -1,11 +1,11 @@
 // Invoke asynchronous function
 
-'use strict';
+"use strict";
 
-var isCallable = require('es5-ext/object/is-callable')
-  , callable   = require('es5-ext/object/valid-callable')
-  , value      = require('es5-ext/object/valid-value')
-  , callAsync  = require('./ext/function/call-async')._base
+var isCallable = require("es5-ext/object/is-callable")
+  , callable   = require("es5-ext/object/valid-callable")
+  , value      = require("es5-ext/object/valid-value")
+  , callAsync  = require("./ext/function/call-async")._base
 
   , slice = Array.prototype.slice;
 

@@ -3,25 +3,25 @@
 // controlled with qLimit value, any calls that would reach over that limit
 // would be discarded (its promise would resolve with "Too many calls" error)
 
-'use strict';
+"use strict";
 
-var toPosInt   = require('es5-ext/number/to-pos-integer')
-  , callable   = require('es5-ext/object/valid-callable')
-  , eeUnify    = require('event-emitter/unify')
-  , deferred   = require('../../deferred')
-  , isPromise  = require('../../is-promise')
-  , assimilate = require('../../assimilate')
+var toPosInt   = require("es5-ext/number/to-pos-integer")
+  , callable   = require("es5-ext/object/valid-callable")
+  , eeUnify    = require("event-emitter/unify")
+  , deferred   = require("../../deferred")
+  , isPromise  = require("../../is-promise")
+  , assimilate = require("../../assimilate")
 
   , resolve = deferred.resolve, reject = deferred.reject
   , apply = Function.prototype.apply, max = Math.max
   , gateReject;
 
-require('../promise/finally');
+require("../promise/finally");
 
 gateReject = function () {
 	var e = new Error("Too many calls at the gate");
-	e.code = 'DEFERRED_REJECTED_AT_GATE';
-	e.type = 'deferred-gate-rejected';
+	e.code = "DEFERRED_REJECTED_AT_GATE";
+	e.type = "deferred-gate-rejected";
 	return reject(e);
 };
 
@@ -29,7 +29,7 @@ module.exports = function (cLimit, qLimit) {
 	var fn, count, decrement, unload, queue, run, result;
 	fn = callable(this);
 	cLimit = max(toPosInt(cLimit), 1);
-	qLimit = ((qLimit == null) || isNaN(qLimit)) ? Infinity : toPosInt(qLimit);
+	qLimit = (qLimit == null) || isNaN(qLimit) ? Infinity : toPosInt(qLimit);
 	count = 0;
 	queue = [];
 

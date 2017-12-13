@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Example demonstrating the use of deferred in the context of unit tests with
 // the mocha and should modules.
@@ -6,8 +6,8 @@
 // Usage:
 // $ mocha test/deferred_with_mocha_and_should.test.js
 
-var should = require('should')
-  , deferred = require('deferred');
+var should = require("should")
+  , deferred = require("deferred");
 
 describe("Async functions with promises", function () {
 
@@ -20,7 +20,7 @@ describe("Async functions with promises", function () {
 
 			// Some async processing
 			setTimeout(function () {
-				def.resolve(params + 'with');
+				def.resolve(params + "with");
 			}, 100);
 
 			return def.promise;
@@ -32,7 +32,7 @@ describe("Async functions with promises", function () {
 
 			// Some async processing
 			setTimeout(function () {
-				def.resolve(params + 'some');
+				def.resolve(params + "some");
 			}, 100);
 
 			return def.promise;
@@ -44,18 +44,18 @@ describe("Async functions with promises", function () {
 
 			// Some async processing
 			setTimeout(function () {
-				def.resolve(params + 'more');
+				def.resolve(params + "more");
 			}, 100);
 
 			return def.promise;
 		};
 
-		asyncFunc1('Intial_value')
+		asyncFunc1("Intial_value")
 			.then(asyncFunc2)
 			.then(asyncFunc3)
 			.done(function (result) {
 				console.log("Final result is:", result);
-				result.should.equal('Intial_valuewithsomemore');
+				result.should.equal("Intial_valuewithsomemore");
 				done();
 			}, function (err) {
 				should.not.exist(err);

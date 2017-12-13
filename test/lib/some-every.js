@@ -1,13 +1,15 @@
-'use strict';
+"use strict";
 
-var deferred  = require('../../deferred')
-  , isPromise = require('../../is-promise');
+var deferred  = require("../../deferred")
+  , isPromise = require("../../is-promise");
 
 module.exports = function (t, a) {
 	var x = {}, y, z = 0, w;
 	t = t(true);
 	a(t.call([]).valueOf(), false, "Empty, no cb");
-	a(t.call([], function () { return true; }).valueOf(), false, "Empty, cb");
+	a(t.call([], function () {
+ return true;
+}).valueOf(), false, "Empty, cb");
 	a(t.call([{}]).valueOf(), true, "One, truthy, no cb");
 	a(t.call([0]).valueOf(), false, "One, falsy, no cb");
 	a(t.call([0, {}]).valueOf(), true, "Two, falsy & truthy, no cb");
@@ -21,9 +23,13 @@ module.exports = function (t, a) {
 		return true;
 	}, x).valueOf(), true, "One, falsy, cb truthy");
 	a(z, 1, "Callback called");
-	a(t.call([1], function () { return false; }).valueOf(), false,
+	a(t.call([1], function () {
+ return false;
+}).valueOf(), false,
 		"One, truthy, cb falsy");
-	a(t.call([1, 0], function (x) { ++z; return !x; }).valueOf(), true,
+	a(t.call([1, 0], function (x) {
+ ++z; return !x;
+}).valueOf(), true,
 		"Two, cb, Second truthy");
 	a(z, 3, "Callback called twice");
 
@@ -37,7 +43,7 @@ module.exports = function (t, a) {
 	z = [];
 	w = t.call([y.promise, 3, 4], function (val) {
 		z.push(val);
-		return !!val;
+		return Boolean(val);
 	});
 	a(isPromise(w.valueOf()), true, "In order, cb");
 	y.resolve(0);

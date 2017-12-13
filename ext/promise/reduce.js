@@ -4,6 +4,6 @@
 //
 // Promise aware reduce for array-like results
 
-'use strict';
+"use strict";
 
-require('./_array')('reduce', require('../array/reduce'));
+require("./_array")("reduce", require("../array/reduce"));

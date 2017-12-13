@@ -1,11 +1,11 @@
 // Assimilate eventual foreign promise
 
-'use strict';
+"use strict";
 
-var isObject  = require('es5-ext/object/is-object')
-  , isPromise = require('./is-promise')
-  , deferred  = require('./deferred')
-  , nextTick  = require('next-tick')
+var isObject  = require("es5-ext/object/is-object")
+  , isPromise = require("./is-promise")
+  , deferred  = require("./deferred")
+  , nextTick  = require("next-tick")
 
   , getPrototypeOf = Object.getPrototypeOf;
 
@@ -17,7 +17,7 @@ module.exports = function self(value) {
 	} catch (e) {
 		return value;
 	}
-	if (typeof then !== 'function') return value;
+	if (typeof then !== "function") return value;
 	if (isPromise(value)) return value;
 	if (!isObject(value)) return value;
 	if (!getPrototypeOf(value)) return value;
@@ -25,9 +25,13 @@ module.exports = function self(value) {
 		done = value.done;
 	} catch (ignore) {}
 	def = deferred();
-	resolve = function (value) { def.resolve(self(value)); };
-	reject = function (value) { def.reject(value); };
-	if (typeof done === 'function') {
+	resolve = function (value) {
+ def.resolve(self(value));
+};
+	reject = function (value) {
+ def.reject(value);
+};
+	if (typeof done === "function") {
 		try {
 			done.call(value, resolve, reject);
 		} catch (e) {
@@ -36,11 +40,15 @@ module.exports = function self(value) {
 		return def.promise;
 	}
 	try {
-		then.call(value, function (value) { nextTick(function () {
+		then.call(value, function (value) {
+ nextTick(function () {
 			resolve(value);
-		}); }, function (value) { nextTick(function () {
+		});
+}, function (value) {
+ nextTick(function () {
 			reject(value);
-		}); });
+		});
+});
 	} catch (e) {
 		return def.reject(e);
 	}

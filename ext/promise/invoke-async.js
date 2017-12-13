@@ -7,13 +7,13 @@
 // Do not pass callback, it's handled by internal implementation.
 // 'name' can be method name or method itself.
 
-'use strict';
+"use strict";
 
-var toArray          = require('es5-ext/array/to-array')
-  , isCallable       = require('es5-ext/object/is-callable')
-  , deferred         = require('../../deferred')
-  , isPromise        = require('../../is-promise')
-  , processArguments = require('../_process-arguments')
+var toArray          = require("es5-ext/array/to-array")
+  , isCallable       = require("es5-ext/object/is-callable")
+  , deferred         = require("../../deferred")
+  , isPromise        = require("../../is-promise")
+  , processArguments = require("../_process-arguments")
 
   , slice = Array.prototype.slice, apply = Function.prototype.apply
   , reject = deferred.reject
@@ -33,7 +33,7 @@ applyFn = function (fn, args, resolve, reject) {
 	}
 	args = toArray(args).concat(function (error, result) {
 		if (error == null) {
-			resolve((arguments.length > 2) ? slice.call(arguments, 1) : result);
+			resolve(arguments.length > 2 ? slice.call(arguments, 1) : result);
 		} else {
 			reject(error);
 		}
@@ -45,11 +45,11 @@ applyFn = function (fn, args, resolve, reject) {
 	}
 };
 
-deferred.extend('invokeAsync', function (method/*, …args*/) {
+deferred.extend("invokeAsync", function (method/*, …args*/) {
 	var def;
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('invokeAsync', [arguments, def.resolve, def.reject]);
+	this.pending.push("invokeAsync", [arguments, def.resolve, def.reject]);
 	return def.promise;
 }, function (args, resolve, reject) {
 	var fn;

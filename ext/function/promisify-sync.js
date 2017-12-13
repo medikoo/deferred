@@ -1,11 +1,11 @@
 // Promisify synchronous function
 
-'use strict';
+"use strict";
 
-var callable         = require('es5-ext/object/valid-callable')
-  , deferred         = require('../../deferred')
-  , isPromise        = require('../../is-promise')
-  , processArguments = require('../_process-arguments')
+var callable         = require("es5-ext/object/valid-callable")
+  , deferred         = require("../../deferred")
+  , isPromise        = require("../../is-promise")
+  , processArguments = require("../_process-arguments")
 
   , apply = Function.prototype.apply
 
@@ -26,7 +26,7 @@ module.exports = function (length) {
 	var fn, result;
 	fn = callable(this);
 	if (fn.returnsPromise) return fn;
-	if (length != null) length = length >>> 0;
+	if (length != null) length >>>= 0;
 	result = function () {
 		var args, def;
 		args = processArguments(arguments, length);

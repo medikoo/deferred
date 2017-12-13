@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Read meta data out of each html file in given directory.
 // Requires jsdom package installed:
@@ -14,10 +14,10 @@
 //   console.log("Result:", result);
 // });
 
-var fs = require('fs')
-  , path = require('path')
-  , jsdom = require('jsdom')
-  , deferred = require('deferred')
+var fs = require("fs")
+  , path = require("path")
+  , jsdom = require("jsdom")
+  , deferred = require("deferred")
 
 // Convert Node.js async functions, into ones that return a promise
   , promisify = deferred.promisify
@@ -43,11 +43,11 @@ extract = function (html) {
 			}
 
 			// The title is the content of the 1st "h1" element
-			elems = window.document.getElementsByTagName('h1');
+			elems = window.document.getElementsByTagName("h1");
 			if (elems.length) data.title = elems[0].textContent;
 
 			// The description is the content of the 1st "p" element
-			elems = window.document.getElementsByTagName('p');
+			elems = window.document.getElementsByTagName("p");
 			if (elems.length) data.description = elems[0].textContent;
 			def.resolve(data);
 		}
@@ -57,7 +57,7 @@ extract = function (html) {
 };
 
 readFirstBytes = function (filePath, byteCount) {
-	return open(filePath, 'r').then(function (fd) {
+	return open(filePath, "r").then(function (fd) {
 		var buffer = new Buffer(byteCount);
 		return read(fd, buffer, 0, buffer.length, null).then(
 			// The callback of fs.read has 2 args: bytesRead, buffer
@@ -94,7 +94,7 @@ module.exports = function (root) {
 	return readdir(root).map(function (fileName) {
 
 		// Process only HTML files
-		if (path.extname(fileName) !== '.html') return;
+		if (path.extname(fileName) !== ".html") return;
 
 		// Note: You  may also use `readdir` from `fs2` package (needs to be
 		// installed aside), then you can configure `readdir` so it results only

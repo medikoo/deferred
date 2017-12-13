@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../deferred')
+var deferred = require("../deferred")
 
   , reject = deferred.reject;
 
@@ -8,12 +8,12 @@ module.exports = function (T) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
 
 	return {
-		Empty: function (a, d) {
+		"Empty": function (a, d) {
 			new T([]).promise(function (result) {
 				a.deep(result, undefined);
 			}, a.never).done(d, d);
 		},
-		One: {
+		"One": {
 			Value: function (a, d) {
 				new T([x]).promise(function (result) {
 					a.deep(result, undefined);
@@ -25,8 +25,8 @@ module.exports = function (T) {
 				}, a.never).done(d, d);
 			}
 		},
-		Many: {
-			Error: function (a, d) {
+		"Many": {
+			"Error": function (a, d) {
 				new T([x, y, deferred(x), reject(e), z]).promise(a.never, function (res) {
 					a(res, e);
 					d();
@@ -37,7 +37,7 @@ module.exports = function (T) {
 					a.deep(res, undefined);
 				}, a.never).done(d, d);
 			},
-			Postponed: function (a, d) {
+			"Postponed": function (a, d) {
 				var def = deferred(), resolved = false;
 				new T([x, y, deferred(x), def.promise, z, deferred(y)]).promise(function (res) {
 					a.deep(res, undefined);

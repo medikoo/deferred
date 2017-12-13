@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = function (t) {
 	var u = {}, x = {}, y = {}, z = {};
@@ -24,7 +24,7 @@ module.exports = function (t) {
 				a(result, z);
 			});
 		},
-		Error: function (a) {
+		"Error": function (a) {
 			var e = new Error("Error");
 			t.call(function () {
 				throw e;

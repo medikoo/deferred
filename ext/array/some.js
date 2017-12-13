@@ -1,5 +1,5 @@
 // Promise aware Array's some
 
-'use strict';
+"use strict";
 
-module.exports = require('../../lib/some-every')(true);
+module.exports = require("../../lib/some-every")(true);

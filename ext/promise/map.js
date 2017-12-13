@@ -4,6 +4,6 @@
 //
 // Promise aware map for array-like results
 
-'use strict';
+"use strict";
 
-require('./_array')('map', require('../array/map'));
+require("./_array")("map", require("../array/map"));

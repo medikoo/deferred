@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var partial  = require('es5-ext/function/#/partial')
-  , forEach  = require('es5-ext/object/for-each')
-  , pad      = require('es5-ext/string/#/pad')
-  , deferred = require('./deferred')
+var partial  = require("es5-ext/function/#/partial")
+  , forEach  = require("es5-ext/object/for-each")
+  , pad      = require("es5-ext/string/#/pad")
+  , deferred = require("./deferred")
 
   , resolved, rStats, unresolved, uStats, profile;
 
@@ -27,10 +27,10 @@ profile = function (isResolved) {
 	}
 
 	stack = (new Error()).stack;
-	if (!stack.split('\n').slice(3).some(function (line) {
+	if (!stack.split("\n").slice(3).some(function (line) {
 			if ((line.search(/[\/\\]deferred[\/\\]/) === -1) &&
 					(line.search(/[\/\\]es5-ext[\/\\]/) === -1) &&
-					(line.indexOf(' (native)') === -1)) {
+					(line.indexOf(" (native)") === -1)) {
 				line = line.replace(/\n/g, "\\n").trim();
 				if (!data[line]) {
 					data[line] = { count: 0 };
@@ -47,7 +47,7 @@ profile = function (isResolved) {
 };
 
 exports.profileEnd = function () {
-	var total, lpad, log = '';
+	var total, lpad, log = "";
 
 	if (!deferred._profile) {
 		throw new Error("Deferred profiler was not initialized");

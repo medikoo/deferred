@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (t, a, d) {
 	var x = {}, fn;
@@ -15,11 +15,11 @@ module.exports = function (t, a, d) {
 	}).done(d, d);
 };
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = function () {
 	return {
-		Function: function (a, d) {
+		"Function": function (a, d) {
 			var x = {}, z = {};
 			z.foo = function (y, cb) {
 				var self = this;
@@ -31,11 +31,11 @@ module.exports = function () {
 				}, 0);
 				return 3;
 			};
-			deferred(z).invoke('foo', x)(function (r) {
+			deferred(z).invoke("foo", x)(function (r) {
 				a(r, 3);
 			}).done();
 		},
-		Method: function (a, d) {
+		"Method": function (a, d) {
 			var x = {}, fn, z = {};
 			fn = function (y, cb) {
 				var self = this;
@@ -51,19 +51,19 @@ module.exports = function () {
 				a(r, 3);
 			}).done();
 		},
-		Fail: function (a) {
+		"Fail": function (a) {
 			var e = new Error("Error");
-			deferred(e).invoke('bla')(a.never, function (r) {
+			deferred(e).invoke("bla")(a.never, function (r) {
 				a(r, e);
 			}).done();
 		},
 		"Null input": function (a) {
-			deferred(null).invoke('test')(a.never, function (e) {
+			deferred(null).invoke("test")(a.never, function (e) {
 				a.ok(e instanceof TypeError);
 			}).done();
 		},
 		"No Function": function (a) {
-			deferred({}).invoke('test')(a.never, function (e) {
+			deferred({}).invoke("test")(a.never, function (e) {
 				a.ok(e instanceof TypeError);
 			}).done();
 		},
@@ -71,15 +71,15 @@ module.exports = function () {
 			var y = {}, z = {}, x = { foo: function (w, u) {
 				a(this, x, "Context");
 				a.deep([w, u], [y, z], "Arguments");
-				return 'foo';
+				return "foo";
 			} };
-			deferred(x).invoke('foo', deferred(y), z)(function (r) {
-				a(r, 'foo', "Result");
+			deferred(x).invoke("foo", deferred(y), z)(function (r) {
+				a(r, "foo", "Result");
 			}, a.never).done();
 		},
-		Erroneous: function (a) {
+		"Erroneous": function (a) {
 			var x, fn;
-			x = new Error('Test');
+			x = new Error("Test");
 			fn = function () {
 				return x;
 			};
@@ -88,7 +88,7 @@ module.exports = function () {
 			}).done();
 		},
 		"Function crash": function (a) {
-			var x = new Error('Test'), fn;
+			var x = new Error("Test"), fn;
 			fn = function () {
 				throw x;
 			};

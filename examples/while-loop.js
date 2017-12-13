@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 // While loops are usually constructruted as recurrent asynchronous functions:
 
-var deferred = require('deferred')
+var deferred = require("deferred")
 
   , count = 0, limit = 10, get;
 

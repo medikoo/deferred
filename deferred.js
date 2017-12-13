@@ -9,11 +9,11 @@
 // 3. If invoked with more than one arguments then promise that resolves with
 //    array of all resolved arguments is returned.
 
-'use strict';
+"use strict";
 
-var isError    = require('es5-ext/error/is-error')
-  , noop       = require('es5-ext/function/noop')
-  , isPromise  = require('./is-promise')
+var isError    = require("es5-ext/error/is-error")
+  , noop       = require("es5-ext/function/noop")
+  , isPromise  = require("./is-promise")
 
   , every = Array.prototype.every, push = Array.prototype.push
 
@@ -32,23 +32,29 @@ extendShim = function (promise) {
 };
 
 resolve = function (value, failed) {
-	var promise = function (win, fail) { return promise.then(win, fail); };
+	var promise = function (win, fail) {
+ return promise.then(win, fail);
+};
 	promise.value = value;
 	promise.failed = failed;
 	promise.__proto__ = ext._resolved;
-	if (!protoSupported) { extendShim(promise); }
+	if (!protoSupported) {
+ extendShim(promise);
+}
 	if (createDeferred._profile) createDeferred._profile(true);
 	return promise;
 };
 
 Deferred = function () {
-	var promise = function (win, fail) { return promise.then(win, fail); };
+	var promise = function (win, fail) {
+ return promise.then(win, fail);
+};
 	if (!count) timeout = setTimeout(noop, 1e9);
 	++count;
 	if (createDeferred._monitor) promise.monitor = createDeferred._monitor();
 	promise.__proto__ = ext._unresolved;
 	if (!protoSupported) extendShim(promise);
-	(createDeferred._profile && createDeferred._profile());
+	createDeferred._profile && createDeferred._profile();
 	this.promise = promise;
 	this.resolve = this.resolve.bind(this);
 	this.reject = this.reject.bind(this);
@@ -101,7 +107,9 @@ Deferred.prototype = {
 				value.dependencies.push(this.promise);
 				if (this.promise.pending) {
 					if (value.pending) {
-						this.promise.pending.forEach(function (promise) { value.pending.push(promise); });
+						this.promise.pending.forEach(function (promise) {
+ value.pending.push(promise);
+});
 						this.promise.pending = value.pending;
 						if (this.promise.dependencies) {
 							this.promise.dependencies.forEach(function self(dPromise) {
@@ -174,11 +182,13 @@ module.exports = createDeferred = function (value) {
 };
 
 createDeferred.Deferred = Deferred;
-createDeferred.reject = function (value) { return resolve(value, true); };
+createDeferred.reject = function (value) {
+ return resolve(value, true);
+};
 createDeferred.resolve = function (value) {
 	value = assimilate(value);
 	if (isPromise(value)) return value;
 	return resolve(value, false);
 };
-ext = require('./_ext');
-assimilate = require('./assimilate');
+ext = require("./_ext");
+assimilate = require("./assimilate");

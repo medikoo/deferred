@@ -5,17 +5,19 @@
 // Called on promise resolution returns same promise, doesn't pass any values to
 // provided callback
 
-'use strict';
+"use strict";
 
-var callable = require('es5-ext/object/valid-callable')
-  , deferred = require('../../deferred');
+var callable = require("es5-ext/object/valid-callable")
+  , deferred = require("../../deferred");
 
-deferred.extend('finally', function (cb) {
+deferred.extend("finally", function (cb) {
 	callable(cb);
 	if (!this.pending) this.pending = [];
-	this.pending.push('finally', arguments);
+	this.pending.push("finally", arguments);
 	return this;
-}, function (cb) { cb(); }, function (cb) {
+}, function (cb) {
+ cb();
+}, function (cb) {
 	callable(cb)();
 	return this;
 });

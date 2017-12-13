@@ -1,13 +1,13 @@
 // Run if you want to monitor unresolved promises (in properly working
 // application there should be no promises that are never resolved)
 
-'use strict';
+"use strict";
 
 var max        = Math.max
-  , callable   = require('es5-ext/object/valid-callable')
-  , isCallable = require('es5-ext/object/is-callable')
-  , toPosInt   = require('es5-ext/number/to-pos-integer')
-  , deferred   = require('./deferred');
+  , callable   = require("es5-ext/object/valid-callable")
+  , isCallable = require("es5-ext/object/is-callable")
+  , toPosInt   = require("es5-ext/number/to-pos-integer")
+  , deferred   = require("./deferred");
 
 exports = module.exports = function (timeout, cb) {
 	if (timeout === false) {
@@ -19,11 +19,11 @@ exports = module.exports = function (timeout, cb) {
 	}
 	exports.timeout = timeout = max(toPosInt(timeout) || 5000, 50);
 	if (cb == null) {
-		if ((typeof console !== 'undefined') && console &&
+		if ((typeof console !== "undefined") && console &&
 				isCallable(console.error)) {
 			cb = function (e) {
-				console.error(((e.stack && e.stack.toString()) ||
-					"Unresolved promise: no stack available"));
+				console.error((e.stack && e.stack.toString()) ||
+					"Unresolved promise: no stack available");
 			};
 		}
 	} else {

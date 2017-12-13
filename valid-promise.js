@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var isPromise = require('./is-promise');
+var isPromise = require("./is-promise");
 
 module.exports = function (x) {
 	if (!isPromise(x)) {

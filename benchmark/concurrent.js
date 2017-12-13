@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Benchmark comparing performance of promise setups (concurrent)
 // To run it, do following in package path:
@@ -6,15 +6,15 @@
 // $ npm install Q when kew bluebird
 // $ node benchmark/concurrent.js
 
-var generate   = require('es5-ext/array/generate')
-  , forEach    = require('es5-ext/object/for-each')
-  , pad        = require('es5-ext/string/#/pad')
-  , lstat      = require('fs').lstat
-  , Q          = require('Q')
-  , Bluebird   = require('bluebird')
-  , kew        = require('kew')
-  , when       = require('when')
-  , deferred   = require('../')
+var generate   = require("es5-ext/array/generate")
+  , forEach    = require("es5-ext/object/for-each")
+  , pad        = require("es5-ext/string/#/pad")
+  , lstat      = require("fs").lstat
+  , Q          = require("Q")
+  , Bluebird   = require("bluebird")
+  , kew        = require("kew")
+  , when       = require("when")
+  , deferred   = require("../")
 
   , now = Date.now
   , Deferred = deferred.Deferred
@@ -27,7 +27,8 @@ var generate   = require('es5-ext/array/generate')
 console.log("Promise overhead (concurrent calls)", "x" + count + ":\n");
 
 // Plain
-tests = [function () {
+tests = [
+function () {
 	var i = count, j = count;
 	self = function () {
 		lstat(__filename, function (err, stats) {
@@ -133,7 +134,11 @@ tests = [function () {
 	self = function () {
 		dlstat(__filename).then(function () {
 			if (!--i) nextTick(next); // Ignore first
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	while (j--) self();
@@ -156,7 +161,11 @@ tests = [function () {
 				// Get out of try/catch clause
 				nextTick(next);
 			}
-		}, function (err) { nextTick(function () { throw err; }); });
+		}, function (err) {
+ nextTick(function () {
+ throw err;
+});
+});
 	};
 	time = now();
 	while (j--) self();
@@ -166,7 +175,9 @@ tests = [function () {
 	var i = count, j = count, dlstat;
 	dlstat = function (path) {
 		var def = new Deferred();
-		lstat(path, function (err, stats) { def.resolve(err || stats); });
+		lstat(path, function (err, stats) {
+ def.resolve(err || stats);
+});
 		return def.promise;
 	};
 
@@ -181,7 +192,9 @@ tests = [function () {
 	var i = count, j = count, dlstat;
 	dlstat = function (path) {
 		var def = new Deferred();
-		lstat(path, function (err, stats) { def.resolve(err || stats); });
+		lstat(path, function (err, stats) {
+ def.resolve(err || stats);
+});
 		return def.promise;
 	};
 
@@ -233,7 +246,9 @@ tests = [function () {
 	time = now();
 	deferred.map(files, function (name) {
 		return dlstat(name);
-	}).done(function () { next(); });
+	}).done(function () {
+ next();
+});
 }, function () {
 	var dlstat = promisify(lstat);
 
@@ -327,7 +342,9 @@ tests = [function () {
 		dlstat(__filename).then(function () {
 			if (!--i) nextTick(next);
 		}, function (e) {
-			nextTick(function () { throw e; });
+			nextTick(function () {
+ throw e;
+});
 		});
 	};
 
@@ -352,13 +369,16 @@ tests = [function () {
 				nextTick(next);
 			}
 		}, function (e) {
-			nextTick(function () { throw e; });
+			nextTick(function () {
+ throw e;
+});
 		});
 	};
 
 	time = now();
 	while (j--) self();
-}];
+}
+];
 
 next = function () {
 	setTimeout(function () {
@@ -369,7 +389,9 @@ next = function () {
 			forEach(data, function (value, name, obj, index) {
 				console.log(pad.call(index + 1 + ":", " ", 3),
 					pad.call(value, " ", 5) + "ms ", name);
-			}, null, function (a, b) { return this[a] - this[b]; });
+			}, null, function (a, b) {
+ return this[a] - this[b];
+});
 		}
 	}, 100);
 };

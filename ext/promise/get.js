@@ -4,19 +4,19 @@
 //
 // Resolves with property of resolved object
 
-'use strict';
+"use strict";
 
-var value    = require('es5-ext/object/valid-value')
-  , deferred = require('../../deferred')
+var value    = require("es5-ext/object/valid-value")
+  , deferred = require("../../deferred")
 
   , reduce = Array.prototype.reduce
   , resolve = deferred.resolve, reject = deferred.reject;
 
-deferred.extend('get', function (/*…name*/) {
+deferred.extend("get", function (/* …name*/) {
 	var def;
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('get', [arguments, def.resolve, def.reject]);
+	this.pending.push("get", [arguments, def.resolve, def.reject]);
 	return def.promise;
 
 }, function (args, resolve, reject) {
@@ -31,7 +31,7 @@ deferred.extend('get', function (/*…name*/) {
 		return;
 	}
 	resolve(result);
-}, function (/*…name*/) {
+}, function (/* …name*/) {
 	var result;
 	if (this.failed) return this;
 	try {

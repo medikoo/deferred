@@ -2,14 +2,14 @@
 // Allows to create a promise queue, where new promises can be added to queue until last promise in
 // a queue resolves. Queue promise resolves with `undefined` value, when last promises resolves.
 
-'use strict';
+"use strict";
 
-var aFrom          = require('es5-ext/array/from')
-  , ensureIterable = require('es5-ext/iterable/validate-object')
-  , assign         = require('es5-ext/object/assign')
-  , deferred       = require('./deferred')
-  , isPromise      = require('./is-promise')
-  , assimilate     = require('./assimilate')
+var aFrom          = require("es5-ext/array/from")
+  , ensureIterable = require("es5-ext/iterable/validate-object")
+  , assign         = require("es5-ext/object/assign")
+  , deferred       = require("./deferred")
+  , isPromise      = require("./is-promise")
+  , assimilate     = require("./assimilate")
 
   , DynamicQueue;
 

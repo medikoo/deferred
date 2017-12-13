@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var arrayOf    = require('es5-ext/array/of')
-  , deferred   = require('../deferred')
-  , isPromise  = require('../is-promise')
-  , assimilate = require('../assimilate')
+var arrayOf    = require("es5-ext/array/of")
+  , deferred   = require("../deferred")
+  , isPromise  = require("../is-promise")
+  , assimilate = require("../assimilate")
 
   , push = Array.prototype.push, slice = Array.prototype.slice;
 

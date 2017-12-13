@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 var keys     = Object.keys
-  , deferred = require('../deferred');
+  , deferred = require("../deferred");
 
 module.exports = function (t, a) {
 	var d1, d2, data;
@@ -10,7 +10,7 @@ module.exports = function (t, a) {
 	t.profile();
 	deferred(2);
 	deferred({});
-	deferred('raz');
+	deferred("raz");
 	d1 = deferred();
 	d2 = deferred();
 	d1.resolve(1);

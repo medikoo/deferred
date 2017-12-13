@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var deferred = require('../deferred')
+var deferred = require("../deferred")
 
   , x = {};
 
 module.exports = {
-	then: {
+	"then": {
 		Resolve: function (t, a, d) {
 			t({ then: function (resolve) {
 				resolve(x);
@@ -23,16 +23,18 @@ module.exports = {
 			});
 		}
 	},
-	done: {
+	"done": {
 		Resolve: function (t, a) {
-			t({ then: function () {}, done: function (resolve) {
+			t({ then: function () {},
+done: function (resolve) {
 				resolve(x);
 			} }).done(function (value) {
 				a(value, x);
 			}, a.never);
 		},
 		Reject: function (t, a) {
-			t({ then: function () {}, done: function (resolve, reject) {
+			t({ then: function () {},
+done: function (resolve, reject) {
 				reject(x);
 			} }).done(a.never, function (value) {
 				a(value, x);
@@ -40,12 +42,12 @@ module.exports = {
 		}
 	},
 	"via then": function (t, a, d) {
-		deferred('marko').then(function () {
+		deferred("marko").then(function () {
 			return { then: function (resolve) {
-				resolve('foreign');
+				resolve("foreign");
 			} };
 		}).done(function (value) {
-			a(value, 'foreign');
+			a(value, "foreign");
 			d();
 		});
 	}

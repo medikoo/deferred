@@ -5,23 +5,23 @@
 // Matches eventual list result onto function arguments,
 // otherwise works same as 'then' (promise function itself)
 
-'use strict';
+"use strict";
 
-var spread     = require('es5-ext/function/#/spread')
-  , callable   = require('es5-ext/object/valid-callable')
-  , isCallable = require('es5-ext/object/is-callable')
-  , isPromise  = require('../../is-promise')
-  , deferred   = require('../../deferred')
+var spread     = require("es5-ext/function/#/spread")
+  , callable   = require("es5-ext/object/valid-callable")
+  , isCallable = require("es5-ext/object/is-callable")
+  , isPromise  = require("../../is-promise")
+  , deferred   = require("../../deferred")
 
   , resolve = deferred.resolve, reject = deferred.reject;
 
-deferred.extend('spread', function (win, fail) {
+deferred.extend("spread", function (win, fail) {
 	var def;
-	((win == null) || callable(win));
+	(win == null) || callable(win);
 	if (!win && (fail == null)) return this;
 	if (!this.pending) this.pending = [];
 	def = deferred();
-	this.pending.push('spread', [win, fail, def.resolve, def.reject]);
+	this.pending.push("spread", [win, fail, def.resolve, def.reject]);
 	return def.promise;
 }, function (win, fail, resolve, reject) {
 	var cb, value;

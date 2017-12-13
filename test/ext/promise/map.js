@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var deferred = require('../../../deferred');
+var deferred = require("../../../deferred");
 
 module.exports = function (t, a, d) {
 	deferred([deferred(1), deferred(2), 3]).map(function (res) {

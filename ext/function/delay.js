@@ -1,11 +1,11 @@
 // Delay function execution, return promise for delayed function result
 
-'use strict';
+"use strict";
 
-var callable      = require('es5-ext/object/valid-callable')
-  , nextTick      = require('next-tick')
-  , ensureTimeout = require('timers-ext/valid-timeout')
-  , deferred      = require('../../deferred')
+var callable      = require("es5-ext/object/valid-callable")
+  , nextTick      = require("next-tick")
+  , ensureTimeout = require("timers-ext/valid-timeout")
+  , deferred      = require("../../deferred")
 
   , apply    = Function.prototype.apply
   , delayed;

@@ -4,6 +4,6 @@
 //
 // Promise aware some for array-like results
 
-'use strict';
+"use strict";
 
-require('./_array')('some', require('../array/some'));
+require("./_array")("some", require("../array/some"));
