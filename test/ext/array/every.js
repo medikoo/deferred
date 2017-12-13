@@ -6,30 +6,57 @@ var deferred  = require("../../../deferred")
 module.exports = function (t, a) {
 	var x = {}, y, z = 0, w;
 	a(t.call([]).valueOf(), true, "Empty, no cb");
-	a(t.call([], function () {
- return true;
-}).valueOf(), true, "Empty, cb");
+	a(
+		t
+			.call([], function () {
+				return true;
+			})
+			.valueOf(),
+		true,
+		"Empty, cb"
+	);
 	a(t.call([{}]).valueOf(), true, "One, truthy, no cb");
 	a(t.call([0]).valueOf(), false, "One, falsy, no cb");
 	a(t.call([0, {}]).valueOf(), false, "Two, falsy & truthy, no cb");
 	a(t.call([0, false]).valueOf(), false, "Two, falsy & falsy, no cb");
-	a(t.call(y = [false], function (a1, a2, a3) {
-		++z;
-		a(a1, false, "Argument");
-		a(a2, 0, "Index");
-		a(a3, y, "List");
-		a(this, x, "Context");
-		return true;
-	}, x).valueOf(), true, "One, falsy, cb truthy");
+	a(
+		t
+			.call(
+				y = [false],
+				function (a1, a2, a3) {
+					++z;
+					a(a1, false, "Argument");
+					a(a2, 0, "Index");
+					a(a3, y, "List");
+					a(this, x, "Context");
+					return true;
+				},
+				x
+			)
+			.valueOf(),
+		true,
+		"One, falsy, cb truthy"
+	);
 	a(z, 1, "Callback called");
-	a(t.call([1], function () {
- return false;
-}).valueOf(), false,
-		"One, truthy, cb falsy");
-	a(t.call([1, 0], function (x) {
- ++z; return !x;
-}).valueOf(), false,
-		"Two, cb, Second truthy");
+	a(
+		t
+			.call([1], function () {
+				return false;
+			})
+			.valueOf(),
+		false,
+		"One, truthy, cb falsy"
+	);
+	a(
+		t
+			.call([1, 0], function (x) {
+				++z;
+				return !x;
+			})
+			.valueOf(),
+		false,
+		"Two, cb, Second truthy"
+	);
 	a(z, 2, "Callback called once");
 
 	y = deferred();
