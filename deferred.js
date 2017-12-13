@@ -1,3 +1,5 @@
+/* eslint max-statements: "off", max-depth: "off" */
+
 // Returns function that returns deferred or promise object.
 //
 // 1. If invoked without arguments then deferred object is returned
@@ -11,30 +13,31 @@
 
 "use strict";
 
-var isError   = require("es5-ext/error/is-error")
-  , noop      = require("es5-ext/function/noop")
-  , isPromise = require("./is-promise");
+var isError        = require("es5-ext/error/is-error")
+  , noop           = require("es5-ext/function/noop")
+  , setPrototypeOf = require("es5-ext/object/set-prototype-of")
+  , isPromise      = require("./is-promise");
 
 var every = Array.prototype.every
   , push = Array.prototype.push
+  , getPrototypeOf = Object.getPrototypeOf
   , Deferred
   , createDeferred
   , count = 0
   , timeout
   , extendShim
   , ext
-  , protoSupported = Boolean(isPromise.__proto__)
   , resolve
   , assimilate;
 
 extendShim = function (promise) {
 	ext._names.forEach(function (name) {
 		promise[name] = function () {
-			return promise.__proto__[name].apply(promise, arguments);
+			return getPrototypeOf(promise)[name].apply(promise, arguments);
 		};
 	});
 	promise.returnsPromise = true;
-	promise.resolved = promise.__proto__.resolved;
+	promise.resolved = getPrototypeOf(promise).resolved;
 };
 
 resolve = function (value, failed) {
@@ -43,10 +46,8 @@ resolve = function (value, failed) {
 	};
 	promise.value = value;
 	promise.failed = failed;
-	promise.__proto__ = ext._resolved;
-	if (!protoSupported) {
-		extendShim(promise);
-	}
+	if (setPrototypeOf) setPrototypeOf(promise, ext._resolved);
+	else extendShim(promise);
 	if (createDeferred._profile) createDeferred._profile(true);
 	return promise;
 };
@@ -58,9 +59,9 @@ Deferred = function () {
 	if (!count) timeout = setTimeout(noop, 1e9);
 	++count;
 	if (createDeferred._monitor) promise.monitor = createDeferred._monitor();
-	promise.__proto__ = ext._unresolved;
-	if (!protoSupported) extendShim(promise);
-	createDeferred._profile && createDeferred._profile();
+	if (setPrototypeOf) setPrototypeOf(promise, ext._unresolved);
+	else extendShim(promise);
+	if (createDeferred._profile) createDeferred._profile();
 	this.promise = promise;
 	this.resolve = this.resolve.bind(this);
 	this.reject = this.reject.bind(this);
@@ -71,20 +72,20 @@ Deferred.prototype = {
 	_settle: function (value) {
 		var i, name, data, deps, dPromise, nuDeps;
 		this.promise.value = value;
-		this.promise.__proto__ = ext._resolved;
-		if (!protoSupported) this.promise.resolved = true;
+		if (setPrototypeOf) setPrototypeOf(this.promise, ext._resolved);
+		else this.promise.resolved = true;
 		deps = this.promise.dependencies;
 		delete this.promise.dependencies;
 		while (deps) {
 			for (i = 0; (dPromise = deps[i]); ++i) {
 				dPromise.value = value;
 				dPromise.failed = this.failed;
-				dPromise.__proto__ = ext._resolved;
-				if (!protoSupported) dPromise.resolved = true;
+				if (setPrototypeOf) setPrototypeOf(dPromise, ext._resolved);
+				else dPromise.resolved = true;
 				delete dPromise.pending;
 				if (dPromise.dependencies) {
-					if (!nuDeps) nuDeps = dPromise.dependencies;
-					else push.apply(nuDeps, dPromise.dependencies);
+					if (nuDeps) push.apply(nuDeps, dPromise.dependencies);
+					else nuDeps = dPromise.dependencies;
 					delete dPromise.dependencies;
 				}
 			}
@@ -157,23 +158,23 @@ module.exports = createDeferred = function (value) {
 		d = new Deferred();
 		waiting = 0;
 		result = new Array(l);
-		every.call(arguments, function (value, index) {
-			value = assimilate(value);
-			if (!isPromise(value)) {
-				result[index] = value;
+		every.call(arguments, function (itemValue, index) {
+			itemValue = assimilate(itemValue);
+			if (!isPromise(itemValue)) {
+				result[index] = itemValue;
 				return true;
 			}
-			if (value.resolved) {
-				if (value.failed) {
-					d.reject(value.value);
+			if (itemValue.resolved) {
+				if (itemValue.failed) {
+					d.reject(itemValue.value);
 					return false;
 				}
-				result[index] = value.value;
+				result[index] = itemValue.value;
 				return true;
 			}
 			++waiting;
-			value.done(function (value) {
-				result[index] = value;
+			itemValue.done(function (resolvedValue) {
+				result[index] = resolvedValue;
 				if (!--waiting && initialized) d.resolve(result);
 			}, d.reject);
 			return true;
