@@ -3,6 +3,7 @@
 "use strict";
 
 var toArray          = require("es5-ext/array/to-array")
+  , isValue          = require("es5-ext/object/is-value")
   , callable         = require("es5-ext/object/valid-callable")
   , deferred         = require("../../deferred")
   , isPromise        = require("../../is-promise")
@@ -16,11 +17,8 @@ applyFn = function (fn, args, def) {
 		fn,
 		this,
 		args.concat(function (error, result) {
-			if (error == null) {
-				def.resolve(arguments.length > 2 ? slice.call(arguments, 1) : result);
-			} else {
-				def.reject(error);
-			}
+			if (isValue(error)) def.reject(error);
+			else def.resolve(arguments.length > 2 ? slice.call(arguments, 1) : result);
 		})
 	);
 };
@@ -31,10 +29,13 @@ callAsync = function (fn, length, context, args) {
 	if (isPromise(args)) {
 		if (args.failed) return args;
 		def = deferred();
-		args.done(function (args) {
-			if (fn.returnsPromise) return apply.call(fn, context, args);
+		args.done(function (resolvedArgs) {
+			if (fn.returnsPromise) {
+				apply.call(fn, context, resolvedArgs);
+				return;
+			}
 			try {
-				applyFn.call(context, fn, args, def);
+				applyFn.call(context, fn, resolvedArgs, def);
 			} catch (e) {
 				def.reject(e);
 			}
