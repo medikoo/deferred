@@ -40,13 +40,13 @@ getPage = function (path) {
 // 2. Invoke promise loop
 
 pageN = 1;
-getPage("/page/" + pageN)(function process(content) {
+getPage("/page/" + pageN)(function processContent(content) {
 	var isNextPage = false;
 	// ...populate result...
 
 	// ...decide whether we need to download next page
 
-	if (isNextPage) return getPage("/page/" + ++pageN)(process);
+	if (isNextPage) return getPage("/page/" + ++pageN)(processContent);
 	return result;
 }).done(function (finalResult) {
 	// Process final result
