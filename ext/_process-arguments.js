@@ -3,13 +3,13 @@
 var arrayOf    = require("es5-ext/array/of")
   , deferred   = require("../deferred")
   , isPromise  = require("../is-promise")
-  , assimilate = require("../assimilate")
+  , assimilate = require("../assimilate");
 
-  , push = Array.prototype.push, slice = Array.prototype.slice;
+var push = Array.prototype.push, slice = Array.prototype.slice;
 
 module.exports = function (args, length) {
 	var i, l, arg;
-	if ((length != null) && (args.length !== length)) {
+	if (length != null && args.length !== length) {
 		args = slice.call(args, 0, length);
 		if (args.length < length) {
 			push.apply(args, new Array(length - args.length));
