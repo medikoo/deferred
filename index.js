@@ -40,3 +40,4 @@ require("./ext/promise/map");
 require("./ext/promise/reduce");
 require("./ext/promise/spread");
 require("./ext/promise/some");
+require("./ext/promise/timeout");

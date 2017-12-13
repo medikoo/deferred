@@ -36,7 +36,8 @@ module.exports = {
 			"find",
 			"map",
 			"reduce",
-			"some"
+			"some",
+			"timeout"
 		]
 	),
 	"isPromise": function (t, a) {

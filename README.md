@@ -651,6 +651,32 @@ promise.spread(function (a, b) {
 });
 ```
 
+#### timeout
+
+Resolve with rejection ("Operation timeout" error with `DEFERRED_TIMEOUT` code), if given promise
+won't settle with resolved value within given _timeout_
+
+```javascript
+var deferred = new Deferred();
+
+deferred.promise.timeout(30).done(function (value) {
+	console.log("Never called");
+}, function () {
+	console.log("Rejected after 30 seconds");
+});
+
+deferred = new Deferred();
+deferred.promise.timeout(30).done(function (value) {
+	console.log("Resolved with", value); // Resolved with true
+}, function () {}
+	console.log("Never called");
+});
+setTimeout(function () {
+	deferred.resolve(true);
+}, 10);
+
+```
+
 ### Debugging
 
 #### Monitoring unresolved promises
