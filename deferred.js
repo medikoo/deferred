@@ -11,15 +11,21 @@
 
 "use strict";
 
-var isError    = require("es5-ext/error/is-error")
-  , noop       = require("es5-ext/function/noop")
-  , isPromise  = require("./is-promise")
+var isError   = require("es5-ext/error/is-error")
+  , noop      = require("es5-ext/function/noop")
+  , isPromise = require("./is-promise");
 
-  , every = Array.prototype.every, push = Array.prototype.push
-
-  , Deferred, createDeferred, count = 0, timeout, extendShim, ext
+var every = Array.prototype.every
+  , push = Array.prototype.push
+  , Deferred
+  , createDeferred
+  , count = 0
+  , timeout
+  , extendShim
+  , ext
   , protoSupported = Boolean(isPromise.__proto__)
-  , resolve, assimilate;
+  , resolve
+  , assimilate;
 
 extendShim = function (promise) {
 	ext._names.forEach(function (name) {
@@ -33,22 +39,22 @@ extendShim = function (promise) {
 
 resolve = function (value, failed) {
 	var promise = function (win, fail) {
- return promise.then(win, fail);
-};
+		return promise.then(win, fail);
+	};
 	promise.value = value;
 	promise.failed = failed;
 	promise.__proto__ = ext._resolved;
 	if (!protoSupported) {
- extendShim(promise);
-}
+		extendShim(promise);
+	}
 	if (createDeferred._profile) createDeferred._profile(true);
 	return promise;
 };
 
 Deferred = function () {
 	var promise = function (win, fail) {
- return promise.then(win, fail);
-};
+		return promise.then(win, fail);
+	};
 	if (!count) timeout = setTimeout(noop, 1e9);
 	++count;
 	if (createDeferred._monitor) promise.monitor = createDeferred._monitor();
@@ -108,8 +114,8 @@ Deferred.prototype = {
 				if (this.promise.pending) {
 					if (value.pending) {
 						this.promise.pending.forEach(function (promise) {
- value.pending.push(promise);
-});
+							value.pending.push(promise);
+						});
 						this.promise.pending = value.pending;
 						if (this.promise.dependencies) {
 							this.promise.dependencies.forEach(function self(dPromise) {
@@ -183,7 +189,7 @@ module.exports = createDeferred = function (value) {
 
 createDeferred.Deferred = Deferred;
 createDeferred.reject = function (value) {
- return resolve(value, true);
+	return resolve(value, true);
 };
 createDeferred.resolve = function (value) {
 	value = assimilate(value);
