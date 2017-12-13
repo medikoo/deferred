@@ -1,3 +1,9 @@
+
+[![Build status][semaphore-image]][semaphore-url]
+[![Windows status][appveyor-image]][appveyor-url]
+![Transpilation status][transpilation-image]
+[![npm version][npm-image]][npm-url]
+
 # Deferred
 ## Modular and fast Promises implementation for JavaScript
 
@@ -788,8 +794,7 @@ Promise overhead (concurrent calls) x10000:
 10:  3645ms  Q: nbind (generic wrapper)
 ```
 
-### Tests [![Build Status](https://travis-ci.org/medikoo/deferred.png?branch=master)](https://travis-ci.org/medikoo/deferred)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_shield)
+### Tests
 
 __Covered by over 300 unit tests__
 
@@ -798,3 +803,14 @@ __Covered by over 300 unit tests__
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_large)
+
+
+[semaphore-image]: https://semaphoreci.com/api/v1/medikoo/deferred/branches/master/badge.svg
+[semaphore-url]: https://semaphoreci.com/medikoo/deferred
+[appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/deferred.svg
+[appveyor-url]: https://ci.appveyor.com/project/medikoo/deferred
+[codecov-image]: https://img.shields.io/codecov/c/github/medikoo/deferred.svg
+[codecov-url]: https://codecov.io/gh/medikoo/deferred
+[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
+[npm-image]: https://img.shields.io/npm/v/deferred.svg
+[npm-url]: https://www.npmjs.com/package/deferred
