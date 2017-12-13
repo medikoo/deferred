@@ -7,9 +7,7 @@ module.exports = function (t, a, d) {
 	deferred([deferred(1), deferred(2), 3])
 		.some(function (res) {
 			++count;
-			if (res > 1) {
-				return true;
-			}
+			return res > 1;
 		})(function (r) {
 			a(r, true);
 			a(count, 2, "Count");
