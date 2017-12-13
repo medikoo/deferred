@@ -5,11 +5,9 @@
 var callable         = require("es5-ext/object/valid-callable")
   , deferred         = require("../../deferred")
   , isPromise        = require("../../is-promise")
-  , processArguments = require("../_process-arguments")
+  , processArguments = require("../_process-arguments");
 
-  , apply = Function.prototype.apply
-
-  , applyFn;
+var apply = Function.prototype.apply, applyFn;
 
 applyFn = function (fn, args, resolve, reject) {
 	var value;
@@ -34,9 +32,12 @@ module.exports = function (length) {
 		if (isPromise(args)) {
 			if (args.failed) return args;
 			def = deferred();
-			args.done(function (args) {
-				applyFn.call(this, fn, args, def.resolve, def.reject);
-			}.bind(this), def.reject);
+			args.done(
+				function (args) {
+					applyFn.call(this, fn, args, def.resolve, def.reject);
+				}.bind(this),
+				def.reject
+			);
 		} else {
 			def = deferred();
 			applyFn.call(this, fn, args, def.resolve, def.reject);
