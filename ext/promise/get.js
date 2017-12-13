@@ -20,9 +20,9 @@ deferred.extend(
 		this.pending.push("get", [arguments, def.resolve, def.reject]);
 		return def.promise;
 	},
-	function (args, resolve, reject) {
+	function (args, localResolve, localReject) {
 		var result;
-		if (this.failed) reject(this.value);
+		if (this.failed) localReject(this.value);
 		try {
 			result = reduce.call(
 				args,
@@ -32,10 +32,10 @@ deferred.extend(
 				this.value
 			);
 		} catch (e) {
-			reject(e);
+			localReject(e);
 			return;
 		}
-		resolve(result);
+		localResolve(result);
 	},
 	function (/* …name*/) {
 		var result;
