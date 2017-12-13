@@ -20,14 +20,15 @@
 
 "use strict";
 
-var callable = require("es5-ext/object/valid-callable")
+var isValue  = require("es5-ext/object/is-value")
+  , callable = require("es5-ext/object/valid-callable")
   , nextTick = require("next-tick")
   , deferred = require("../../deferred");
 
 deferred.extend(
 	"cb",
 	function (cb) {
-		if (cb == null) return this;
+		if (!isValue(cb)) return this;
 		callable(cb);
 		nextTick(
 			function () {
@@ -47,7 +48,7 @@ deferred.extend(
 		else cb(null, this.value);
 	},
 	function (cb) {
-		if (cb == null) return this;
+		if (!isValue(cb)) return this;
 		callable(cb);
 		nextTick(
 			function () {
