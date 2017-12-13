@@ -2,7 +2,8 @@
 
 "use strict";
 
-var callable      = require("es5-ext/object/valid-callable")
+var isValue       = require("es5-ext/object/is-value")
+  , callable      = require("es5-ext/object/valid-callable")
   , nextTick      = require("next-tick")
   , ensureTimeout = require("timers-ext/valid-timeout")
   , deferred      = require("../../deferred");
@@ -23,11 +24,11 @@ delayed = function (fn, args, resolve, reject) {
 module.exports = function (timeout) {
 	var fn, result, delay;
 	fn = callable(this);
-	if (timeout == null) {
-		delay = nextTick;
-	} else {
+	if (isValue(timeout)) {
 		timeout = ensureTimeout(timeout);
 		delay = setTimeout;
+	} else {
+		delay = nextTick;
 	}
 	result = function () {
 		var def = deferred();
