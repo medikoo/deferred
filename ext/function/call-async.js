@@ -6,21 +6,23 @@ var toArray          = require("es5-ext/array/to-array")
   , callable         = require("es5-ext/object/valid-callable")
   , deferred         = require("../../deferred")
   , isPromise        = require("../../is-promise")
-  , processArguments = require("../_process-arguments")
+  , processArguments = require("../_process-arguments");
 
-  , slice = Array.prototype.slice, apply = Function.prototype.apply
-
-  , applyFn, callAsync;
+var slice = Array.prototype.slice, apply = Function.prototype.apply, applyFn, callAsync;
 
 applyFn = function (fn, args, def) {
 	args = toArray(args);
-	apply.call(fn, this, args.concat(function (error, result) {
-		if (error == null) {
-			def.resolve(arguments.length > 2 ? slice.call(arguments, 1) : result);
-		} else {
-			def.reject(error);
-		}
-	}));
+	apply.call(
+		fn,
+		this,
+		args.concat(function (error, result) {
+			if (error == null) {
+				def.resolve(arguments.length > 2 ? slice.call(arguments, 1) : result);
+			} else {
+				def.reject(error);
+			}
+		})
+	);
 };
 
 callAsync = function (fn, length, context, args) {
@@ -34,8 +36,8 @@ callAsync = function (fn, length, context, args) {
 			try {
 				applyFn.call(context, fn, args, def);
 			} catch (e) {
- def.reject(e);
-}
+				def.reject(e);
+			}
 		}, def.reject);
 		return def.promise;
 	}
@@ -54,7 +56,9 @@ module.exports = exports = function (context/*, …args*/) {
 	return callAsync(callable(this), null, context, slice.call(arguments, 1));
 };
 
-Object.defineProperty(exports, "_base", { configurable: true,
+Object.defineProperty(exports, "_base", {
+	configurable: true,
 	enumerable: false,
-writable: true,
-value: callAsync });
+	writable: true,
+	value: callAsync
+});
