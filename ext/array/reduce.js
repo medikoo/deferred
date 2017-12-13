@@ -2,31 +2,30 @@
 
 "use strict";
 
-var assign     = require("es5-ext/object/assign")
-  , value      = require("es5-ext/object/valid-value")
-  , callable   = require("es5-ext/object/valid-callable")
-  , deferred   = require("../../deferred")
-  , isPromise  = require("../../is-promise")
-  , assimilate = require("../../assimilate");
+var assign          = require("es5-ext/object/assign")
+  , isValue         = require("es5-ext/object/is-value")
+  , ensureValue     = require("es5-ext/object/valid-value")
+  , callable        = require("es5-ext/object/valid-callable")
+  , toNaturalNumber = require("es5-ext/number/to-pos-integer")
+  , deferred        = require("../../deferred")
+  , isPromise       = require("../../is-promise")
+  , assimilate      = require("../../assimilate");
 
-var call = Function.prototype.call
-  , hasOwnProperty = Object.prototype.hasOwnProperty
-  , resolve = deferred.resolve
-  , Reduce;
+var call = Function.prototype.call, resolve = deferred.resolve, Reduce;
 
 Reduce = function (list, cb, initial, initialized) {
 	this.list = list;
 	this.cb = cb;
 	this.initialized = initialized;
-	this.length = list.length >>> 0;
+	this.length = toNaturalNumber(list.length);
 
 	initial = assimilate(initial);
 	if (isPromise(initial)) {
 		if (!initial.resolved) {
 			assign(this, deferred());
 			initial.done(
-				function (initial) {
-					this.value = initial;
+				function (resolvedInitial) {
+					this.value = resolvedInitial;
 					this.init();
 				}.bind(this),
 				this.reject
@@ -85,11 +84,11 @@ Reduce.prototype = {
 					}.bind(this),
 					this.reject
 				);
-				return;
+				return null;
 			}
 			if (value.failed) {
 				this.reject(value.value);
-				return;
+				return null;
 			}
 			value = value.value;
 		}
@@ -107,7 +106,7 @@ Reduce.prototype = {
 				value = call.call(this.cb, undefined, this.value, value, this.current, this.list);
 			} catch (e) {
 				this.reject(e);
-				return;
+				return null;
 			}
 			value = assimilate(value);
 			if (isPromise(value)) {
@@ -120,11 +119,11 @@ Reduce.prototype = {
 						}.bind(this),
 						this.reject
 					);
-					return;
+					return null;
 				}
 				if (value.failed) {
 					this.reject(value.value);
-					return;
+					return null;
 				}
 				value = value.value;
 			}
@@ -145,8 +144,8 @@ Reduce.prototype = {
 };
 
 module.exports = function (cb/*, initial*/) {
-	value(this);
-	cb == null || callable(cb);
+	ensureValue(this);
+	if (!isValue(cb)) callable(cb);
 
 	return new Reduce(this, cb, arguments[1], arguments.length > 1);
 };
