@@ -170,6 +170,7 @@ module.exports = {
 					if (file.slice(-3) === ".js" && file[0] !== "_") {
 						return convert.call(file.slice(0, -3));
 					}
+					return null;
 				})
 				.filter(Boolean)
 				.forEach(function (file) {
