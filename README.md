@@ -1,7 +1,7 @@
 
 [![Build status][semaphore-image]][semaphore-url]
 [![Windows status][appveyor-image]][appveyor-url]
-![Transpilation status][transpilation-image]
+[![Transpilation status][transpilation-image]
 [![npm version][npm-image]][npm-url]
 
 # Deferred
