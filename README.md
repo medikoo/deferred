@@ -821,8 +821,8 @@ Promise overhead (concurrent calls) x10000:
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_large)
 
-[semaphore-image]: https://semaphoreci.com/api/v1/medikoo/deferred/branches/master/badge.svg
-[semaphore-url]: https://semaphoreci.com/medikoo/deferred
+[semaphore-image]: https://semaphoreci.com/api/v1/medikoo-org/deferred/branches/master/badge.svg
+[semaphore-url]: https://semaphoreci.com/medikoo-org/deferred
 [appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/deferred.svg
 [appveyor-url]: https://ci.appveyor.com/project/medikoo/deferred
 [codecov-image]: https://img.shields.io/codecov/c/github/medikoo/deferred.svg
