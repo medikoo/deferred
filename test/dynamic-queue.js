@@ -1,28 +1,26 @@
 "use strict";
 
-var deferred = require("../deferred")
+var deferred = require("../deferred");
 
-  , reject = deferred.reject;
+var reject = deferred.reject;
 
 module.exports = function (T) {
 	var x = {}, y = {}, z = {}, e = new Error("Error");
 
 	return {
 		"Empty": function (a, d) {
-			new T([]).promise(function (result) {
-				a.deep(result, undefined);
-			}, a.never).done(d, d);
+			new T([]).promise(function (result) { a.deep(result, undefined); }, a.never).done(d, d);
 		},
 		"One": {
 			Value: function (a, d) {
-				new T([x]).promise(function (result) {
-					a.deep(result, undefined);
-				}, a.never).done(d, d);
+				new T([x])
+					.promise(function (result) { a.deep(result, undefined); }, a.never)
+					.done(d, d);
 			},
 			Promise: function (a, d) {
-				new T([deferred(x)]).promise(function (result) {
-					a.deep(result, undefined);
-				}, a.never).done(d, d);
+				new T([deferred(x)])
+					.promise(function (result) { a.deep(result, undefined); }, a.never)
+					.done(d, d);
 			}
 		},
 		"Many": {
@@ -33,22 +31,22 @@ module.exports = function (T) {
 				});
 			},
 			"Values & Promises": function (a, d) {
-				new T([x, y, deferred(x), z, deferred(y)]).promise(function (res) {
-					a.deep(res, undefined);
-				}, a.never).done(d, d);
+				new T([x, y, deferred(x), z, deferred(y)])
+					.promise(function (res) { a.deep(res, undefined); }, a.never)
+					.done(d, d);
 			},
 			"Postponed": function (a, d) {
 				var def = deferred(), resolved = false;
-				new T([x, y, deferred(x), def.promise, z, deferred(y)]).promise(function (res) {
-					a.deep(res, undefined);
-				}, a.never).done(d, d);
+				new T([x, y, deferred(x), def.promise, z, deferred(y)])
+					.promise(function (res) { a.deep(res, undefined); }, a.never)
+					.done(d, d);
 				a(resolved, false);
 				def.resolve();
 			},
 			"Error promise": function (a, d) {
-				new T([x, y, deferred(e), z, deferred(y)]).promise(a.never, function (res) {
-					a(res, e);
-				}, a.never).done(d, d);
+				new T([x, y, deferred(e), z, deferred(y)])
+					.promise(a.never, function (res) { a(res, e); }, a.never)
+					.done(d, d);
 			}
 		},
 		"Resolve not via then": function (a) {
@@ -58,9 +56,7 @@ module.exports = function (T) {
 			// case anymore
 
 			var d = deferred();
-			new T([d.promise]).promise.done(function () {
-				throw new Error("ERROR");
-			});
+			new T([d.promise]).promise.done(function () { throw new Error("ERROR"); });
 			a.throws(d.resolve);
 		}
 	};
