@@ -1,9 +1,8 @@
 "use strict";
 
-var deferred = require("../deferred")
-  , x        = {}
-  , y        = {}
-  , e        = new Error("Error");
+var deferred = require("../deferred");
+
+var x = {}, y = {}, e = new Error("Error");
 
 module.exports = {
 	"Then callback run in current tick": function (a) {
