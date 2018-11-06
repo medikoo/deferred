@@ -60,9 +60,7 @@ readdir(__dirname, function(err, files) {
 			if (!--waiting) {
 				// Got content of all files
 				// Concatenate into one string and write into lib.js
-				writeFile(__dirname + "/lib.js", result.join("\n"), function(
-					err
-				) {
+				writeFile(__dirname + "/lib.js", result.join("\n"), function(err) {
 					if (err) {
 						// We cannot write lib.js file, throw error
 						throw err;
@@ -368,9 +366,7 @@ invokeAsync(db, "find", "books", { title: "Some title" }).done(function(book) {
 When we're interested in results of more than one promise object we may group them into one promise with `deferred` function:
 
 ```javascript
-deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function(
-	result
-) {
+deferred(delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7))(function(result) {
 	console.log(result); // [5, 8, 8]
 });
 ```
@@ -417,12 +413,9 @@ This function is available also as an extension on promise object.
 It's same as Array's reduce with that difference that it calls callback only after previous accumulated value is resolved, this way we may accumulate results of collection of promises or invoke some asynchronous tasks one after another.
 
 ```javascript
-deferred.reduce(
-	[delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)],
-	function(a, b) {
-		return delayedAdd(a, b);
-	}
-)(function(result) {
+deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)], function(a, b) {
+	return delayedAdd(a, b);
+})(function(result) {
 	console.log(result); // 21
 });
 ```
