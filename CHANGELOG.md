@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.7.10"></a>
+## [0.7.10](https://github.com/medikoo/deferred/compare/v0.7.9...v0.7.10) (2018-12-27)
+
+
+### Bug Fixes
+
+* promise.map on pending then rejected ([e7cfc02](https://github.com/medikoo/deferred/commit/e7cfc02))
+
+
+
 <a name="0.7.9"></a>
 ## [0.7.9](https://github.com/medikoo/deferred/compare/v0.7.8...v0.7.9) (2017-12-13)
 
