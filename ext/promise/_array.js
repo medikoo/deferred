@@ -36,11 +36,8 @@ module.exports = function (name, ext) {
 		function (cb) {
 			if (isValue(cb)) callable(cb);
 			if (this.failed) return this;
-			try {
-				return ext.apply(this.value, arguments);
-			} catch (e) {
-				return reject(e);
-			}
+			try { return ext.apply(this.value, arguments); }
+			catch (e) { return reject(e); }
 		}
 	);
 };
