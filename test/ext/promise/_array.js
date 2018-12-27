@@ -9,9 +9,7 @@ module.exports = function (t) {
 	return {
 		Direct: function (a) {
 			deferred([deferred(1), deferred(2), 3])
-				.map(function (res) {
-					return deferred(res * res);
-				})(function (r) {
+				.map(function (res) { return deferred(res * res); })(function (r) {
 					a.deep(r, [1, 4, 9]);
 				}, a.never)
 				.done();
@@ -19,9 +17,7 @@ module.exports = function (t) {
 		Delayed: function (a) {
 			var def = deferred();
 			def.promise
-				.map(function (res) {
-					return deferred(res * res);
-				})(function (r) {
+				.map(function (res) { return deferred(res * res); })(function (r) {
 					a.deep(r, [1, 4, 9]);
 				}, a.never)
 				.done();
@@ -30,9 +26,7 @@ module.exports = function (t) {
 		Error: function (a) {
 			t("reduce", require("../../../ext/array/reduce"));
 			deferred([])
-				.reduce(function () {
-					return null;
-				})(a.never, function (err) {
+				.reduce(function () { return null; })(a.never, function (err) {
 					a(isError(err), true, "Error");
 				})
 				.done();
