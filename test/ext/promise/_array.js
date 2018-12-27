@@ -23,6 +23,13 @@ module.exports = function (t) {
 				.done();
 			def.resolve([deferred(1), deferred(2), 3]);
 		},
+		OnRejected: function (a) {
+			var error = new Error("foo");
+			deferred
+				.reject(error)
+				.map(function () { return "foo"; })
+				.done(a.never, function (reason) { a(reason, error); });
+		},
 		Error: function (a) {
 			t("reduce", require("../../../ext/array/reduce"));
 			deferred([])
