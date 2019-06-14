@@ -6,17 +6,14 @@ var isPromise = require("../../is-promise")
 module.exports = function (t) {
 	var x = {}, y = {}, e = new Error();
 	return {
-		"Limit": function (a) {
-			a.deep(t([x, 34, "raz"], 2), [x, 34]);
-		},
+		"Limit": function (a) { a.deep(t([x, 34, "raz"], 2), [x, 34]); },
 		"Extend": function (a) {
 			a.deep(t([x, 34, "raz"], 5), [x, 34, "raz", undefined, undefined]);
 		},
 		"Promise arguments": {
 			Resolved: {
 				"": function (a) {
-					a.deep(t([x, deferred(y), "dwa", deferred(null)]),
-						[x, y, "dwa", null]);
+					a.deep(t([x, deferred(y), "dwa", deferred(null)]), [x, y, "dwa", null]);
 				},
 				"Error": function (a) {
 					var p = deferred(e);
@@ -28,9 +25,7 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, "dwa", px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.done(function (args) {
-						a.deep(args, [x, y, "dwa", x]);
-					}, a.never);
+					p.done(function (args) { a.deep(args, [x, y, "dwa", x]); }, a.never);
 					py.resolve(y);
 					px.resolve(x);
 				},
@@ -38,9 +33,7 @@ module.exports = function (t) {
 					var py = deferred(), px = deferred(), p;
 					p = t([x, py.promise, "dwa", px.promise]);
 					a(isPromise(p), true, "Promise");
-					p.done(a.never, function (err) {
-						a(err, e);
-					});
+					p.done(a.never, function (err) { a(err, e); });
 					py.resolve(y);
 					px.reject(e);
 				}

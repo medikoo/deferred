@@ -39,9 +39,7 @@ exports._unresolved = ee(
 		}),
 		resolved: d(false),
 		returnsPromise: d(true),
-		valueOf: d(function () {
-			return this;
-		})
+		valueOf: d(function () { return this; })
 	})
 );
 
@@ -93,11 +91,8 @@ exports._resolved = ee(
 			if (!isValue(cont)) return this;
 			if (isCallable(cont)) {
 				if (isPromise(cont)) return cont;
-				try {
-					value = cont(this.value);
-				} catch (e) {
-					return reject(e);
-				}
+				try { value = cont(this.value); }
+				catch (e) { return reject(e); }
 				return resolve(value);
 			}
 			return resolve(cont);
@@ -116,9 +111,7 @@ exports._resolved = ee(
 		}),
 		resolved: d(true),
 		returnsPromise: d(true),
-		valueOf: d(function () {
-			return this.value;
-		})
+		valueOf: d(function () { return this.value; })
 	})
 );
 

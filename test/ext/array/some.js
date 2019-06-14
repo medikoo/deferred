@@ -6,15 +6,7 @@ var deferred  = require("../../../deferred")
 module.exports = function (t, a) {
 	var x = {}, y, z = 0, w;
 	a(t.call([]).valueOf(), false, "Empty, no cb");
-	a(
-		t
-			.call([], function () {
-				return true;
-			})
-			.valueOf(),
-		false,
-		"Empty, cb"
-	);
+	a(t.call([], function () { return true; }).valueOf(), false, "Empty, cb");
 	a(t.call([{}]).valueOf(), true, "One, truthy, no cb");
 	a(t.call([0]).valueOf(), false, "One, falsy, no cb");
 	a(t.call([0, {}]).valueOf(), true, "Two, falsy & truthy, no cb");
@@ -22,7 +14,7 @@ module.exports = function (t, a) {
 	a(
 		t
 			.call(
-				y = [false],
+				(y = [false]),
 				function (a1, a2, a3) {
 					++z;
 					a(a1, false, "Argument");
@@ -38,15 +30,7 @@ module.exports = function (t, a) {
 		"One, falsy, cb truthy"
 	);
 	a(z, 1, "Callback called");
-	a(
-		t
-			.call([1], function () {
-				return false;
-			})
-			.valueOf(),
-		false,
-		"One, truthy, cb falsy"
-	);
+	a(t.call([1], function () { return false; }).valueOf(), false, "One, truthy, cb falsy");
 	a(
 		t
 			.call([1, 0], function (x) {

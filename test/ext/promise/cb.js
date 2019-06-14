@@ -8,10 +8,14 @@ module.exports = function () {
 			var x = {}, def = deferred(), p = def.promise, invoked = false;
 
 			a(p.cb(), p, "Callback is optional");
-			a(p.cb(function (err, o) {
-				a.deep([err, o], [null, x], "Unresolved: arguments");
-				invoked = true;
-			}), p, "Returns self promise");
+			a(
+				p.cb(function (err, o) {
+					a.deep([err, o], [null, x], "Unresolved: arguments");
+					invoked = true;
+				}),
+				p,
+				"Returns self promise"
+			);
 			a(invoked, false, "Callback not invoked on unresolved promise");
 			invoked = false;
 			def.resolve(x);
@@ -23,13 +27,10 @@ module.exports = function () {
 				invoked = true;
 				d();
 			});
-			a(invoked, false,
-				"Callback not invoked immediatelly on resolved promise");
+			a(invoked, false, "Callback not invoked immediatelly on resolved promise");
 		},
 		Errorneus: function (a, d) {
-			var x = new Error("Error")
-			  , p = deferred(x)
-			  , invoked = false;
+			var x = new Error("Error"), p = deferred(x), invoked = false;
 
 			invoked = false;
 			p.cb(function (err, o) {

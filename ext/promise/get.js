@@ -25,11 +25,7 @@ deferred.extend(
 		if (this.failed) localReject(this.value);
 		try {
 			result = reduce.call(
-				args,
-				function (obj, key) {
-					return value(obj)[String(key)];
-				},
-				this.value
+				args, function (obj, key) { return value(obj)[String(key)]; }, this.value
 			);
 		} catch (e) {
 			localReject(e);
@@ -42,15 +38,10 @@ deferred.extend(
 		if (this.failed) return this;
 		try {
 			result = reduce.call(
-				arguments,
-				function (obj, key) {
-					return value(obj)[String(key)];
-				},
-				this.value
+				arguments, function (obj, key) { return value(obj)[String(key)]; }, this.value
 			);
-		} catch (e) {
-			return reject(e);
 		}
+		catch (e) { return reject(e); }
 		return resolve(result);
 	}
 );

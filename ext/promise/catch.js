@@ -56,11 +56,8 @@ deferred.extend(
 		if (!this.failed) return this;
 		if (isCallable(cb)) {
 			if (isPromise(cb)) return cb;
-			try {
-				value = cb(this.value);
-			} catch (e) {
-				return reject(e);
-			}
+			try { value = cb(this.value); }
+			catch (e) { return reject(e); }
 			return resolve(value);
 		}
 		return resolve(cb);

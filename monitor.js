@@ -34,8 +34,6 @@ exports = module.exports = function (timeout, cb) {
 
 	deferred._monitor = function () {
 		var e = new Error("Unresolved promise");
-		return setTimeout(function () {
-			if (cb) cb(e);
-		}, timeout);
+		return setTimeout(function () { if (cb) cb(e); }, timeout);
 	};
 };

@@ -42,11 +42,8 @@ applyFn = function (fn, args, localResolve, localReject) {
 			localResolve(arguments.length > 2 ? slice.call(arguments, 1) : localResult);
 		}
 	});
-	try {
-		apply.call(fn, this, args);
-	} catch (e2) {
-		localReject(e2);
-	}
+	try { apply.call(fn, this, args); }
+	catch (e2) { localReject(e2); }
 };
 
 deferred.extend(

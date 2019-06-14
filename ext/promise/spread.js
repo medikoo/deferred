@@ -63,11 +63,8 @@ deferred.extend(
 		if (isCallable(cb)) {
 			if (isPromise(cb)) return cb;
 			if (!this.failed) cb = spread.call(cb);
-			try {
-				value = cb(this.value);
-			} catch (e) {
-				return reject(e);
-			}
+			try { value = cb(this.value); }
+			catch (e) { return reject(e); }
 			return resolve(value);
 		}
 		return resolve(cb);

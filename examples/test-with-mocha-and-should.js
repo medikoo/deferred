@@ -20,9 +20,7 @@ describe("Async functions with promises", function () {
 			var def = deferred();
 
 			// Some async processing
-			setTimeout(function () {
-				def.resolve(params + "with");
-			}, 100);
+			setTimeout(function () { def.resolve(params + "with"); }, 100);
 
 			return def.promise;
 		};
@@ -32,9 +30,7 @@ describe("Async functions with promises", function () {
 			var def = deferred();
 
 			// Some async processing
-			setTimeout(function () {
-				def.resolve(params + "some");
-			}, 100);
+			setTimeout(function () { def.resolve(params + "some"); }, 100);
 
 			return def.promise;
 		};
@@ -44,26 +40,21 @@ describe("Async functions with promises", function () {
 			var def = deferred();
 
 			// Some async processing
-			setTimeout(function () {
-				def.resolve(params + "more");
-			}, 100);
+			setTimeout(function () { def.resolve(params + "more"); }, 100);
 
 			return def.promise;
 		};
 
-		asyncFunc1("Intial_value")
-			.then(asyncFunc2)
-			.then(asyncFunc3)
-			.done(
-				function (result) {
-					console.log("Final result is:", result);
-					result.should.equal("Intial_valuewithsomemore");
-					done();
-				},
-				function (err) {
-					should.not.exist(err);
-					done();
-				}
-			);
+		asyncFunc1("Intial_value").then(asyncFunc2).then(asyncFunc3).done(
+			function (result) {
+				console.log("Final result is:", result);
+				result.should.equal("Intial_valuewithsomemore");
+				done();
+			},
+			function (err) {
+				should.not.exist(err);
+				done();
+			}
+		);
 	});
 });

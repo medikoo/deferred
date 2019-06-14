@@ -28,24 +28,21 @@ profile = function (isResolved) {
 
 	stack = new Error().stack;
 	if (
-		!stack
-			.split("\n")
-			.slice(3)
-			.some(function (line) {
-				if (
-					line.search(/[/\\]deferred[/\\]/) === -1 &&
-					line.search(/[/\\]es5-ext[/\\]/) === -1 &&
-					line.indexOf(" (native)") === -1
-				) {
-					line = line.replace(/\n/g, "\\n").trim();
-					if (!data[line]) {
-						data[line] = { count: 0 };
-					}
-					++data[line].count;
-					return true;
+		!stack.split("\n").slice(3).some(function (line) {
+			if (
+				line.search(/[/\\]deferred[/\\]/) === -1 &&
+				line.search(/[/\\]es5-ext[/\\]/) === -1 &&
+				line.indexOf(" (native)") === -1
+			) {
+				line = line.replace(/\n/g, "\\n").trim();
+				if (!data[line]) {
+					data[line] = { count: 0 };
 				}
-				return false;
-			})
+				++data[line].count;
+				return true;
+			}
+			return false;
+		})
 	) {
 		if (!data.unknown) {
 			data.unknown = { count: 0, stack: stack };
@@ -75,13 +72,9 @@ exports.profileEnd = function () {
 		log += "\nUnresolved promises were initialized at:\n";
 		forEach(
 			uStats,
-			function (data, name) {
-				log += lpad.call(data.count) + " " + name + "\n";
-			},
+			function (data, name) { log += lpad.call(data.count) + " " + name + "\n"; },
 			null,
-			function (data1, data2) {
-				return this[data2].count - this[data1].count;
-			}
+			function (data1, data2) { return this[data2].count - this[data1].count; }
 		);
 	}
 
@@ -89,13 +82,9 @@ exports.profileEnd = function () {
 		log += "\nResolved promises were initialized at:\n";
 		forEach(
 			rStats,
-			function (data, name) {
-				log += lpad.call(data.count) + " " + name + "\n";
-			},
+			function (data, name) { log += lpad.call(data.count) + " " + name + "\n"; },
 			null,
-			function (data1, data2) {
-				return this[data2].count - this[data1].count;
-			}
+			function (data1, data2) { return this[data2].count - this[data1].count; }
 		);
 	}
 	log += "------------------------------------------------------------\n";

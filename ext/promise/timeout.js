@@ -28,9 +28,7 @@ deferred.extend(
 		this.pending.push("timeout", [def.promise, def.resolve]);
 		return def.promise;
 	},
-	function (promise, resolve) {
-		if (!promise.resolved) resolve(this);
-	},
+	function (promise, resolve) { if (!promise.resolved) resolve(this); },
 	function (timeout) {
 		if (isValue(timeout)) ensureTimeout(timeout);
 		return this;

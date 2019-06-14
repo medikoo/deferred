@@ -19,10 +19,8 @@ module.exports = function (t) {
 			dy = deferred();
 			a(gfn(dy.promise, "y"), dy.promise, "#2"); // Y
 			dz = deferred();
-			a.not(hz = gfn(dz.promise, "z"), dz.promise, "#3 blocked");
-			hz.on("test", function (arg) {
- invoked = arg;
-});
+			a.not((hz = gfn(dz.promise, "z")), dz.promise, "#3 blocked");
+			hz.on("test", function (arg) { invoked = arg; });
 			hz.done(function (r) {
 				released = true;
 				a(r, z, "Held resolution");
@@ -44,7 +42,7 @@ module.exports = function (t) {
 			dx = deferred();
 			a(gfn(dx.promise), dx.promise, "#1");
 			dz = deferred();
-			a.not(hz = gfn(dz.promise), dz.promise, "#2 blocked");
+			a.not((hz = gfn(dz.promise)), dz.promise, "#2 blocked");
 			hz.done(function (r) {
 				a(r, z, "Held resolution");
 				a(resolved, true, "Held timing");
@@ -82,10 +80,8 @@ module.exports = function (t) {
 			a(gfn(dy.promise), dy.promise, "#2");
 			// X, y, z
 			dz = deferred();
-			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.done(function (r) {
- a(r, z, "#3 held");
-});
+			a.not((hz = gfn(dz.promise)), dz.promise, "#3 blocked");
+			hz.done(function (r) { a(r, z, "#3 held"); });
 			// X, y, z
 			gfn(x).done(null, function (err) {
 				a(err.type, "deferred-gate-rejected", "Reject error");
@@ -99,10 +95,8 @@ module.exports = function (t) {
 			a(gfn(dy.promise), dy.promise, "#2");
 			// X, y, z
 			dz = deferred();
-			a.not(hz = gfn(dz.promise), dz.promise, "#3 blocked");
-			hz.done(function (r) {
-				a(r, z, "#3 held");
-			});
+			a.not((hz = gfn(dz.promise)), dz.promise, "#3 blocked");
+			hz.done(function (r) { a(r, z, "#3 held"); });
 			// X, y, z
 			gfn(x).done(null, function (err) {
 				a(err.type, "deferred-gate-rejected", "Reject error");
@@ -113,12 +107,8 @@ module.exports = function (t) {
 		},
 		"Resolution type": function (a) {
 			var error = new Error("Test");
-			gfn = t.call(function () {
- return deferred.reject(error);
-}, 1, 0);
-			gfn().done(a.never, function (err) {
-				a(err, error);
-			});
+			gfn = t.call(function () { return deferred.reject(error); }, 1, 0);
+			gfn().done(a.never, function (err) { a(err, error); });
 		}
 	};
 };

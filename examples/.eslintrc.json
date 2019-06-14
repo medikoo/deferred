@@ -1,9 +1,1 @@
-{
-	"rules": {
-		"no-console": "off",
-		"no-unused-vars": "off"
-	},
-	"env": {
-		"node": true
-	}
-}
+{ "rules": { "no-console": "off", "no-unused-vars": "off" }, "env": { "node": true } }

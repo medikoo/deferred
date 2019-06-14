@@ -10,7 +10,5 @@ module.exports = function (t, a) {
 	a.throws(function () {
 		t(function () {});
 	}, "Function");
-	a.throws(function () {
-		t({});
-	}, "Object");
+	a.throws(function () { t({}); }, "Object");
 };

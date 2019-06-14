@@ -1,8 +1,1 @@
-{
-	"env": {
-		"node": true
-	},
-	"rules": {
-		"no-console": "off"
-	}
-}
+{ "env": { "node": true }, "rules": { "no-console": "off" } }

@@ -15,24 +15,12 @@ var getPage, pageN, result = {};
 getPage = function (path) {
 	var d = deferred();
 
-	http
-		.get(
-			{
-				host: "www.example.com",
-				path: path
-			},
-			function (res) {
-				res.setEncoding("utf-8");
-				var content = "";
-				res.on("data", function (data) {
-					content += data;
-				});
-				res.on("end", function () {
-					d.resolve(content);
-				});
-			}
-		)
-		.on("error", d.reject);
+	http.get({ host: "www.example.com", path: path }, function (res) {
+		res.setEncoding("utf-8");
+		var content = "";
+		res.on("data", function (data) { content += data; });
+		res.on("end", function () { d.resolve(content); });
+	}).on("error", d.reject);
 
 	return d.promise;
 };

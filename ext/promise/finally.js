@@ -10,14 +10,17 @@
 var callable = require("es5-ext/object/valid-callable")
   , deferred = require("../../deferred");
 
-deferred.extend("finally", function (cb) {
-	callable(cb);
-	if (!this.pending) this.pending = [];
-	this.pending.push("finally", arguments);
-	return this;
-}, function (cb) {
- cb();
-}, function (cb) {
-	callable(cb)();
-	return this;
-});
+deferred.extend(
+	"finally",
+	function (cb) {
+		callable(cb);
+		if (!this.pending) this.pending = [];
+		this.pending.push("finally", arguments);
+		return this;
+	},
+	function (cb) { cb(); },
+	function (cb) {
+		callable(cb)();
+		return this;
+	}
+);

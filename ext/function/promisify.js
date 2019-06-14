@@ -12,9 +12,7 @@ module.exports = function (length) {
 	fn = callable(this);
 	if (fn.returnsPromise) return fn;
 	if (isValue(length)) length = toNaturalNumber(length);
-	result = function () {
-		return callAsync(fn, length, this, arguments);
-	};
+	result = function () { return callAsync(fn, length, this, arguments); };
 	result.returnsPromise = true;
 	return result;
 };

@@ -22,11 +22,8 @@ var slice = Array.prototype.slice
 
 applyFn = function (fn, args, localResolve, localReject) {
 	var value;
-	try {
-		value = apply.call(fn, this, args);
-	} catch (e) {
-		return localReject(e);
-	}
+	try { value = apply.call(fn, this, args); }
+	catch (e) { return localReject(e); }
 	return localResolve(value);
 };
 

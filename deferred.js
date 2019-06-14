@@ -41,9 +41,7 @@ extendShim = function (promise) {
 };
 
 resolve = function (value, failed) {
-	var promise = function (win, fail) {
-		return promise.then(win, fail);
-	};
+	var promise = function (win, fail) { return promise.then(win, fail); };
 	promise.value = value;
 	promise.failed = failed;
 	if (setPrototypeOf) setPrototypeOf(promise, ext._resolved);
@@ -53,9 +51,7 @@ resolve = function (value, failed) {
 };
 
 Deferred = function () {
-	var promise = function (win, fail) {
-		return promise.then(win, fail);
-	};
+	var promise = function (win, fail) { return promise.then(win, fail); };
 	if (!count) timeout = setTimeout(noop, 1e9);
 	++count;
 	if (createDeferred._monitor) promise.monitor = createDeferred._monitor();
@@ -189,9 +185,7 @@ module.exports = createDeferred = function (value) {
 };
 
 createDeferred.Deferred = Deferred;
-createDeferred.reject = function (value) {
-	return resolve(value, true);
-};
+createDeferred.reject = function (value) { return resolve(value, true); };
 createDeferred.resolve = function (value) {
 	value = assimilate(value);
 	if (isPromise(value)) return value;

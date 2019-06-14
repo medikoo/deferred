@@ -150,9 +150,7 @@ tests = [
 					if (!--i) nextTick(next); // Ignore first
 				},
 				function (err) {
-					nextTick(function () {
-						throw err;
-					});
+					nextTick(function () { throw err; });
 				}
 			);
 		};
@@ -181,9 +179,7 @@ tests = [
 					}
 				},
 				function (err) {
-					nextTick(function () {
-						throw err;
-					});
+					nextTick(function () { throw err; });
 				}
 			);
 		};
@@ -196,9 +192,7 @@ tests = [
 		var i = count, j = count, dlstat;
 		dlstat = function (path) {
 			var localDef = new Deferred();
-			lstat(path, function (err, stats) {
-				localDef.resolve(err || stats);
-			});
+			lstat(path, function (err, stats) { localDef.resolve(err || stats); });
 			return localDef.promise;
 		};
 
@@ -214,9 +208,7 @@ tests = [
 		var i = count, j = count, dlstat;
 		dlstat = function (path) {
 			var localDef = new Deferred();
-			lstat(path, function (err, stats) {
-				localDef.resolve(err || stats);
-			});
+			lstat(path, function (err, stats) { localDef.resolve(err || stats); });
 			return localDef.promise;
 		};
 
@@ -260,34 +252,20 @@ tests = [
 		var dlstat = promisify(lstat);
 
 		time = now();
-		deferred
-			.map(files, function (name) {
-				return dlstat(name);
-			})
-			.done(function () {
-				next();
-			});
+		deferred.map(files, function (name) { return dlstat(name); }).done(function () { next(); });
+	},
+	function () {
+		var dlstat = promisify(lstat);
+
+		time = now();
+		deferred.map(files, function (name) { return dlstat(name); }).done(function () { next(); });
 	},
 	function () {
 		var dlstat = promisify(lstat);
 
 		time = now();
 		deferred
-			.map(files, function (name) {
-				return dlstat(name);
-			})
-			.done(function () {
-				next();
-			});
-	},
-	function () {
-		var dlstat = promisify(lstat);
-
-		time = now();
-		deferred
-			.map(files, function (name) {
-				return dlstat(name);
-			})
+			.map(files, function (name) { return dlstat(name); })
 			.done(function () {
 				data["Deferred: Map + Promisify"] = now() - time;
 				next();
@@ -308,9 +286,7 @@ tests = [
 		};
 
 		self = function () {
-			dlstat(__filename).done(function () {
-				if (!--i) next();
-			});
+			dlstat(__filename).done(function () { if (!--i) next(); });
 		};
 		time = now();
 		while (j--) self();
@@ -342,9 +318,7 @@ tests = [
 		var i = count, j = count, dlstat = QLib.nbind(lstat, null);
 
 		self = function () {
-			dlstat(__filename).done(function () {
-				if (!--i) next();
-			});
+			dlstat(__filename).done(function () { if (!--i) next(); });
 		};
 		time = now();
 		while (j--) self();
@@ -378,13 +352,9 @@ tests = [
 
 		self = function () {
 			dlstat(__filename).then(
-				function () {
-					if (!--i) nextTick(next);
-				},
+				function () { if (!--i) nextTick(next); },
 				function (e) {
-					nextTick(function () {
-						throw e;
-					});
+					nextTick(function () { throw e; });
 				}
 			);
 		};
@@ -413,9 +383,7 @@ tests = [
 					}
 				},
 				function (e) {
-					nextTick(function () {
-						throw e;
-					});
+					nextTick(function () { throw e; });
 				}
 			);
 		};
@@ -435,15 +403,11 @@ next = function () {
 				data,
 				function (value, name, obj, index) {
 					console.log(
-						pad.call(index + 1 + ":", " ", 3),
-						pad.call(value, " ", 5) + "ms ",
-						name
+						pad.call(index + 1 + ":", " ", 3), pad.call(value, " ", 5) + "ms ", name
 					);
 				},
 				null,
-				function (data1, data2) {
-					return this[data1] - this[data2];
-				}
+				function (data1, data2) { return this[data1] - this[data2]; }
 			);
 		}
 	}, 100);
