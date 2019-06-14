@@ -45,5 +45,5 @@
     "lint": "eslint --ignore-path=.gitignore .",
     "test": "node ./node_modules/tad/bin/tad"
   },
-  "license": "MIT"
+  "license": "ISC"
 }
