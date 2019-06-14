@@ -181,7 +181,7 @@ resultPromise(function (value) {
 
 #### Promise
 
-Promise is an object that represents eventual value which may already be available or is expected to be available in a future. Promise may succeed (fulfillment) or fail (rejection). Promise can be resolved only once.  
+Promise is an object that represents eventual value which may already be available or is expected to be available in a future. Promise may succeed (fulfillment) or fail (rejection). Promise can be resolved only once.
 In `deferred` (and most of the other promise implementations) you may listen for the value by passing observers to `then` function:
 
 ```javascript
@@ -227,7 +227,7 @@ def.promise(function (result) {
 
 Errors in promises are handled with separate control flow, that's one of the reasons why code written with promises is more readable and maintainable than when using callbacks approach.
 
-A promise resolved with an error (rejected), propagates its error to all promises that depend on this promise (e.g. promises initiated by adding observers).  
+A promise resolved with an error (rejected), propagates its error to all promises that depend on this promise (e.g. promises initiated by adding observers).
 If observer function crashes with error or returns error, its promise is rejected with the error.
 
 To handle error, pass dedicated callback as second argument to promise function:
@@ -785,9 +785,21 @@ Promise overhead (concurrent calls) x10000:
 
     $ npm test
 
-## License
+## Security contact information
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmedikoo%2Fdeferred?ref=badge_large)
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
+
+---
+
+<div align="center">
+	<b>
+		<a href="https://tidelift.com/subscription/pkg/npm-deferred?utm_source=npm-deferred&utm_medium=referral&utm_campaign=readme">Get professional support for d with a Tidelift subscription</a>
+	</b>
+	<br>
+	<sub>
+		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
+	</sub>
+</div>
 
 [semaphore-image]: https://semaphoreci.com/api/v1/medikoo-org/deferred/branches/master/badge.svg
 [semaphore-url]: https://semaphoreci.com/medikoo-org/deferred
