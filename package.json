@@ -28,6 +28,7 @@
 	"devDependencies": {
 		"eslint": "^5.16.0",
 		"eslint-config-medikoo": "^2.3.0",
+		"prettier-elastic": "^1.18.2",
 		"tad": "^2.0.1"
 	},
 	"eslintConfig": {
@@ -41,8 +42,23 @@
 			"no-extend-native": "off"
 		}
 	},
+	"prettier": {
+		"printWidth": 100,
+		"tabWidth": 4,
+		"overrides": [
+			{
+				"files": [
+					"*.md"
+				],
+				"options": {
+					"tabWidth": 2
+				}
+			}
+		]
+	},
 	"scripts": {
 		"lint": "eslint --ignore-path=.gitignore .",
+		"prettify": "prettier --write --ignore-path .gitignore '**/*.{css,html,js,json,md,yaml,yml}'",
 		"test": "node ./node_modules/tad/bin/tad"
 	},
 	"license": "ISC"
