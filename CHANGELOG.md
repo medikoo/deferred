@@ -1,6 +1,8 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.7.11](https://github.com/medikoo/deferred/compare/v0.7.10...v0.7.11) (2019-06-14)
 
 <a name="0.7.10"></a>
 
