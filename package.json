@@ -27,11 +27,11 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "eslint-config-medikoo-es5": "^1.7.3",
+    "eslint-config-medikoo": "^2.3.0",
     "tad": "^0.2.8"
   },
   "eslintConfig": {
-    "extends": "medikoo-es5",
+    "extends": "medikoo/es5",
     "root": true,
     "env": {
       "shared-node-browser": true
