@@ -1,49 +1,49 @@
 {
-  "name": "deferred",
-  "version": "0.7.10",
-  "description": "Modular and fast Promises implementation",
-  "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
-  "keywords": [
-    "async",
-    "asynchronous",
-    "deferred",
-    "flow",
-    "future",
-    "futures",
-    "promise",
-    "promises",
-    "continuations"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/medikoo/deferred.git"
-  },
-  "dependencies": {
-    "d": "^1.0.1",
-    "es5-ext": "^0.10.50",
-    "event-emitter": "^0.3.5",
-    "next-tick": "^1.0.0",
-    "timers-ext": "^0.1.7"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-medikoo": "^2.3.0",
-    "tad": "^2.0.1"
-  },
-  "eslintConfig": {
-    "extends": "medikoo/es5",
-    "root": true,
-    "env": {
-      "shared-node-browser": true
-    },
-    "rules": {
-      "max-lines-per-function": "off",
-      "no-extend-native": "off"
-    }
-  },
-  "scripts": {
-    "lint": "eslint --ignore-path=.gitignore .",
-    "test": "node ./node_modules/tad/bin/tad"
-  },
-  "license": "ISC"
+	"name": "deferred",
+	"version": "0.7.10",
+	"description": "Modular and fast Promises implementation",
+	"author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
+	"keywords": [
+		"async",
+		"asynchronous",
+		"deferred",
+		"flow",
+		"future",
+		"futures",
+		"promise",
+		"promises",
+		"continuations"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/medikoo/deferred.git"
+	},
+	"dependencies": {
+		"d": "^1.0.1",
+		"es5-ext": "^0.10.50",
+		"event-emitter": "^0.3.5",
+		"next-tick": "^1.0.0",
+		"timers-ext": "^0.1.7"
+	},
+	"devDependencies": {
+		"eslint": "^5.16.0",
+		"eslint-config-medikoo": "^2.3.0",
+		"tad": "^2.0.1"
+	},
+	"eslintConfig": {
+		"extends": "medikoo/es5",
+		"root": true,
+		"env": {
+			"shared-node-browser": true
+		},
+		"rules": {
+			"max-lines-per-function": "off",
+			"no-extend-native": "off"
+		}
+	},
+	"scripts": {
+		"lint": "eslint --ignore-path=.gitignore .",
+		"test": "node ./node_modules/tad/bin/tad"
+	},
+	"license": "ISC"
 }
